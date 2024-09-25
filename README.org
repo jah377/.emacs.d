@@ -1,0 +1,3 @@
+#+TITLE:Literate Emacs Configuration
+#+DATE: Wednesday, September 25, 2024
+#+PROPERTY: header-args:emacs-lisp :results silent
