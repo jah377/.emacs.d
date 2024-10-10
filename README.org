@@ -14,3 +14,15 @@ document, not in the individual config files.
 
 *N.B.* Modules are individually imported in [[*Conclusion][Conclusion]].
 
+* early-init.el
+
+The =early-init.el= file, introduced with Emacs27, is the first file
+that Emacs reads when starting up (before =init.el=). In principal, the
+early initialization file should set-up a few basic things before
+Emacs produces the initial frame, and should not depend on any
+packages.
+
+#+begin_src emacs-lisp :tangle early-init.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
