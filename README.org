@@ -402,3 +402,14 @@ explored registers much.
   (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
 #+end_src
 
+* my-visuals.el
+** Visual Advice
+
+#+begin_src emacs-lisp :tangle modules/my-visuals.el
+;;; -*- lexical-binding: t -*-
+
+;; Discard all themes before loading next
+(define-advice load-theme (:before (&rest _args) theme-dont-propagate)
+  (mapc #'disable-theme custom-enabled-themes))
+#+end_src
+
