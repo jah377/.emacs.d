@@ -818,6 +818,7 @@ away. Note that this forces loading the package.
 No longer have to worry about indents getting messed up in emacs-lisp.
 
 #+begin_src emacs-lisp :tangle modules/my-dev.el
+;; Update indentation in response to changes to code
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))
 #+end_src

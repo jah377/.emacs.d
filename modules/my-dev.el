@@ -11,6 +11,7 @@
   (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
 
+;; Update indentation in response to changes to code
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))
 
