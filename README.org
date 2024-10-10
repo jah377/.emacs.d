@@ -81,3 +81,16 @@ resizing?
               initial-major-mode 'fundamental-mode)
 #+end_src
 
+* init.el
+
+#+begin_src emacs-lisp :tangle init.el
+;;; -*- lexical-binding: t -*-
+
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "*** Emacs loaded in %s seconds with %d garbage collections."
+                     (emacs-init-time "%.2f")
+                     gcs-done)))
+#+end_src
+
