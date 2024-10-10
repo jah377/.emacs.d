@@ -94,3 +94,33 @@ resizing?
                      gcs-done)))
 #+end_src
 
+** Initialize Package Resources
+
+#+begin_src emacs-lisp :tangle init.el
+;; Initialize package resources
+(require 'package)
+(setq package-archives
+      '(("gnu elpa"  . "https://elpa.gnu.org/packages/")
+        ("melpa"     . "https://melpa.org/packages/")
+        ("nongnu"    . "https://elpa.nongnu.org/nongnu/"))
+      package-archive-priorities
+      '(("melpa"    . 6)
+        ("gnu elpa" . 5)
+        ("nongnu"   . 4)))
+(package-initialize)
+#+end_src
+
+** Setup 'use-package'
+
+#+begin_src emacs-lisp :tangle init.el
+;; Is this still necessary since 'use-package' now builtin?
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+;; Standardize `use-package` settings
+(require 'use-package-ensure)
+(setq use-package-always-ensure t
+      use-package-compute-statistics t
+      use-package-verbose t)
+#+end_src
+
