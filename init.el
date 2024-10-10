@@ -105,7 +105,14 @@
                       space-before-tab::tab))
   :config
   ;; Turn off global whitespace mode
-  (global-whitespace-mode 0))
+  (global-whitespace-mode 0)
+
+  ;; Whitespace-mode a bit aggressive if editing make files
+  (add-hook 'makefile-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode t
+                    whitespace-mode nil)
+              (add-hook 'before-save-hook #'delete-trailing-whitespace))))
 
 (setq  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; scroll one line at a time
        mouse-wheel-progressive-speed nil            ; don't accelerate scrolling
