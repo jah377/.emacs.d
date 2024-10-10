@@ -647,6 +647,17 @@ away. Note that this forces loading the package.
   :config (nerd-icons-completion-mode))
 #+end_src
 
+** Orderless
+
+#+begin_src emacs-lisp :tangle modules/my-completion.el
+;; Copied from https://github.com/oantolin/orderless/tree/master
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+#+end_src
+
 ** Provide my-completion.el
 
 #+begin_src emacs-lisp :tangle modules/my-completion.el
