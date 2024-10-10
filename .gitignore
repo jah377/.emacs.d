@@ -9,3 +9,9 @@
 
 # Undo-tree save-files
 *.~undo-tree
+
+# Generated directories
+elpa/
+var/
+etc/
+
