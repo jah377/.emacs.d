@@ -135,12 +135,11 @@
 (use-package paren
   :custom
   (show-paren-style 'parenthesis "Only highlight ()")
-  (show-paren-ring-bell-on-mismatch t)
   (show-paren-when-point-inside-paren t)
   (show-paren-when-point-in-periphery t)
   ;; If cursor on ), show overlay for (
-  ;; Unfortunately does not work other way around
-  (show-paren-context-when-offscreen 'overlay))
+  (show-paren-context-when-offscreen 'overlay)
+  :config (electric-pair-mode 1 "Automatic parens pairing"))
 
 (use-package bookmark
   :custom

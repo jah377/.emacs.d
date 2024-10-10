@@ -174,7 +174,7 @@ using Emacs. Therefore, we perform GC if idle for 30 seconds.(credit:
 
 ** Better Defaults
 
-Here, we configure default built-in Emacs settings.
+Here, we configure default built-in Emacs settings and modes.
 
 *** Frame
 
@@ -366,12 +366,11 @@ visualized and the following are included in our configuration:
 (use-package paren
   :custom
   (show-paren-style 'parenthesis "Only highlight ()")
-  (show-paren-ring-bell-on-mismatch t)
   (show-paren-when-point-inside-paren t)
   (show-paren-when-point-in-periphery t)
   ;; If cursor on ), show overlay for (
-  ;; Unfortunately does not work other way around
-  (show-paren-context-when-offscreen 'overlay))
+  (show-paren-context-when-offscreen 'overlay)
+  :config (electric-pair-mode 1 "Automatic parens pairing"))
 #+end_src
 
 *** Bookmarks
@@ -795,7 +794,6 @@ away. Note that this forces loading the package.
 #+begin_src emacs-lisp :tangle modules/my-dev.el
 ;;; -*- lexical-binding: t -*-
 #+end_src
-
 
 ** Terminal
 
