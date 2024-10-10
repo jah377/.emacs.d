@@ -899,6 +899,24 @@ match" and "total matches" information in the mode-line.
          ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)))
 #+end_src
 
+** Avy
+
+The =avy= package is useful for jumping to visible text using a
+char-based decision tree.
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+(use-package avy
+  :bind (("M-j" . avy-goto-char-timer)  ;; orig. 'default-indent-new-line'
+         :map isearch-mode-map
+         ("M-j" . avy-isearch))
+  :custom
+  (avy-timeout-seconds 0.3 "Seconds before overlay appears")
+  (avy-style 'pre "Overyly single char at beginning of word")
+  :custom-face
+  ;; Change colors to improve readability
+  (avy-lead-face ((t (:background "#000000" :foreground "#33A4FF" :weight bold)))))
+#+end_src
+
 ** Provide my-productivity.el
 
 #+begin_src emacs-lisp :tangle modules/my-productivity.el
