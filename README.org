@@ -444,3 +444,14 @@ explored registers much.
 (dark)
 #+end_src
 
+** Icons
+
+#+begin_src emacs-lisp :tangle modules/my-visuals.el
+(use-package nerd-icons
+  :config
+  ;; Download nerd-icons if directory not found
+  (unless (car (file-expand-wildcards
+                (concat user-emacs-directory "elpa/nerd-icons-*")))
+    (nerd-icons-install-fonts t)))
+#+end_src
+
