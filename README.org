@@ -866,3 +866,17 @@ Porcelain) inside Emacs [https://magit.vc/].
 ;;; my-vc.el ends here
 #+end_src
 
+* my-productivity.el
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+** Provide my-productivity.el
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+(provide 'my-productivity)
+
+;;; my-productivity.el ends here
+#+end_src
+
