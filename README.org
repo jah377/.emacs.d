@@ -1052,6 +1052,16 @@ function."
   (find-file-other-window "~/.emacs.d/README.org"))
 #+end_src
 
+** Jump to Minibuffer
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/jump-to-minibuffer ()
+  "Switch to minibuffer window (if active)"
+  (interactive)
+  (when (active-minibuffer-window)
+    (select-window (active-minibuffer-window))))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
