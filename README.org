@@ -820,6 +820,28 @@ No longer have to worry about indents getting messed up in emacs-lisp.
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
+** Magit
+
+The =magit= package is a texted-based user interface to Git (Git
+Porcelain) inside Emacs [https://magit.vc/].
+
+#+begin_src emacs-lisp :tangle modules/my-vc.el
+(use-package magit
+  :bind ("C-x g" . magit-status)
+  :diminish magit-minor-mode
+  :hook (git-commit-mode . (lambda () (setq fill-column 72)))
+  :mode ("/\\.gitmodules\\'" . conf-mode)
+  :custom
+  ;; hide ^M chars at the end of the line when viewing diffs
+  (magit-diff-hide-trailing-cr-characters t)
+
+  ;; Limit legth of commit message summary
+  (git-commit-summary-max-length 50)
+
+  ;; Open status buffer in same buffer
+  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
+#+end_src
+
 ** Provide my-vc.el
 
 #+begin_src emacs-lisp :tangle modules/my-vc.el
