@@ -872,6 +872,33 @@ Porcelain) inside Emacs [https://magit.vc/].
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
+** Anzu-mode
+
+The =anzu= package provides a minor mode which displays the "current
+match" and "total matches" information in the mode-line.
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+(use-package anzu
+  :hook (emacs-startup . global-anzu-mode)
+  :custom
+  (anzu-search-threshold 1000 "Limit n words searched to reduce lag")
+  (anzu-replace-threshold 50 "Limit n replacement overlay to reduce lag")
+  (anzu-minimum-input-length 2 "Increase activation threshold to reduce lag")
+
+  ;; Cleanup mode-line information
+  (anzu-mode-lighter "" "Remove mode-name from results")
+  (anzu-replace-to-string-separator "")
+
+  :bind (;; Keybindings M-% and C-M-% do not change
+         ([remap query-replace] . anzu-query-replace)
+         ([remap query-replace-regexp] . anzu-query-replace-regexp)
+
+         :map isearch-mode-map
+         ;; Use Anzu-mode for replacing from isearch results (C-s or C-f)
+         ([remap isearch-query-replace] . anzu-isearch-query-replace)
+         ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)))
+#+end_src
+
 ** Provide my-productivity.el
 
 #+begin_src emacs-lisp :tangle modules/my-productivity.el
