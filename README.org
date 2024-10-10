@@ -938,6 +938,24 @@ pomodoro-style break routine.
   (type-break-mode-line-message-mode t))
 #+end_src
 
+** Helpful
+
+The =Helpful= package is an alternative to the built-in Emacs and
+provides a number of additional features such as more readable
+doc-strings, and links to function calls and source-code.
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+;; Alternative to built-in Emacs help
+(use-package helpful
+  :bind (("C-h j" . helpful-at-point)
+         ("C-h f" . helpful-callable)
+         ("C-h F" . helpful-function)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-h c" . helpful-command)
+         ("C-h m" . helpful-macro)))
+#+end_src
+
 ** Provide my-productivity.el
 
 #+begin_src emacs-lisp :tangle modules/my-productivity.el
