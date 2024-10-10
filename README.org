@@ -336,3 +336,13 @@ visualized and the following are included in our configuration:
 (pixel-scroll-precision-mode 1)
 #+end_src
 
+*** Cursor
+
+#+begin_src emacs-lisp :tangle init.el
+(setq-default cursor-type 'bar)
+
+;; Flash cursor location when switching buffers
+(use-package beacon
+  :config (beacon-mode 1))
+#+end_src
+
