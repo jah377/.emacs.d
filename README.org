@@ -1,3 +1,16 @@
-#+TITLE:Literate Emacs Configuration
+#+TITLE: My GNU Emacs Configuration
 #+DATE: Wednesday, September 25, 2024
 #+PROPERTY: header-args:emacs-lisp :results silent
+#+STARTUP: overview
+
+* Introduction
+
+This is my literate Emacs configuration file; there are many like it,
+but this one is mine. It serves as both documentation and the source
+for configuring Emacs. All necessary config files are generated from
+this file by calling ~org-babel-tangle~ (~C-c C-v t~), and stored in the
+=/modules= sub-directory. As such, changes should be made in this
+document, not in the individual config files.
+
+*N.B.* Modules are individually imported in [[*Conclusion][Conclusion]].
+
