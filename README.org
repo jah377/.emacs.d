@@ -351,6 +351,9 @@ visualized and the following are included in our configuration:
 #+begin_src emacs-lisp :tangle init.el
 ;; Replace active region by typing text
 (delete-selection-mode 1)
+
+;; Specify desired column width of buffer
+(setq fill-column 79)
 #+end_src
 
 *** Highlighting
