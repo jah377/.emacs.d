@@ -281,3 +281,42 @@ back ~C-b~ and deleting M, -, or x. _Not ideal_.
               standard-indent 4)
 #+end_src
 
+*** Whitespace
+
+The builtin =whitespace-mode= is useful for visualizing and
+automatically cleaning up white-spaces in our buffers. [[https://www.emacswiki.org/emacs/WhiteSpace][Emacswiki]]
+provides a nice overview of the settings.
+
+The ~whitespace-style~ variable specifies how blank white-spaces are
+visualized and the following are included in our configuration:
+
+  + face :: Enable all visualization via faces. Required for
+    visualization of many white-spaces listed below.
+  + trailing :: Trailing blanks are visualized via faces.
+  + lines-tail :: Columns beyond ~whitespace-line-column~ are
+    highlighted via faces (must exclude =lines= in our configuration).
+  + empty :: Empty lines at beginning/end of buffer are visualized.
+  + indentation::space :: TABs at beginning of lines are visualized.
+  + space-before-tab::tab :: SPACEs before TAB are visualized.
+
+#+begin_src emacs-lisp :tangle init.el
+;; Built-in Emacs variable highlights empty lines
+(setq indicate-empty-lines t)
+
+;; Visualize whitespace and remove on cleanup
+(use-package whitespace
+  :hook (((prog-mode org-mode) . whitespace-mode)
+         (before-save . whitespace-cleanup))
+  :custom
+  (whitespace-line-column 79 "Highlight text beyond column")
+  (whitespace-style '(face
+                      trailing
+                      lines-tail
+                      empty
+                      indentation::space
+                      space-before-tab::tab))
+  :config
+  ;; Turn off global whitespace mode
+  (global-whitespace-mode 0))
+#+end_src
+
