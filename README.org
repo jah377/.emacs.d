@@ -176,7 +176,7 @@ using Emacs. Therefore, we perform GC if idle for 30 seconds.(credit:
 
 Here, we configure default built-in Emacs settings and modes.
 
-*** Frame
+*** Frame + Buffers
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Change frame title w.r.t. current buffer
@@ -186,7 +186,11 @@ Here, we configure default built-in Emacs settings and modes.
 
 ;; Maximize frame size at init
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; Unique buffers of identical files denoted with parent directory name
+(setq uniquify-buffer-name-style 'forward)
 #+end_src
+
 *** Prompts
 
 #+begin_src emacs-lisp :tangle init.el

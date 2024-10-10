@@ -60,6 +60,9 @@
 ;; Maximize frame size at init
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;; Unique buffers of identical files denoted with parent directory name
+(setq uniquify-buffer-name-style 'forward)
+
 ;; Too lazy to type 'yes-or-no'
 (setq use-short-answers t)
 (fset 'yes-or-no-p 'y-or-n-p)
