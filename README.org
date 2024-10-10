@@ -346,3 +346,10 @@ visualized and the following are included in our configuration:
   :config (beacon-mode 1))
 #+end_src
 
+*** Writing
+
+#+begin_src emacs-lisp :tangle init.el
+;; Replace active region by typing text
+(delete-selection-mode 1)
+#+end_src
+
