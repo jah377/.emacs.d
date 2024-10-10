@@ -1076,6 +1076,31 @@ function."
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
+** Which-Key
+
+The =which-key= minor-mode displays the available keybindings following
+an incomplete command [[[https://github.com/justbur/emacs-which-key][github/whichkey]]]. For example, typing ~C-x~ will
+open a window showing available keybindings (and descriptions) sharing
+the ~C-x~ prefix.
+
+*N.B.* After popup window appears, use ~C-h~ to open additional navigation
+options. This is helpful not all keybindings can fit in the popup
+window.
+
+#+begin_src emacs-lisp :tangle modules/my-bindings.el
+(use-package which-key
+  :config (which-key-mode)
+  :custom
+  (which-key-show-early-on-C-h t     "Trigger which-key manually")
+  (which-key-idle-delay 0.5          "Delay before popup appears")
+  (which-key-idle-second-delay 0.05  "Responsiveness after triggered")
+  (which-key-popup-type 'minibuffer  "Where to show which-key")
+  (which-key-max-display-columns nil "N-cols determined from monotor")
+  (which-key-separator " → "         "ex: C-x DEL backward-kill-sentence")
+  (which-key-add-column-padding 1    "Padding between columns of keys")
+  (which-key-show-remaining-keys t   "Show count of keys in modeline"))
+#+end_src
+
 ** Provide my-bindings.el
 
 #+begin_src emacs-lisp :tangle modules/my-bindings.el
