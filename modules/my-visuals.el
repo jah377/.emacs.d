@@ -43,4 +43,16 @@
   (doom-modeline-vcs-max-length 30 "Limit branch name length")
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 
+;; Highlight occurrences of the same text in buffer
+(use-package highlight-thing
+  :demand t
+  :hook ((prog-mode . highlight-thing-mode)
+         (org-mode . highlight-thing-mode))
+  :custom
+  (highlight-thing-exclude-thing-under-point t)
+  (highlight-thing-case-sensitive-p t)
+  (highlight-thing-ignore-list
+   '("False" "True", "return", "None", "if", "else", "self",
+     "import", "from", "in", "def", "class")))
+
 (provide 'my-visuals)

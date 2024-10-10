@@ -492,6 +492,24 @@ instruct Emacs to treat files as UTF-8 by default (credit:
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 #+end_src
 
+** Addtitional Highlighting
+
+*N.B.* Built-in Emacs settings set in [[*Highlighting][Highlighting]]
+
+#+begin_src emacs-lisp :tangle modules/my-visuals.el
+;; Highlight occurrences of the same text in buffer
+(use-package highlight-thing
+  :demand t
+  :hook ((prog-mode . highlight-thing-mode)
+         (org-mode . highlight-thing-mode))
+  :custom
+  (highlight-thing-exclude-thing-under-point t)
+  (highlight-thing-case-sensitive-p t)
+  (highlight-thing-ignore-list
+   '("False" "True", "return", "None", "if", "else", "self",
+     "import", "from", "in", "def", "class")))
+#+end_src
+
 ** Provide Visuals
 
 #+begin_src emacs-lisp :tangle modules/my-visuals.el
