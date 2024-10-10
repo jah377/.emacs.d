@@ -987,6 +987,22 @@ doc-strings, and links to function calls and source-code.
   (kill-new (buffer-name)))
 #+end_src
 
+** Copy Relative Buffer Path
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/kill-relative-buffer-path ()
+  "Copy relative buffer path to kill ring.
+
+Replace '/home/<username>' prefix with '~' if applicable."
+  (interactive)
+  (if-let* ((full-path (buffer-file-name))
+            (abbrev-path (abbreviate-file-name full-path)))
+      (progn
+        (kill-new abbrev-path)
+        (message "Buffer path copied to kill ring: %s" full-path))
+    (message "Buffer is not visiting a file.")))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
