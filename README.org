@@ -479,6 +479,45 @@ instruct Emacs to treat files as UTF-8 by default (credit:
     (nerd-icons-install-fonts t)))
 #+end_src
 
+** Font
+
+Example of emphasis markers in org-mode include *bold*, ~code~, =verbatim=,
+/italics/, _underline_.
+
+The following fonts were downloaded and added to the configuration by
+doing the following:
+
++ Jetbrains Mono :: Manually downloaded from [[https://www.jetbrains.com/lp/mono/][jetbrains.com]]. The font
+  was installed by following the [[https://www.jetbrains.com/lp/mono/#how-to-install][how-to]] instructions verbatim.
+
+*N.B.* This section pulls heavily from [[https://github.com/daviwil/dotfiles/blob/emacs-home-service/.emacs.d/modules/dw-core.el][github/daviwil/.emacs.d]].
+
+#+begin_src emacs-lisp :tangle modules/my-visuals.el
+;; Set fonts
+(set-face-attribute 'default nil
+                    :font "JetBrains Mono"
+                    :height 100
+                    :weight 'medium)
+
+(set-face-attribute 'fixed-pitch nil
+                    :font "JetBrains Mono"
+                    :height 100
+                    :weight 'medium)
+
+(set-face-attribute 'variable-pitch nil
+                    :font "JetBrains Mono"
+                    :height 100
+                    :weight 'medium)
+
+;; Modified from https://stackoverflow.com/a/50052751
+(defun set-font-size ()
+  "Set the font-pt size."
+  (interactive)
+  (let* ((pt-size (string-to-number (read-string "Font size: ")))
+         (font-height (* 10 pt-size)))
+    (set-face-attribute 'default nil :height font-height)))
+#+end_src
+
 ** Modeline
 
 #+begin_src emacs-lisp :tangle modules/my-visuals.el

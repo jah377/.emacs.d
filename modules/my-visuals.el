@@ -34,6 +34,30 @@
                 (concat user-emacs-directory "elpa/nerd-icons-*")))
     (nerd-icons-install-fonts t)))
 
+;; Set fonts
+(set-face-attribute 'default nil
+                    :font "JetBrains Mono"
+                    :height 100
+                    :weight 'medium)
+
+(set-face-attribute 'fixed-pitch nil
+                    :font "JetBrains Mono"
+                    :height 100
+                    :weight 'medium)
+
+(set-face-attribute 'variable-pitch nil
+                    :font "JetBrains Mono"
+                    :height 100
+                    :weight 'medium)
+
+;; Modified from https://stackoverflow.com/a/50052751
+(defun set-font-size ()
+  "Set the font-pt size."
+  (interactive)
+  (let* ((pt-size (string-to-number (read-string "Font size: ")))
+         (font-height (* 10 pt-size)))
+    (set-face-attribute 'default nil :height font-height)))
+
 (use-package doom-modeline
   :config (doom-modeline-mode 1)
   :custom
