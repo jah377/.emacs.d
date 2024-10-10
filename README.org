@@ -353,3 +353,21 @@ visualized and the following are included in our configuration:
 (delete-selection-mode 1)
 #+end_src
 
+*** Highlighting
+
+#+begin_src emacs-lisp :tangle init.el
+;; Highlight line containing point
+(global-hl-line-mode)
+
+;; Highlight matching parentheses
+(use-package paren
+  :custom
+  (show-paren-style 'parenthesis "Only highlight ()")
+  (show-paren-ring-bell-on-mismatch t)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
+  ;; If cursor on ), show overlay for (
+  ;; Unfortunately does not work other way around
+  (show-paren-context-when-offscreen 'overlay))
+#+end_src
+
