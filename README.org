@@ -416,6 +416,16 @@ instruct Emacs to treat files as UTF-8 by default (credit:
 (set-default-coding-systems 'utf-8)
 #+end_src
 
+*** Line Numbers
+
+#+begin_src emacs-lisp :tangle init.el
+;; Show column number in the modeline
+(column-number-mode t)
+
+;; Display line numbers in prog-mode
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+#+end_src
+
 * my-visuals.el
 ** Visual Advice
 
@@ -985,7 +995,6 @@ doc-strings, and links to function calls and source-code.
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
-
 ** Spell Check
 
 Spell checking is important for both things like narratives and git
@@ -1058,7 +1067,6 @@ ALL of the code.
 
 ;;; my-writing.el ends here
 #+end_src
-
 
 * my-functions.el
 

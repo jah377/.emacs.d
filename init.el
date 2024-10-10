@@ -152,6 +152,12 @@
 
 (set-default-coding-systems 'utf-8)
 
+;; Show column number in the modeline
+(column-number-mode t)
+
+;; Display line numbers in prog-mode
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;; Add configuration modules to load path
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 
