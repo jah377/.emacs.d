@@ -541,6 +541,26 @@ explored registers much.
              (looking-back "^\**"))))
 #+end_src
 
+** Org-Babel
+*** General Org-Babel Settings
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+(setq org-confirm-babel-evaluate nil
+        org-src-window-setup 'current-window
+        org-src-ask-before-returning-to-edit-buffer t)
+
+;; Remove code indentation in org-src blocks
+(setq org-src-preserve-indentation t)
+#+end_src
+
+*** FIX: Display ANSI Error Colors
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+;; https://github.com/emacs-jupyter/jupyter/issues/366
+(defun display-ansi-colors ()
+  (ansi-color-apply-on-region (point-min) (point-max)))
+#+end_src
+
 ** Provide my-org
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
