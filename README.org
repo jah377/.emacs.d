@@ -814,3 +814,17 @@ No longer have to worry about indents getting messed up in emacs-lisp.
 ;;; my-dev.el ends here
 #+end_src
 
+* my-vc.el
+
+#+begin_src emacs-lisp :tangle modules/my-vc.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+** Provide my-vc.el
+
+#+begin_src emacs-lisp :tangle modules/my-vc.el
+(provide 'my-vc)
+
+;;; my-vc.el ends here
+#+end_src
+
