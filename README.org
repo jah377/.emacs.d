@@ -1003,6 +1003,26 @@ Replace '/home/<username>' prefix with '~' if applicable."
     (message "Buffer is not visiting a file.")))
 #+end_src
 
+** Create Org-Mode :file Link to Buffer
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/kill-buffer-orgmode-file-link ()
+  "Build [[:file file-path][file-name]] org-link from current
+buffer.
+
+The function 'buffer-file-name' returns the absolute path of the
+buffer, which breaks should other users open the link. Instead,
+the relative path is referenced using the 'abbreviate-file-name'
+function."
+
+  (interactive)
+  (if-let ((absolute-path (buffer-file-name)))
+      (kill-new (message "[[file:%s][%s]]"
+                         (abbreviate-file-name absolute-path)
+                         (buffer-name)))
+    (message "Buffer is not a file")))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
