@@ -402,6 +402,18 @@ explored registers much.
   (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
 #+end_src
 
+*** File Encoding
+
+[[https://blog.hubspot.com/website/what-is-utf-8][UTF-8]] is central to the storage and encoding of text and
+files. Although other encoding systems exist, =utf-8= is practically a
+standard, at least in the West, and so it is important that we
+instruct Emacs to treat files as UTF-8 by default (credit:
+[[https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs][MasteringEmacs]]).
+
+#+begin_src emacs-lisp :tangle init.el
+(set-default-coding-systems 'utf-8)
+#+end_src
+
 * my-visuals.el
 ** Visual Advice
 
