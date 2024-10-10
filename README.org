@@ -580,3 +580,17 @@ explored registers much.
 (provide 'my-org)
 #+end_src
 
+* my-completion.el
+
+#+begin_src emacs-lisp :tangle modules/my-completion.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+** Provide my-completion.el
+
+#+begin_src emacs-lisp :tangle modules/my-completion.el
+(provide 'my-completion)
+
+;;; my-completion.el ends here
+#+end_src
+
