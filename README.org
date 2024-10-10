@@ -1187,3 +1187,24 @@ method for binding keys in Emacs.
 ;;; my-bindings.el ends here
 #+end_src
 
+* Conclusion
+
+Finally, we specify the packages (ie top-level org-headers) to be
+included in our configuration.
+
+#+begin_src emacs-lisp :tangle init.el
+;; Add configuration modules to load path
+(add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
+
+;; Load Pertinent Modules
+(require 'my-visuals)
+(require 'my-org)
+(require 'my-completion)
+(require 'my-bindings)
+(require 'my-vc)
+(require 'my-productivity)
+(require 'my-dev)
+(require 'my-functions)
+
+;;; init.el ends here
+#+end_src
