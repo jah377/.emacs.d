@@ -3,7 +3,7 @@
 ;; Terminal emulator inside Emacs
 (use-package vterm
   ;; Requires compilation, which may not work without installing dependencies
-  :init (setq vterm-always-compile-module t))
+  :init (setq vterm-always-compile-module t)
   :config
   (defun jh/vterm-new ()
   "Prompt the user for a new vterm buffer name and open it."
