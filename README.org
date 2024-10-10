@@ -561,6 +561,19 @@ explored registers much.
   (ansi-color-apply-on-region (point-min) (point-max)))
 #+end_src
 
+** Org Templates
+*** Org-Block Templates
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+(setq org-structure-template-alist
+      '(("x" . "example")
+        ("q" . "quote")
+        ("e" . "src emacs-lisp")
+        ("m" . "src emacs-lisp :tangle modules/my-")
+        ("s" . "src sh")
+        ("p" . "src python")))
+#+end_src
+
 ** Provide my-org
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
