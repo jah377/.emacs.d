@@ -586,6 +586,51 @@ explored registers much.
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
+** Vertico
+*** Vertico + Savehist
+
+The =vertico= package provides mini-buffer completion. Without it, for
+instance, I am required to blindly type the name of the desired buffer
+or file-path when calling ~switch-to-buffer~ or ~find-file~. Previous
+completions are more quickly available
+
+The =savehist= package saves the mini-buffer history so previous
+completions are more quickly available.
+
+*N.B.* The author recommends activating the packages in the ~:init~
+section of =use-package= such that the mode gets enabled right
+away. Note that this forces loading the package.
+
+#+begin_src emacs-lisp :tangle modules/my-completion.el
+;; Copied from https://github.com/minad/vertico
+(use-package vertico
+  :custom
+  (vertico-cycle t "Return to top of list")
+  (vertico-count 10 "N candidate suggestions")
+  :hook (minibuffer-setup . vertico-repeat-save)
+  :init (vertico-mode))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init (savehist-mode))
+#+end_src
+
+*** Vertico-Directory
+
+#+begin_src emacs-lisp :tangle modules/my-completion.el
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+#+end_src
+
 ** Provide my-completion.el
 
 #+begin_src emacs-lisp :tangle modules/my-completion.el
