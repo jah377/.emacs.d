@@ -1141,6 +1141,44 @@ Below, we add a number of useful functions:
 (global-set-key (kbd "C-x M-k") 'kill-current-buffer)
 #+end_src
 
+** General.el
+
+Similar to =use-package=, the =general= package provides a more convenient
+method for binding keys in Emacs.
+
+#+BEGIN_src emacs-lisp :tangle modules/my-bindings.el
+(use-package general
+  :custom
+  (general-describe-priority-keymaps nil)
+  (general-describe-keymap-sort-function 'general-sort-by-car)
+  (general-describe-keybinding-sort-function 'general-sort-by-car)
+
+  :config
+  ;; Good to unset before assigning to 'my-leader-def'
+  (global-unset-key (kbd "M-m"))
+
+  (general-create-definer my-leader-def
+    :keymaps 'global
+    :prefix "M-m"))
+
+;; :ignore t to define sub-section headers
+(my-leader-def
+
+  ;; BUFFERS
+  "b"  '(:ignore t                        :which-key "buffer")
+  "bn" '(jh/kill-buffer-name              :which-key "get-buffer-name")
+  "bp" '(jh/kill-relative-buffer-path     :which-key "get-relative-path")
+  "bl" '(jh/kill-buffer-orgmode-file-link :which-key "get-buffer-orgmode-link")
+  "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
+  "bc" '(jh/find-config-file              :which-key "jump-to-config")
+  "bf" '(ffap-other-window                :which-key "find-file-other-window")
+
+  ;; KILL BUFFERS
+  "k"  '(:ignore t                          :which-key "killing")
+  "ka" '(jh/kill-all-buffers-except-scratch :which-key "kill-all-buffers")
+  "ke" '(crux-kill-other-buffers            :which-key "kill-buffers-except-current"))
+#+end_src
+
 ** Provide my-bindings.el
 
 #+begin_src emacs-lisp :tangle modules/my-bindings.el
