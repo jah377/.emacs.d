@@ -125,6 +125,9 @@
 ;; Replace active region by typing text
 (delete-selection-mode 1)
 
+;; Specify desired column width of buffer
+(setq fill-column 79)
+
 ;; Highlight line containing point
 (global-hl-line-mode)
 
@@ -147,6 +150,8 @@
   ;; (bookmark-default-file "~/scratch/jon/.bookmarks.el")
   (bookmark-save-flag t "Save bookmarks when Emacs killed")
   (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
+
+(set-default-coding-systems 'utf-8)
 
 ;; Add configuration modules to load path
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
