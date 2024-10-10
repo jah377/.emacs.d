@@ -631,6 +631,22 @@ away. Note that this forces loading the package.
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 #+end_src
 
+** Marginalia
+
+*N.B.* =nerd-icons= package added in [[*Icons][Icons]].
+
+#+begin_src emacs-lisp :tangle modules/my-completion.el
+;; Provides additional data to mini-buffer completion
+(use-package marginalia
+  :init (marginalia-mode 1))
+
+;; Add nerd-icons to mini-buffer marginalia
+(use-package nerd-icons-completion
+  :after (marginalia nerd-icons)
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+  :config (nerd-icons-completion-mode))
+#+end_src
+
 ** Provide my-completion.el
 
 #+begin_src emacs-lisp :tangle modules/my-completion.el
