@@ -1041,6 +1041,17 @@ function."
   (jh/kill-buffers-except "*scratch*"))
 #+end_src
 
+** Jump to Configuration README.org
+
+*N.B.* See related ~M-x crux-find-user-init-file~
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/find-config-file ()
+  "Edit '~/.emacs.d/README.org', in other window."
+  (interactive)
+  (find-file-other-window "~/.emacs.d/README.org"))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
