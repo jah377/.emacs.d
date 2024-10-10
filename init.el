@@ -139,7 +139,7 @@
   (show-paren-when-point-in-periphery t)
   ;; If cursor on ), show overlay for (
   (show-paren-context-when-offscreen 'overlay)
-  :config (electric-pair-mode 1 "Automatic parens pairing"))
+  :config (electric-pair-mode 1))
 
 (use-package bookmark
   :custom

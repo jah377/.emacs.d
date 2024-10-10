@@ -370,7 +370,7 @@ visualized and the following are included in our configuration:
   (show-paren-when-point-in-periphery t)
   ;; If cursor on ), show overlay for (
   (show-paren-context-when-offscreen 'overlay)
-  :config (electric-pair-mode 1 "Automatic parens pairing"))
+  :config (electric-pair-mode 1))
 #+end_src
 
 *** Bookmarks
