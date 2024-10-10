@@ -187,3 +187,17 @@ Here, we configure default built-in Emacs settings.
 ;; Maximize frame size at init
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
+*** Prompts
+
+#+begin_src emacs-lisp :tangle init.el
+;; Too lazy to type 'yes-or-no'
+(setq use-short-answers t)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Kill buffer, even if live process attached
+;; https://www.masteringemacs.org/article/disabling-prompts-emacs
+(setq kill-buffer-query-functions
+      (remq 'process-kill-buffer-query-function
+            kill-buffer-query-functions))
+#+end_src
+
