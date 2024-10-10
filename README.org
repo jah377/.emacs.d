@@ -970,6 +970,15 @@ doc-strings, and links to function calls and source-code.
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
+** Evaluate init.el
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+;; Quickly re-evaluate init file
+(defun jh/eval-init ()
+  (interactive)
+  (load-file user-init-file))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
