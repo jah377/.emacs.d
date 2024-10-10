@@ -474,3 +474,28 @@ explored registers much.
 (provide 'my-visuals)
 #+end_src
 
+* my-org.el
+** Org Basics
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+  ;;; -*- lexical-binding: t -*-
+
+;; The essentials
+(use-package org
+  :demand t
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c c" . org-capture))
+  :hook (org-src-mode . whitespace-cleanup)
+  :custom
+  (org-startup-folded t "Always fold headers")
+  (org-startup-indented t "Visually indent at startup")
+  (org-adapt-indentation t "Align contents with heading"))
+#+end_src
+
+** Provide my-org
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+(provide 'my-org)
+#+end_src
+
