@@ -782,6 +782,20 @@ away. Note that this forces loading the package.
 #+end_src
 
 
+** Terminal
+
+#+begin_src emacs-lisp :tangle modules/my-dev.el
+;; Terminal emulator inside Emacs
+(use-package vterm
+  :config
+  (defun jh/vterm-new ()
+  "Prompt the user for a new vterm buffer name and open it."
+  (interactive)
+  (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
+    (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
+
+#+end_src
+
 ** Provide my-dev.el
 
 #+begin_src emacs-lisp :tangle modules/my-dev.el
