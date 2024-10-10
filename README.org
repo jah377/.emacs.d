@@ -172,3 +172,18 @@ using Emacs. Therefore, we perform GC if idle for 30 seconds.(credit:
 (run-with-idle-timer 30 t (lambda () (garbage-collect)))
 #+end_src
 
+** Better Defaults
+
+Here, we configure default built-in Emacs settings.
+
+*** Frame
+
+#+begin_src emacs-lisp :tangle init.el
+;; Change frame title w.r.t. current buffer
+(setq frame-title-format
+      '("emacs: " (:eval (if (buffer-file-name)
+                             (abbreviate-file-name (buffer-file-name)) "%b"))))
+
+;; Maximize frame size at init
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+end_src
