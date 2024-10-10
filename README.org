@@ -884,6 +884,19 @@ away. Note that this forces loading the package.
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
 #+end_src
 
+** Projectile-Mode
+
+#+begin_src emacs-lisp :tangle modules/my-dev.el
+;; To provide project management + navigation features
+(use-package projectile
+  :init (projectile-mode 1)
+  :custom
+  ;; Cache to prevent slow 'projectile-find-file' on larger projects
+  (projectile-enable-caching t)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map)))
+#+end_src
+
 ** Lisp
 *** Aggressive-Indent-Mode
 
