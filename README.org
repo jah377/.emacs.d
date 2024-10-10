@@ -358,6 +358,9 @@ visualized and the following are included in our configuration:
 
 ;; Specify desired column width of buffer
 (setq fill-column 79)
+
+;; Built-in Emacs minor-mode wraps long text to next line
+(global-visual-line-mode 1)
 #+end_src
 
 *** Highlighting

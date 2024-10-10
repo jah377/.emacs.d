@@ -131,6 +131,9 @@
 ;; Specify desired column width of buffer
 (setq fill-column 79)
 
+;; Built-in Emacs minor-mode wraps long text to next line
+(global-visual-line-mode 1)
+
 ;; Highlight line containing point
 (global-hl-line-mode)
 
