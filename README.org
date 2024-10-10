@@ -455,3 +455,16 @@ explored registers much.
     (nerd-icons-install-fonts t)))
 #+end_src
 
+** Modeline
+
+#+begin_src emacs-lisp :tangle modules/my-visuals.el
+(use-package doom-modeline
+  :config (doom-modeline-mode 1)
+  :custom
+  ;; Display project_name/../file_name
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
+  (doom-modeline-vcs-max-length 30 "Limit branch name length")
+  (doom-modeline-enable-word-count t "Turn on wordcount"))
+#+end_src
+
