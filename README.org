@@ -267,3 +267,17 @@ back ~C-b~ and deleting M, -, or x. _Not ideal_.
                                      (when (active-minibuffer-window)
                                        (abort-recursive-edit))))
 #+end_src
+*** Indentation Style
+
+#+begin_src emacs-lisp :tangle init.el
+;; Disable 'TAB' for indentation
+(setq-default indent-tabs-mode nil)
+
+;; Use 'TAB' for auto-completion selection
+(setq-default tab-always-indent 'complete)
+
+;; Number of spaces occupied by 'TAB'
+(setq-default tab-width 4
+              standard-indent 4)
+#+end_src
+
