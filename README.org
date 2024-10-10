@@ -468,3 +468,9 @@ explored registers much.
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 #+end_src
 
+** Provide Visuals
+
+#+begin_src emacs-lisp :tangle modules/my-visuals.el
+(provide 'my-visuals)
+#+end_src
+
