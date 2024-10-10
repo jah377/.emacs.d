@@ -964,3 +964,17 @@ doc-strings, and links to function calls and source-code.
 ;;; my-productivity.el ends here
 #+end_src
 
+* my-functions.el
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+** Provide my-functions.el
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(provide 'my-functions)
+
+;;; my-functions.el ends here
+#+end_src
+
