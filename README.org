@@ -371,3 +371,34 @@ visualized and the following are included in our configuration:
   (show-paren-context-when-offscreen 'overlay))
 #+end_src
 
+*** Bookmarks
+
+The built-in =bookmark.el= package allows us to quickly store and access
+specific locations in frequently visited files. I mostly use the
+following functions:
+
++ bookmark-set :: ~C-x r m~; Set bookmark at current location
+  - Prompt user for desired name of bookmark
+  - Bookmarked locations indicated by flag in fringe of buffer
+  - Bookmark details stored in =bookmark-alist=
++ bookmark-jump :: ~C-x r b~; Select bookmark and jump to location
++ bookmark-save :: Export =bookmark-alist= to specified file
++ bookmark-delete :: Delete bookmark in =bookmark-alist=
++ bookmark-bmenu-list :: Open buffer containing all bookmarks
+
+*N.B.* The built-in =register.el= package is a more temporary alternative
+to =bookmark=, and are assigned to a single character instead of a
+name. For more information, checkout this [[https://www.youtube.com/watch?time_continue=3&v=RLPU65RLiC4&embeds_referring_euri=https%3A%2F%2Fwww.reddit.com%2F][youtube video]]. I have not
+explored registers much.
+
+#+begin_src emacs-lisp :tangle init.el
+(use-package bookmark
+  :custom
+  ;; By default 'no-littering' package stores bookmark file to 'var/', which is
+  ;; lost if performing a "fresh" Emacs install. To persist, set
+  ;; 'bookmark-default-file' to store in personal 'scratch/' directory.
+  ;; (bookmark-default-file "~/scratch/jon/.bookmarks.el")
+  (bookmark-save-flag t "Save bookmarks when Emacs killed")
+  (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
+#+end_src
+
