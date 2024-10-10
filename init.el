@@ -161,6 +161,7 @@
 (require 'my-completion)
 (require 'my-bindings)
 (require 'my-vc)
+(require 'my-writing)
 (require 'my-productivity)
 (require 'my-dev)
 (require 'my-functions)

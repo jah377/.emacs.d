@@ -979,6 +979,87 @@ doc-strings, and links to function calls and source-code.
 ;;; my-productivity.el ends here
 #+end_src
 
+* my-writing.el
+
+#+begin_src emacs-lisp :tangle modules/my-writing.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+
+** Spell Check
+
+Spell checking is important for both things like narratives and git
+commits.  The [[https://github.com/minad/jinx][jinx]] package is preferred over the builtin =flyspell= due
+to efficiency, keybindings, and ability to save words to a dictionary.
+
+The package uses the API of the =Enchant= library [[[https://abiword.github.io/enchant/][github/enchant]]] and
+only analyses visible text (instead of the entire buffer). The =jinx=
+package requires the following local packages to provide
+spell-checking. Both =enchant= and =pkgconf= are
+Arch-specific. Dictionaries are provided by =nuspell= (the modern
+version of =hunspell=). See [[https://github.com/minad/jinx][gitub/jinx]] for more details. In Arch,
+packages can be download by ~yay enchant pkgconf hunspell~.
+
+  + hunspell :: Spell-checker dictionaries
+  + enchant :: Wrapper for spelling libraries
+  + pkgconf :: Compiler; used by =jinx= to locate =enchant=
+
+Useful commands include:
+  + jinx-next / jinx-previous :: Jump to previous/next visible
+    spelling error
+  + jinx-correct-all :: Allow user to correct all spelling errors in
+    buffer
+
+*QUIRK:* Comments in =src-blocks= are only checked if viewed in an
+=org-edit-special= buffer accessed via ~C-c '~ . This is because =jinx= only
+checks text possessing specific face properties (see
+~jinx-include-faces~ and ~jinx-exclude-faces~). When coding, we are only
+interested in checking comments and docstrings;
+~tree-sitter-hl-face:comment~, for example extends this functionality to
+=.py= files (see [[*Syntax Highlighting][Syntax Highlighting]]). To check a comment, we would need
+to remove =org-block= in ~jinx-exclude-faces~ at the expense of checking
+ALL of the code.
+
+#+begin_src elisp :tangle modules/my-writing.el
+(use-package jinx
+  :hook (org-mode text-mode prog-mode conf-mode)
+  :bind (("C-c j c" . jinx-correct)
+         ("C-c j a" . jinx-correct-all)
+         ;; alias defined using 'jinx-correct' keybinding
+         ("C-c j d" . jinx-save-word-at-point))
+  :custom
+  ;; 'jinx-mode' only checks text possessing specific face properties like
+  ;; 'font-lock-comment-face' in 'prog-mode' for example.
+  (jinx-include-faces
+   '((yaml-mode . conf-mode)
+     (yaml-ts-mode . conf-mode)
+     ;; Only check docstrings and comments; not strings
+     (conf-mode font-lock-comment-face)
+     (prog-mode font-lock-comment-face
+                font-lock-doc-face
+                tree-sitter-hl-face:comment
+                tree-sitter-hl-face:doc)))
+
+  (jinx-languages "en_GB")
+  :config
+  ;; Quickly save word-at-point to dictionary used by 'jinx'
+  (defalias 'jinx-save-word-at-point (kmacro "C-c j c @ RET"))
+
+  ;; 'jinx-correct' suggestions displayed as grid instead of long list
+  (vertico-multiform-mode 1)
+  (add-to-list 'vertico-multiform-categories
+               '(jinx grid (vertico-grid-annotate . 20))))
+#+end_src
+
+** Provide my-writing.el
+
+#+begin_src emacs-lisp :tangle modules/my-writing.el
+(provide 'my-writing)
+
+;;; my-writing.el ends here
+#+end_src
+
+
 * my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
@@ -1217,6 +1298,7 @@ included in our configuration.
 (require 'my-completion)
 (require 'my-bindings)
 (require 'my-vc)
+(require 'my-writing)
 (require 'my-productivity)
 (require 'my-dev)
 (require 'my-functions)
