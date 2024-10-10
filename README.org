@@ -26,3 +26,22 @@ packages.
 ;;; -*- lexical-binding: t -*-
 #+end_src
 
+** Temporarily Configure Garbage Collection
+
+Garbage collection (GC) ensures that a program does not exceed its
+memory quote or reach a point that it can no longer function. It also
+frees up developers from having to manually manage a program's memory
+which, in turn, reduces the potential for memory-related bugs.
+
+However, GC can extend startup time. Therefore, we (temporarily) set
+~gc-cons-threshold~ to a very large number -- effectively disabling
+garbage collection. Otherwise Emacs might freeze. This strategy is
+used by =Doom-Emacs= [[[https://github.com/doomemacs/doomemacs/blob/master/early-init.el][doomemacs/early-init.el]]].
+
+*N.B.* This value is reset later in [[*Reset Garbage Collection][Reset Garbage Collection]].
+
+#+begin_src emacs-lisp :tangle early-init.el
+;; Temporarily increase garbage collect for fast startup
+(setq gc-cons-threshold most-positive-fixnum)
+#+end_src
+
