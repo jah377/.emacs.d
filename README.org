@@ -45,3 +45,21 @@ used by =Doom-Emacs= [[[https://github.com/doomemacs/doomemacs/blob/master/early
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
+** Disable Frame Resizing
+
+Changing the font, bars, and fringes may resize the frame in order to
+preserve the number of oclumns or lines it displays. It is said that
+this affects startup times.
+
+Set prior to [[*Disable UI Elements][Disable UI Elements]] as those changes may affect frame
+resizing?
+
++ Damien Cassou :: [[https://github.com/DamienCassou/emacs.d/blob/master/early-init.el#L25][github.com/early-init.el]]
++ Tony Zorman :: [[https://tony-zorman.com/posts/emacs-potpourri.html][A Potpourri of Emacs Tweaks]]
+
+#+begin_src emacs-lisp :tangle early-init.el
+;; Inhibit frame resizing due to visual settings
+(setq frame-inhibit-implied-resize t)
+
+#+end_src
+
