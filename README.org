@@ -775,3 +775,18 @@ away. Note that this forces loading the package.
 ;;; my-completion.el ends here
 #+end_src
 
+* my-dev.el
+
+#+begin_src emacs-lisp :tangle modules/my-dev.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+
+** Provide my-dev.el
+
+#+begin_src emacs-lisp :tangle modules/my-dev.el
+(provide 'my-dev)
+
+;;; my-dev.el ends here
+#+end_src
+
