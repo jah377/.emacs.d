@@ -518,6 +518,29 @@ explored registers much.
   :custom (org-appear-inside-latex t))
 #+end_src
 
+** Org Key Behavior
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+;; 'C-a/e' jump to start-end of headline text
+(setq org-special-ctrl-a/e t)
+
+;; 'C-k' behave different on headline text
+(setq org-special-ctrl-k t)
+
+;; Do not delete hidden subtree with 'C-k'
+(setq org-ctrl-k-protect-subtree t)
+
+;; ? speed-key opens Speed Keys help.
+(setq org-use-speed-commands
+      ;; If non-nil, 'org-use-speed-commands' allows efficient
+      ;; navigation of headline text when cursor is on leading
+      ;; star. Custom function allows use of Speed keys if on ANY
+      ;; stars.
+      (lambda ()
+        (and (looking-at org-outline-regexp)
+             (looking-back "^\**"))))
+#+end_src
+
 ** Provide my-org
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
