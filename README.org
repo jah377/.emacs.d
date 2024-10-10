@@ -1125,6 +1125,22 @@ Below, we add a number of useful functions:
          ("C-c 3" . 'crux-view-url)))
 #+end_src
 
+** Global Bindings
+
+#+begin_src emacs-lisp :tangle modules/my-bindings.el
+;; 'Find-File-At-Point' package adds additional functionality to
+;; existing keybindings
+(ffap-bindings)
+
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-c C-;") 'copy-comment-region)
+(global-set-key (kbd "C-x O") 'jh/jump-to-minibuffer)
+
+;; Kill current buffer instead of selecting it from minibuffer
+(global-set-key (kbd "C-x M-k") 'kill-current-buffer)
+#+end_src
+
 ** Provide my-bindings.el
 
 #+begin_src emacs-lisp :tangle modules/my-bindings.el
