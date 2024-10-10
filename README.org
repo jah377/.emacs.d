@@ -917,6 +917,27 @@ char-based decision tree.
   (avy-lead-face ((t (:background "#000000" :foreground "#33A4FF" :weight bold)))))
 #+end_src
 
+** Type-break Mode
+
+It is not healthy to sit all day; even worse to not take breaks to
+eat/drink/stretch/walk. The built-in =type-break-mode= enforces a
+pomodoro-style break routine.
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+(use-package type-break
+  :hook (after-init)
+  :custom
+  (type-break-interval (* 50 60) "Work session duration")
+  (type-break-good-break-interval (* 5 60) "Break duration")
+  (type-break-good-rest-interval nil "Start break immediately")
+  (type-break-keystroke-threshold '(nil . nil) "Break due to time, not keystroke")
+  (type-break-file-name nil "Donot save break info")
+  (type-break-query-mode t "Remind later, if break declined")
+  (type-break-query-function 'y-or-n-p)
+  (type-break-query-interval (* 10 60))
+  (type-break-mode-line-message-mode t))
+#+end_src
+
 ** Provide my-productivity.el
 
 #+begin_src emacs-lisp :tangle modules/my-productivity.el
