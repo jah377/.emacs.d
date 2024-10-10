@@ -259,3 +259,11 @@ For example if ~(setq minibuffer-prompt-properties nil)~ and we call
 ~M-x~, it would be possible to modify the prompt by moving the cursor
 back ~C-b~ and deleting M, -, or x. _Not ideal_.
 
+**** Close Minibuffer Regardless of Point Location
+
+#+begin_src emacs-lisp :tangle init.el
+;; Closes minibuffer regardless of point location
+(advice-add 'keyboard-quit :before (lambda ()
+                                     (when (active-minibuffer-window)
+                                       (abort-recursive-edit))))
+#+end_src
