@@ -124,3 +124,21 @@ resizing?
       use-package-verbose t)
 #+end_src
 
+** Tidy Emacs Directory
+
+Default paths used to store configuraiton files and persistent data
+are not consistent across Emacs packages, and are often dumped into
+~user-emacs-directory~. Alternatively, the =no-littering= package stores
+config and data files in =/etc= and =/var= sub-directories of
+~user-emacs-directory~.
+
+#+begin_src emacs-lisp :tangle init.el
+(use-package no-littering
+  :demand t
+  :config
+  ;; Save customizations in 'etc' sub-directory and load on startup
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+  (when (file-exists-p custom-file)
+    (load custom-file)))
+#+end_src
+
