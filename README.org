@@ -842,6 +842,22 @@ Porcelain) inside Emacs [https://magit.vc/].
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
 #+end_src
 
+** Git-Gutter
+
+#+begin_src emacs-lisp :tangle modules/my-vc.el
+(use-package git-gutter
+  :hook (prog-mode org-mode)
+  :bind (("C-x P" . git-gutter:previous-hunk)
+         ("C-x N" . git-gutter:next-hunk)
+         ("C-x G" . git-gutter:popup-hunk))
+  :config
+
+  ;; Must include if 'linum-mode' activated (common in 'prog-mode')
+  ;; because 'git-gutter' does not work with 'linum-mode'.
+  (use-package git-gutter-fringe
+    :commands git-gutter-mode
+    :config (global-git-gutter-mode)))
+#+end_src
 ** Provide my-vc.el
 
 #+begin_src emacs-lisp :tangle modules/my-vc.el
