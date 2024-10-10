@@ -142,3 +142,33 @@ config and data files in =/etc= and =/var= sub-directories of
     (load custom-file)))
 #+end_src
 
+** Reset Garbage Collection
+
+In [[*Temporarily Configure Garbage Collection][Temporarily Configure Garbage Collection]] we maximized GC thresholds
+to improve startup time. Here, we use =Doom-Emacs=' "Garbage Collection
+Magic Hack" package [[[https://github.com/emacsmirror/gcmh][github/gcmh]]] to reset these values and enforce a
+"sneaky" GC strategy.
+
+#+begin_src emacs-lisp :tangle init.el
+;; Garbage Collection Magic Hack
+(use-package gcmh
+  :init (gcmh-mode 1)
+  :hook
+  (after-init . garbage-collect)
+
+  ;; Must reset GC threshold values after initialization
+  (emacs-startup . (lambda () (setq gc-cons-percentage 0.1
+                                    gc-cons-threshold (* 32 1024 1024)
+                                    gcmh-high-cons-threshold (* 32 1024 1024)
+                                    gcmh-idle-delay 30))))
+#+end_src
+
+It is recommended that we perform garbage collection when not actively
+using Emacs. Therefore, we perform GC if idle for 30 seconds.(credit:
+[[https://emacs.stackexchange.com/questions/34342/is-there-any-downside-to-setting-gc-cons-threshold-very-high-and-collecting-ga][StackExchange]])
+
+#+begin_src emacs-lisp :tangle init.el
+;; Idle garbage collecting
+(run-with-idle-timer 30 t (lambda () (garbage-collect)))
+#+end_src
+
