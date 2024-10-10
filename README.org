@@ -1101,6 +1101,30 @@ window.
   (which-key-show-remaining-keys t   "Show count of keys in modeline"))
 #+end_src
 
+** Crux
+
+The "Collection of Ridiculously Useful eXtensions" =crux= package
+bundles many useful interactive commands to enhance your overall Emacs
+experience. There are many functions [[[https://github.com/bbatsov/crux/blob/master/crux.el][github.com/crux]]] to choose from.
+
+Below, we add a number of useful functions:
+  + crux-move-beginning-of-line :: Move point to indentation of line
+  + crux-kill-line-backwards :: Kill line backwards and adjust the
+    indentation
+  + crux-switch-to-previous-buffer :: Switch to previously opened
+    buffer
+  + crux-view-url :: Open new buffer containing contents of URL
+
+#+begin_src emacs-lisp :tangle modules/my-bindings.el
+;; Collection of useful keybindings
+(use-package crux
+  :bind (([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
+         ([remap kill-whole-line] . 'crux-kill-whole-line)
+         ("M-o" . 'crux-switch-to-previous-buffer)
+         ("C-<backspace>" . 'crux-kill-line-backwards)
+         ("C-c 3" . 'crux-view-url)))
+#+end_src
+
 ** Provide my-bindings.el
 
 #+begin_src emacs-lisp :tangle modules/my-bindings.el
