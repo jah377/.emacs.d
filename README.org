@@ -1070,3 +1070,17 @@ function."
 ;;; my-functions.el ends here
 #+end_src
 
+* my-bindings.el
+
+#+begin_src emacs-lisp :tangle modules/my-bindings.el
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+** Provide my-bindings.el
+
+#+begin_src emacs-lisp :tangle modules/my-bindings.el
+(provide 'my-bindings)
+
+;;; my-bindings.el ends here
+#+end_src
+
