@@ -979,6 +979,14 @@ doc-strings, and links to function calls and source-code.
   (load-file user-init-file))
 #+end_src
 
+** Copy Buffer Name
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/kill-buffer-name ()
+  (interactive)
+  (kill-new (buffer-name)))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
