@@ -493,6 +493,31 @@ explored registers much.
   (org-adapt-indentation t "Align contents with heading"))
 #+end_src
 
+** Org Appearance
+*** Modernize Org UI
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+;; "Modernizes" UI experience of 'org-mode'
+(use-package org-modern
+  :after org
+  :init (global-org-modern-mode)
+  :hook ((org-mode                 . org-modern-mode)
+         (org-agenda-finalize-hook . org-modern-agenda))
+  :commands (org-modern-mode org-modern-agenda))
+#+end_src
+
+*** Emphasis Markers
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+(setq org-hide-emphasis-markers t)
+
+;; Interactively toggle visability if cursor between markers
+(use-package org-appear
+  :after org
+  :hook (org-mode . org-appear-mode)
+  :custom (org-appear-inside-latex t))
+#+end_src
+
 ** Provide my-org
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
