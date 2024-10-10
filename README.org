@@ -1023,6 +1023,24 @@ function."
     (message "Buffer is not a file")))
 #+end_src
 
+** Kill All Buffers
+
+*N.B.* ~M-x crux-kill-other-buffers~ to kill all buffers except current one
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/kill-buffers-except (buffer-name)
+  "Kill all buffers except for BUFFER-NAME."
+  (dolist (buffer (buffer-list))
+    (unless (or (string-equal (buffer-name buffer) buffer-name)
+                (string-equal (buffer-name buffer) (concat " " buffer-name)))
+      (kill-buffer buffer))))
+
+(defun jh/kill-all-buffers-except-scratch ()
+  "Kill all buffers except for *scratch*."
+  (interactive)
+  (jh/kill-buffers-except "*scratch*"))
+#+end_src
+
 ** Provide my-functions.el
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
