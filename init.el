@@ -1,11 +1,18 @@
 ;;; -*- lexical-binding: t -*-
 
 ;; Profile emacs startup
-(add-hook 'emacs-startup-hook
+;; https://github.com/LionyxML/emacs-kick/blob/master/init.el
+(add-hook 'after-init-hook
           (lambda ()
-            (message "*** Emacs loaded in %s seconds with %d garbage collections."
-                     (emacs-init-time "%.2f")
-                     gcs-done)))
+            (with-current-buffer (get-buffer-create "*scratch*")
+              (insert (format "*Welcome to Emacs!*
+
++ Loading time :: %s secs
++ Packages :: %s
++ Garbage Collections :: %s"
+                              (emacs-init-time "%.2f")
+                              (number-to-string (length package-activated-list))
+                              gcs-done)))))
 
 ;; Initialize package resources
 (require 'package)
