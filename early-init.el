@@ -17,5 +17,5 @@
 (setq-default inhibit-startup-screen t     ; disable start-up screen
               inhibit-startup-message t    ; disable start-up message
               initial-scratch-message nil  ; Empty initial *scratch* buffer
-              initil-buffer-choice t       ; Open *scratch* buffer at init
-              initial-major-mode 'fundamental-mode)
+              initial-buffer-choice t       ; Open *scratch* buffer at init
+              initial-major-mode 'org-mode)
