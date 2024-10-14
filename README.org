@@ -48,7 +48,7 @@ used by =Doom-Emacs= [[[https://github.com/doomemacs/doomemacs/blob/master/early
 ** Disable Frame Resizing
 
 Changing the font, bars, and fringes may resize the frame in order to
-preserve the number of oclumns or lines it displays. It is said that
+preserve the number of columns or lines it displays. It is said that
 this affects startup times.
 
 Set prior to [[*Disable UI Elements][Disable UI Elements]] as those changes may affect frame
@@ -133,7 +133,7 @@ resizing?
 
 ** Tidy Emacs Directory
 
-Default paths used to store configuraiton files and persistent data
+Default paths used to store configuration files and persistent data
 are not consistent across Emacs packages, and are often dumped into
 ~user-emacs-directory~. Alternatively, the =no-littering= package stores
 config and data files in =/etc= and =/var= sub-directories of
@@ -562,7 +562,7 @@ doing the following:
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 #+end_src
 
-** Addtitional Highlighting
+** Additional Highlighting
 
 *N.B.* Built-in Emacs settings set in [[*Highlighting][Highlighting]]
 
@@ -700,7 +700,7 @@ doing the following:
 #+end_src
 
 ** Vertico
-*** Vertico + Savehist
+*** Vertico + Save-hist
 
 The =vertico= package provides mini-buffer completion. Without it, for
 instance, I am required to blindly type the name of the desired buffer
@@ -1133,7 +1133,7 @@ Useful commands include:
 =org-edit-special= buffer accessed via ~C-c '~ . This is because =jinx= only
 checks text possessing specific face properties (see
 ~jinx-include-faces~ and ~jinx-exclude-faces~). When coding, we are only
-interested in checking comments and docstrings;
+interested in checking comments and doc-strings;
 ~tree-sitter-hl-face:comment~, for example extends this functionality to
 =.py= files (see [[*Syntax Highlighting][Syntax Highlighting]]). To check a comment, we would need
 to remove =org-block= in ~jinx-exclude-faces~ at the expense of checking
