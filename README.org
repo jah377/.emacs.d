@@ -1173,11 +1173,12 @@ Denote]].
                                    "#+FILETAGS: %3$s\n"
                                    "#+STARTUP: overview\n"))
   :config
-  ;; 'denote' provides fuctionality to organize links and backlinks in
-  ;; 'org-dblock'. Good idea to update before each save.
+  ;; Good idea to update 'org-dblock' links/backlinks before saving buffers
   (add-hook 'before-save-hook (lambda ()
-                                (when (derivedmode-p 'org-mode)
-                                  (org-update-all-dblocks)))))
+                                (when (denote-file-is-note-p (buffer-file-name))
+                                  (org-update-all-dblocks))))
+#+end_src
+
 #+end_src
 
 ** Provide my-writing.el
