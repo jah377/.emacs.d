@@ -47,7 +47,7 @@
   ;; Good idea to update 'org-dblock' links/backlinks before saving buffers
   (add-hook 'before-save-hook (lambda ()
                                 (when (denote-file-is-note-p (buffer-file-name))
-                                  (org-update-all-dblocks))))
+                                  (org-update-all-dblocks)))))
 
 (use-package consult-denote
   :after (consult denote)
