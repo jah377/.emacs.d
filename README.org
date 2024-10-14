@@ -1065,6 +1065,14 @@ pomodoro-style break routine.
   (type-break-mode-line-message-mode t))
 #+end_src
 
+** Expand-Region
+
+#+begin_src emacs-lisp :tangle modules/my-productivity.el
+(use-package expand-region
+  :commands er/expand-region
+  :bind ("C-=" . er/expand-region))
+#+end_src
+
 ** Helpful
 
 The =Helpful= package is an alternative to the built-in Emacs and

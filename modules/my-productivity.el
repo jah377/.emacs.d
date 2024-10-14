@@ -44,6 +44,10 @@
   (type-break-query-interval (* 10 60))
   (type-break-mode-line-message-mode t))
 
+(use-package expand-region
+  :commands er/expand-region
+  :bind ("C-=" . er/expand-region))
+
 ;; Alternative to built-in Emacs help
 (use-package helpful
   :bind (("C-h j" . helpful-at-point)
