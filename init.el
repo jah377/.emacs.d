@@ -100,8 +100,16 @@
 
 ;; Visualize whitespace and remove on cleanup
 (use-package whitespace
-  :hook (((prog-mode org-mode) . whitespace-mode)
-         (before-save . whitespace-cleanup))
+  :hook ((prog-mode . whitespace-mode)
+         (before-save . whitespace-cleanup)
+         ;; Org-links are always long
+         (org-mode . (lambda () (whitespace-mode nil)))
+         ;; Whitespace-mode a bit aggressive if editing make files
+         (makefile-mode . (lambda ()
+                            (setq indent-tabs-mode t
+                                  whitespace-mode nil)
+                            (add-hook 'before-save-hook
+                                      #'delete-trailing-whitesapce))))
   :custom
   (whitespace-line-column 79 "Highlight text beyond column")
   (whitespace-style '(face
@@ -112,14 +120,7 @@
                       space-before-tab::tab))
   :config
   ;; Turn off global whitespace mode
-  (global-whitespace-mode 0)
-
-  ;; Whitespace-mode a bit aggressive if editing make files
-  (add-hook 'makefile-mode-hook
-            (lambda ()
-              (setq indent-tabs-mode t
-                    whitespace-mode nil)
-              (add-hook 'before-save-hook #'delete-trailing-whitespace))))
+  (global-whitespace-mode 0))
 
 (setq  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; scroll one line at a time
        mouse-wheel-progressive-speed nil            ; don't accelerate scrolling
