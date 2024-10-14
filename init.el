@@ -161,6 +161,16 @@
   (show-paren-context-when-offscreen 'overlay)
   :config (electric-pair-mode 1))
 
+;; Highlight killed region
+;; https://www.youtube.com/watch?v=oQ9JE9kRwG8
+(defun gopar/pulse-current-region (&rest _)
+  "pulse the current implicit or active region"
+  (if mark-active
+      (pulse-momentary-highlight-region (region-beginning) (region-end))
+    (pulse-momentary-highlight-region (mark) (point))))
+
+(advice-add #'kill-ring-save :before #'gopar/pulse-current-region)
+
 (use-package bookmark
   :custom
   ;; By default 'no-littering' package stores bookmark file to 'var/', which is
