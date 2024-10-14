@@ -8,9 +8,10 @@
          ("C-c c" . org-capture))
   :hook (org-src-mode . whitespace-cleanup)
   :custom
-  (org-startup-folded t "Always fold headers")
-  (org-startup-indented t "Visually indent at startup")
-  (org-adapt-indentation t "Align contents with heading"))
+  (org-startup-folded t    "Always fold headers")
+  (org-startup-indented t  "Visually indent at startup")
+  (org-adapt-indentation t "Align contents with heading")
+  (org-ellipse ""          "Defer to 'org-modern'"))
 
 ;; "Modernizes" UI experience of 'org-mode'
 (use-package org-modern
@@ -48,8 +49,8 @@
              (looking-back "^\**"))))
 
 (setq org-confirm-babel-evaluate nil
-        org-src-window-setup 'current-window
-        org-src-ask-before-returning-to-edit-buffer t)
+      org-src-window-setup 'current-window
+      org-src-ask-before-returning-to-edit-buffer t)
 
 ;; Remove code indentation in org-src blocks
 (setq org-src-preserve-indentation t)

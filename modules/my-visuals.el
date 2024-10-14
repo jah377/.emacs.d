@@ -64,7 +64,7 @@
   ;; Display project_name/../file_name
   (doom-modeline-buffer-file-name-style 'truncate-with-project)
   (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
-  (doom-modeline-vcs-max-length 30 "Limit branch name length")
+  (doom-modeline-vcs-max-length 30   "Limit branch name length")
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 
 ;; Highlight occurrences of the same text in buffer

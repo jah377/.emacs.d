@@ -558,7 +558,7 @@ doing the following:
   ;; Display project_name/../file_name
   (doom-modeline-buffer-file-name-style 'truncate-with-project)
   (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
-  (doom-modeline-vcs-max-length 30 "Limit branch name length")
+  (doom-modeline-vcs-max-length 30   "Limit branch name length")
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 #+end_src
 
@@ -600,9 +600,10 @@ doing the following:
          ("C-c c" . org-capture))
   :hook (org-src-mode . whitespace-cleanup)
   :custom
-  (org-startup-folded t "Always fold headers")
-  (org-startup-indented t "Visually indent at startup")
-  (org-adapt-indentation t "Align contents with heading"))
+  (org-startup-folded t    "Always fold headers")
+  (org-startup-indented t  "Visually indent at startup")
+  (org-adapt-indentation t "Align contents with heading")
+  (org-ellipse ""          "Defer to 'org-modern'"))
 #+end_src
 
 ** Org Appearance
@@ -658,8 +659,8 @@ doing the following:
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
 (setq org-confirm-babel-evaluate nil
-        org-src-window-setup 'current-window
-        org-src-ask-before-returning-to-edit-buffer t)
+      org-src-window-setup 'current-window
+      org-src-ask-before-returning-to-edit-buffer t)
 
 ;; Remove code indentation in org-src blocks
 (setq org-src-preserve-indentation t)
@@ -724,7 +725,7 @@ away. Note that this forces loading the package.
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
-  :init (savehist-mode))
+  :init (savehist-mode 1))
 #+end_src
 
 *** Vertico-Directory
