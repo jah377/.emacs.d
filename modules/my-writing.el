@@ -49,6 +49,9 @@
                                 (when (denote-file-is-note-p (buffer-file-name))
                                   (org-update-all-dblocks))))
 
+(use-package consult-denote
+  :after (consult denote)
+  :commands (consult-denote-find))
 
 (provide 'my-writing)
 

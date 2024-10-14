@@ -1179,6 +1179,16 @@ Denote]].
                                   (org-update-all-dblocks))))
 #+end_src
 
+The =consult-denote= package extends the preview-functionality of
+=consult= and provides the following functions:
+
++ consult-denote-find :: Alternative to ~denote-open-or-create~
++ consult-denote-grep :: Regex to filter files in =denote-directory=
+
+#+begin_src emacs-lisp :tangle modules/my-writing.el
+(use-package consult-denote
+  :after (consult denote)
+  :commands (consult-denote-find))
 #+end_src
 
 ** Provide my-writing.el
