@@ -661,6 +661,18 @@ doing the following:
              (looking-back "^\**"))))
 #+end_src
 
+** Org Images
+
+#+begin_src emacs-lisp :tangle modules/my-org.el
+(setq org-startup-with-inline-images t
+      ;; Allow for inline display of remote images
+      org-display-remote-inline-images 'cache)
+
+;; Refresh inline images after executing an 'src-block'
+(add-hook 'org-babel-after-execute-hook
+          (lambda () (org-display-inline-images nil t)))
+#+end_src
+
 ** Org-Babel
 *** General Org-Babel Settings
 

@@ -48,6 +48,14 @@
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
 
+(setq org-startup-with-inline-images t
+      ;; Allow for inline display of remote images
+      org-display-remote-inline-images 'cache)
+
+;; Refresh inline images after executing an 'src-block'
+(add-hook 'org-babel-after-execute-hook
+          (lambda () (org-display-inline-images nil t)))
+
 (setq org-confirm-babel-evaluate nil
       org-src-window-setup 'current-window
       org-src-ask-before-returning-to-edit-buffer t)
