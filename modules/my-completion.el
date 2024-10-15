@@ -27,7 +27,7 @@
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
-  :init (savehist-mode))
+  :init (savehist-mode 1))
 
 ;; Configure directory extension.
 (use-package vertico-directory
