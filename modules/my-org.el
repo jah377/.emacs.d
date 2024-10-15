@@ -11,7 +11,7 @@
   (org-startup-folded t    "Always fold headers")
   (org-startup-indented t  "Visually indent at startup")
   (org-adapt-indentation t "Align contents with heading")
-  (org-ellipse ""          "Defer to 'org-modern'"))
+  (org-ellipsis ""         "Defer to 'org-modern'"))
 
 ;; "Modernizes" UI experience of 'org-mode'
 (use-package org-modern
