@@ -70,6 +70,10 @@
 ;; Unique buffers of identical files denoted with parent directory name
 (setq uniquify-buffer-name-style 'forward)
 
+;; Built-in mode to record changes in the windows configuration
+;; See 'winner-undo' and 'winner-redo' functions
+(winner-mode 1)
+
 ;; Too lazy to type 'yes-or-no'
 (setq use-short-answers t)
 (fset 'yes-or-no-p 'y-or-n-p)

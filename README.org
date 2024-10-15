@@ -198,6 +198,12 @@ Here, we configure default built-in Emacs settings and modes.
 (setq uniquify-buffer-name-style 'forward)
 #+end_src
 
+#+begin_src emacs-lisp :tangle init.el
+;; Built-in mode to record changes in the windows configuration
+;; See 'winner-undo' and 'winner-redo' functions
+(winner-mode 1)
+#+end_src
+
 *** Prompts
 
 #+begin_src emacs-lisp :tangle init.el
