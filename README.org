@@ -464,6 +464,16 @@ instruct Emacs to treat files as UTF-8 by default (credit:
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 #+end_src
 
+*** Images
+
+See also [[*Org Images][Org Images]].
+
+#+begin_src emacs-lisp :tangle init.el
+;; Open image files + automatically update buffer if image changes
+(auto-image-file-mode 1)
+(add-hook 'image-mode-hook 'auto-revert-mode)
+#+end_src
+
 * my-visuals.el
 ** Visual Advice
 

@@ -193,6 +193,10 @@
 ;; Display line numbers in prog-mode
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
+;; Open image files + automatically update buffer if image changes
+(auto-image-file-mode 1)
+(add-hook 'image-mode-hook 'auto-revert-mode)
+
 ;; Add configuration modules to load path
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 
