@@ -12,6 +12,7 @@
   (org-startup-folded t    "Always fold headers")
   (org-startup-indented t  "Visually indent at startup")
   (org-adapt-indentation t "Align contents with heading")
+  (org-element-use-cache nil "Avoid 'org-element--cache' error")
 
 ;; "Modernizes" UI experience of 'org-mode'
 (use-package org-modern
