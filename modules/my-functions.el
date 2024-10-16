@@ -60,6 +60,52 @@ function."
   (when (active-minibuffer-window)
     (select-window (active-minibuffer-window))))
 
+(defun jh/parse-package-defcustoms ()
+  "Parse all `defcustom` variables and their docstrings in the
+current buffer, and organize them in an `org-mode` description
+list. The variables are sorted alphabetically, and only the first
+sentence of each docstring is included."
+  (interactive)
+  (let ((output-buffer (get-buffer-create "*Parsed defcustom Variables*"))
+        ;; Match 'defcustom' followed by the variable name
+        (regex "^(defcustom\\s-+\\(\\_<[^[:space:]]+\\_>\\)")
+        ;; To store matched defcustom variables and docstrings
+        (result '()))
+    ;; Search the current buffer for all occurrences of defcustom
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward regex nil t)
+        (let ((var-name (match-string 1))
+              docstring)
+          ;; Move point to skip over the default value
+          (forward-sexp)
+          ;; Now search for the docstring (next string literal)
+          (when (re-search-forward "\"\\([^\"]*\\)\"" nil t)
+            (setq docstring (match-string 1)))
+          ;; Extract only the first sentence of the docstring
+          (when docstring
+            (setq docstring (car (split-string docstring "\\.\\s-" t))))
+          ;; Collect the variable name and docstring
+          (push (list var-name docstring) result))))
+
+    ;; Sort the collected variables alphabetically by name
+    (setq result (sort result (lambda (a b) (string< (car a) (car b)))))
+
+    ;; Insert the collected information into the temporary buffer with
+    ;; org-mode formatting
+    (with-current-buffer output-buffer
+      (erase-buffer)
+      (org-mode)  ;; Set buffer to org-mode
+      (insert "#+TITLE: Parsed defcustom Variables\n\n")
+      (dolist (item result)
+        (let ((var-name (nth 0 item))
+              (docstring (nth 1 item)))
+          (insert (format "+ %s :: %s.\n\n" var-name docstring))))
+      (goto-char (point-min)))
+    (display-buffer output-buffer)
+    (mark-whole-buffer)
+    (fill-paragraph)))
+
 (provide 'my-functions)
 
 ;;; my-functions.el ends here
