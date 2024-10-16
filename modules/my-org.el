@@ -8,10 +8,10 @@
          ("C-c c" . org-capture))
   :hook (org-src-mode . whitespace-cleanup)
   :custom
+  (org-ellipsis " ")
   (org-startup-folded t    "Always fold headers")
   (org-startup-indented t  "Visually indent at startup")
   (org-adapt-indentation t "Align contents with heading")
-  (org-ellipsis ""         "Defer to 'org-modern'"))
 
 ;; "Modernizes" UI experience of 'org-mode'
 (use-package org-modern
