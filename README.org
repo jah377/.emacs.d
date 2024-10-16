@@ -325,7 +325,7 @@ visualized and the following are included in our configuration:
   :hook ((prog-mode . whitespace-mode)
          (before-save . whitespace-cleanup)
          ;; Org-links are always long
-         (org-mode . (lambda () (whitespace-mode nil)))
+         (org-mode . (lambda () (whitespace-mode 0)))
          ;; Whitespace-mode a bit aggressive if editing make files
          (makefile-mode . (lambda ()
                             (setq indent-tabs-mode t
