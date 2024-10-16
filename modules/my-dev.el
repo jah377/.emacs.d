@@ -24,6 +24,9 @@
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))
 
+(use-package yaml-mode
+  :mode "\\.yml\\")
+
 (provide 'my-dev)
 
 ;;; my-dev.el ends here

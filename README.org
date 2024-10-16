@@ -965,6 +965,13 @@ No longer have to worry about indents getting messed up in emacs-lisp.
   :hook (emacs-lisp-mode))
 #+end_src
 
+** Yaml
+
+#+begin_src emacs-lisp :tangle modules/my-dev.el
+(use-package yaml-mode
+  :mode "\\.yml\\")
+#+end_src
+
 ** Provide my-dev.el
 
 #+begin_src emacs-lisp :tangle modules/my-dev.el
