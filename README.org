@@ -969,7 +969,7 @@ No longer have to worry about indents getting messed up in emacs-lisp.
 
 #+begin_src emacs-lisp :tangle modules/my-dev.el
 (use-package yaml-mode
-  :mode "\\.yml\\'")
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
 #+end_src
 
 ** Provide my-dev.el

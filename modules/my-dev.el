@@ -25,7 +25,7 @@
   :hook (emacs-lisp-mode))
 
 (use-package yaml-mode
-  :mode "\\.yml\\'")
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 (provide 'my-dev)
 
