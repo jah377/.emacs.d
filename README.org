@@ -622,6 +622,8 @@ doing the following:
   (org-startup-indented t  "Visually indent at startup")
   (org-adapt-indentation t "Align contents with heading")
   (org-element-use-cache nil "Avoid 'org-element--cache' error")
+  ;; Link to ID not heading text; avoids broken links should heading change
+  (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
 ** Org Appearance

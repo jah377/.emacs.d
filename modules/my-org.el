@@ -13,6 +13,8 @@
   (org-startup-indented t  "Visually indent at startup")
   (org-adapt-indentation t "Align contents with heading")
   (org-element-use-cache nil "Avoid 'org-element--cache' error")
+  ;; Link to ID not heading text; avoids broken links should heading change
+  (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
 ;; "Modernizes" UI experience of 'org-mode'
 (use-package org-modern
