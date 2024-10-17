@@ -50,13 +50,15 @@
 
 ;; Alternative to built-in Emacs help
 (use-package helpful
-  :bind (("C-h j" . helpful-at-point)
+  :bind (("C-h k" . helpful-kill-buffers)
+         ("C-h j" . helpful-at-point)
          ("C-h f" . helpful-callable)
          ("C-h F" . helpful-function)
          ("C-h v" . helpful-variable)
          ("C-h k" . helpful-key)
          ("C-h c" . helpful-command)
-         ("C-h m" . helpful-macro)))
+         ("C-h m" . helpful-macro)
+         ("C-h M" . describe-mode)))
 
 (provide 'my-productivity)
 
