@@ -1008,6 +1008,13 @@ Porcelain) inside Emacs [https://magit.vc/].
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
 #+end_src
 
+** Auto-Revert
+
+#+begin_src emacs-lisp :tangle modules/my-vc.el
+;; Switching branchs may change file on disk; if so, refresh buffers
+(global-auto-revert-mode)
+#+end_src
+
 ** Git-Gutter
 
 #+begin_src emacs-lisp :tangle modules/my-vc.el

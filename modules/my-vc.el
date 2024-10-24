@@ -15,6 +15,9 @@
   ;; Open status buffer in same buffer
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
 
+;; Switching branchs may change file on disk; if so, refresh buffers
+(global-auto-revert-mode)
+
 (use-package git-gutter
   :hook (prog-mode org-mode)
   :bind (("C-x P" . git-gutter:previous-hunk)
