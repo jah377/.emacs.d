@@ -48,8 +48,9 @@
 ;; Add nerd-icons to mini-buffer marginalia
 (use-package nerd-icons-completion
   :after (marginalia nerd-icons)
-  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
-  :config (nerd-icons-completion-mode))
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 ;; Copied from https://github.com/oantolin/orderless/tree/master
 (use-package orderless
