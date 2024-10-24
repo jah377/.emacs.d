@@ -197,6 +197,10 @@
 (auto-image-file-mode 1)
 (add-hook 'image-mode-hook 'auto-revert-mode)
 
+;; Show ediffs in single window between left/right buffers
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;; Add configuration modules to load path
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 

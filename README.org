@@ -474,6 +474,14 @@ See also [[*Org Images][Org Images]].
 (add-hook 'image-mode-hook 'auto-revert-mode)
 #+end_src
 
+*** Ediff
+
+#+begin_src emacs-lisp :tangle init.el
+;; Show ediffs in single window between left/right buffers
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+#+end_src
+
 * my-visuals.el
 ** Visual Advice
 
