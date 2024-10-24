@@ -21,7 +21,6 @@
          ("C-x N" . git-gutter:next-hunk)
          ("C-x G" . git-gutter:popup-hunk))
   :config
-
   ;; Must include if 'linum-mode' activated (common in 'prog-mode')
   ;; because 'git-gutter' does not work with 'linum-mode'.
   (use-package git-gutter-fringe
