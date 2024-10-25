@@ -50,6 +50,7 @@
 
 ;; Alternative to built-in Emacs help
 (use-package helpful
+  :after my-functions
   :bind (("C-h k" . helpful-kill-buffers)
          ("C-h j" . helpful-at-point)
          ("C-h f" . helpful-callable)
@@ -58,7 +59,12 @@
          ("C-h k" . helpful-key)
          ("C-h c" . helpful-command)
          ("C-h m" . helpful-macro)
-         ("C-h M" . describe-mode)))
+         ("C-h M" . describe-mode))
+  :config
+  (defun jh/helpful-kill-all-buffers ()
+    "Delete all open 'helpful'-mode buffers."
+    (interactive)
+    (jh/kill-buffers-by-major-mode 'helpful-mode)))
 
 (provide 'my-productivity)
 
