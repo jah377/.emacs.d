@@ -733,6 +733,140 @@ doing the following:
 (provide 'my-org)
 #+end_src
 
+* my-dired.el
+
+The built-in =dired= package provides core functionality for navigating
+directories and performing file operations within a =dired=-buffer.
+
+#+begin_src emacs-lisp :tangle modules/my-dired.el
+;;; -*- lexical-binding: t -*-
+
+(use-package dired
+  :ensure nil
+  :commands dired
+  :custom
+  ;; -A :: Show hidden files but omit implied '.' and '..' targets
+  ;; -h :: Make file sizes human-readable
+  ;; -l :: Produce long=g, detailed listing (required by 'dired')
+  ;; -v :: Sort file by version number
+  ;; --group-directories-first :: List directories at top of buffer
+  ;; --time-style=long-iso     :: List %Y-%m-%d %H:%M
+  (dired-listing-switches (concat "-Ahlv"
+                                  " --group-directories-first"
+                                  " --time-style=long-iso"))
+
+  ;; Refresh 'dired' buffer if directory changes
+  (dired-auto-revert-buffer #'dired-buffer-changed-p)
+
+  ;; If two 'dired' buffers open side-by-side, Emacs will suggest the
+  ;; other buffer directory when moving files
+  (dired-dwim-target t)
+
+  :config
+
+  ;; The variable 'dired-kill-when-opening-new-dired-buffer'
+  ;; exists. However, there are use-cases for having multiple 'dired'
+  ;; buffers open at the same time (see 'dired-dwim-target').
+  (defun jh/dired-kill-all-dired-buffers ()
+    "Delete all open 'dired'-mode buffers."
+    (interactive)
+    (dolist (buffer (buffer-list))
+      (when (eq (buffer-local-value 'major-mode buffer) 'dired-mode)
+        (kill-buffer buffer)))))
+#+end_src
+
+** Dired-X
+
+The built-in =dired-x= package builds on =dired.el= by providing extended
+and optional features including, but not limited to:
+
++ Omitted files :: =dired-omit-mode= tidies the =dired= buffer by hiding
+  files based on regex patterns
+
++ Jumping to files :: Adds commands to quickly jump to files or
+  directories in a project
+
+#+begin_src emacs-lisp :tangle modules/my-dired.el
+(use-package dired-x
+  :ensure nil
+  :after dired
+  :command dired
+  :custom
+  ;; Files to ignore in 'dired' buffer.
+  (dired-omit-files (concat dired-omit-files
+                            "\|"
+                            (rx (or (: bos (or "\.DS_Store"
+                                               "__MACOSX"
+                                               "\.git")
+                                       eos)
+                                    (: bos "__pycache__")
+                                    ".ipynb_checkpoints"
+                                    "\.~.*#"))))
+  :config
+  ;; Must activate 'dired-omit-mode' to omit 'dired-omit-files'.
+  (add-hook 'dired-after-readin-hook 'dired-omit-mode))
+#+end_src
+
+** Dired-Aux
+
+Finally, the =dired-aux= package includes auxiliary functions to support
+additional functionality in =dired=, including (but not limited to):
+
++ Bulk operations :: Handle operations on multiple files more
+  robustly, such as renaming and copying
+
++ File compression and decompression :: Adds commands for compressing
+  and decompressing files directly from a =dired= buffer
+
++ Backup and auto-save file cleanup :: Includes features to clean up
+  backup files and other temporary files more effectively
+
+#+begin_src emacs-lisp :tangle modules/my-dired.el
+(use-package dired-aux
+  :ensure nil
+  :after dired
+  :command dired
+  :bind (:map dired-mode-map
+              ;; C-+ calls 'er/expand-region'
+              ("M-+" . dired-create-empty-file))
+  :custom
+  ;; Revert dired-buffer after 'dired-do' operations
+  (dired-do-revert-buffer t))
+#+end_src
+
+** wDired
+
+The built-in ~wDired~ package is used to make =dired=-buffers
+writable. This is useful for quickly renaming multiple files.
+
+#+begin_src emacs-lisp :tangle modules/my-dired.el
+(use-package wdired
+  :ensure nil
+  :after dired
+  :command dired
+  :commands (wdired-change-to-wdired-mode)
+  :custom
+  ;; Change permission using 'SPC'
+  (wdired-allow-to-change-permissions t))
+#+end_src
+
+** Dired Icons
+
+#+begin_src emacs-lisp :tangle modules/my-dired.el
+(use-package nerd-icons-dired
+  :ensure nil
+  :after (dired nerd-icons)
+  :hook (dired-mode))
+#+end_src
+
+** Provide my-dired.el
+
+#+begin_src emacs-lisp :tangle modules/my-dired.el
+(provide 'my-dired)
+
+;;; my-dired.el ends here
+#+end_src
+
 * my-completion.el
 
 #+begin_src emacs-lisp :tangle modules/my-completion.el
@@ -1236,6 +1370,7 @@ Denote]].
 #+begin_src emacs-lisp :tangle modules/my-writing.el
 (use-package denote
   :commands denote
+  :hook (dired-mode . denote-dired-mode)
   :custom
   (denote-directory "~/notes/")
   (denote-file-type "org")
@@ -1569,6 +1704,7 @@ included in our configuration.
 (require 'my-productivity)
 (require 'my-dev)
 (require 'my-functions)
+(require 'my-dired)
 
 ;;; init.el ends here
 #+end_src

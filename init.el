@@ -214,5 +214,6 @@
 (require 'my-productivity)
 (require 'my-dev)
 (require 'my-functions)
+(require 'my-dired)
 
 ;;; init.el ends here
