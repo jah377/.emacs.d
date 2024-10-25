@@ -1469,9 +1469,11 @@ function."
     (message "Buffer is not a file")))
 #+end_src
 
-** Kill All Buffers
+** Cleaning Buffer-List
 
 *N.B.* ~M-x crux-kill-other-buffers~ to kill all buffers except current one
+
+*** Kill Buffers Except BUFFER-NAME
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
 (defun jh/kill-buffers-except (buffer-name)
@@ -1480,11 +1482,32 @@ function."
     (unless (or (string-equal (buffer-name buffer) buffer-name)
                 (string-equal (buffer-name buffer) (concat " " buffer-name)))
       (kill-buffer buffer))))
+#+end_src
 
+*** Kill Buffers Except SCRATCH
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
 (defun jh/kill-all-buffers-except-scratch ()
   "Kill all buffers except for *scratch*."
   (interactive)
   (jh/kill-buffers-except "*scratch*"))
+#+end_src
+
+*** Kill Buffers By Major-Mode
+
+Quickly kill numerous =dired-mode= or =helpful-mode= buffers that
+accumulate over time.
+
+
+#+begin_src emacs-lisp :tangle modules/my-functions.el
+(defun jh/kill-buffers-by-major-mode (mode)
+  "Kill all buffers belonging to provided major-mode."
+  (interactive "sMajor mode: ")
+  (mapcar 'kill-buffer
+          (seq-filter
+           (lambda (buffer)
+             (eq (buffer-local-value 'major-mode buffer) mode))
+           (buffer-list))))
 #+end_src
 
 ** Jump to Configuration README.org

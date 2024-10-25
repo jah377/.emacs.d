@@ -49,6 +49,15 @@ function."
   (interactive)
   (jh/kill-buffers-except "*scratch*"))
 
+(defun jh/kill-buffers-by-major-mode (mode)
+  "Kill all buffers belonging to provided major-mode."
+  (interactive "sMajor mode: ")
+  (mapcar 'kill-buffer
+          (seq-filter
+           (lambda (buffer)
+             (eq (buffer-local-value 'major-mode buffer) mode))
+           (buffer-list))))
+
 (defun jh/find-config-file ()
   "Edit '~/.emacs.d/README.org', in other window."
   (interactive)
