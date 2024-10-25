@@ -734,6 +734,9 @@ doing the following:
 #+end_src
 
 * my-dired.el
+:PROPERTIES:
+:ID:       20596bd1-da74-408e-a84e-0b5b9f240398
+:END:
 
 The built-in =dired= package provides core functionality for navigating
 directories and performing file operations within a =dired=-buffer.
@@ -1262,6 +1265,9 @@ pomodoro-style break routine.
 #+end_src
 
 ** Helpful
+:PROPERTIES:
+:ID:       8fceb308-3d5f-4c30-bd85-105bc0d09ae7
+:END:
 
 The =Helpful= package is an alternative to the built-in Emacs and
 provides a number of additional features such as more readable
@@ -1503,6 +1509,11 @@ function."
 Quickly kill numerous =dired-mode= or =helpful-mode= buffers that
 accumulate over time.
 
+*N.B.* Mode-specific functions defined in relevant ~use-package~ calls,
+including:
+
++ [[id:20596bd1-da74-408e-a84e-0b5b9f240398][my-dired.el]]
++ [[id:8fceb308-3d5f-4c30-bd85-105bc0d09ae7][Helpful]]
 
 #+begin_src emacs-lisp :tangle modules/my-functions.el
 (defun jh/kill-buffers-by-major-mode (mode)
