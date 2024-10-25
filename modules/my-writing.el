@@ -31,6 +31,7 @@
 
 (use-package denote
   :commands denote
+  :hook (dired-mode . denote-dired-mode)
   :custom
   (denote-directory "~/notes/")
   (denote-file-type "org")
