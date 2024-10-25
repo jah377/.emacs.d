@@ -1548,6 +1548,9 @@ method for binding keys in Emacs.
 #+end_src
 
 * Conclusion
+:PROPERTIES:
+:ID:       8b5ba82d-d303-4970-ade6-39f82fc08b56
+:END:
 
 Finally, we specify the packages (ie top-level org-headers) to be
 included in our configuration.
