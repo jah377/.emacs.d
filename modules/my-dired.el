@@ -3,6 +3,7 @@
 (use-package dired
   :ensure nil
   :commands dired
+  :after my-functions
   :custom
   ;; -A :: Show hidden files but omit implied '.' and '..' targets
   ;; -h :: Make file sizes human-readable
@@ -26,12 +27,10 @@
   ;; The variable 'dired-kill-when-opening-new-dired-buffer'
   ;; exists. However, there are use-cases for having multiple 'dired'
   ;; buffers open at the same time (see 'dired-dwim-target').
-  (defun jh/dired-kill-all-dired-buffers ()
+  (defun jh/dired-kill-all-buffers ()
     "Delete all open 'dired'-mode buffers."
     (interactive)
-    (dolist (buffer (buffer-list))
-      (when (eq (buffer-local-value 'major-mode buffer) 'dired-mode)
-        (kill-buffer buffer)))))
+    (jh/kill-buffers-by-major-mode 'dired-mode)))
 
 (use-package dired-x
   :ensure nil
