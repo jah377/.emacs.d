@@ -1,4 +1,4 @@
-  ;;; -*- lexical-binding: t -*-
+;;; -*- lexical-binding: t -*-
 
 ;; The essentials
 (use-package org

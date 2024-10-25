@@ -615,7 +615,7 @@ doing the following:
 ** Org Basics
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
-  ;;; -*- lexical-binding: t -*-
+;;; -*- lexical-binding: t -*-
 
 ;; The essentials
 (use-package org
