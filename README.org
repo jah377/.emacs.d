@@ -623,7 +623,9 @@ doing the following:
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
          ("C-c c" . org-capture))
-  :hook (org-src-mode . whitespace-cleanup)
+  :hook ((org-src-mode . whitespace-cleanup)
+         ;; Automatic break line at 'current-fill-column' (line wrapping)
+         (org-mode . turn-on-auto-fill))
   :custom
   (org-ellipsis " ")
   (org-startup-folded t    "Always fold headers")
