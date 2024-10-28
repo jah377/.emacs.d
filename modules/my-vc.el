@@ -3,7 +3,7 @@
 (use-package magit
   :bind ("C-x g" . magit-status)
   :diminish magit-minor-mode
-  :hook (git-commit-mode . (lambda () (setq fill-column 72)))
+  :hook (git-commit-mode . (lambda () (setopt fill-column 72)))
   :mode ("/\\.gitmodules\\'" . conf-mode)
   :custom
   ;; hide ^M chars at the end of the line when viewing diffs

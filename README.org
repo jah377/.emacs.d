@@ -42,7 +42,7 @@ used by =Doom-Emacs= [[[https://github.com/doomemacs/doomemacs/blob/master/early
 
 #+begin_src emacs-lisp :tangle early-init.el
 ;; Temporarily increase garbage collect for fast startup
-(setq gc-cons-threshold most-positive-fixnum)
+(setopt gc-cons-threshold most-positive-fixnum)
 #+end_src
 
 ** Disable Frame Resizing
@@ -59,8 +59,7 @@ resizing?
 
 #+begin_src emacs-lisp :tangle early-init.el
 ;; Inhibit frame resizing due to visual settings
-(setq frame-inhibit-implied-resize t)
-
+(setopt frame-inhibit-implied-resize t)
 #+end_src
 
 ** Disable UI Elements
@@ -117,7 +116,7 @@ warnings are annoying.
 #+begin_src emacs-lisp :tangle init.el
 ;; Initialize package resources
 (require 'package)
-(setq package-archives
+(setopt package-archives
       '(("gnu elpa"  . "https://elpa.gnu.org/packages/")
         ("melpa"     . "https://melpa.org/packages/")
         ("nongnu"    . "https://elpa.nongnu.org/nongnu/"))
@@ -137,9 +136,9 @@ warnings are annoying.
 
 ;; Standardize `use-package` settings
 (require 'use-package-ensure)
-(setq use-package-always-ensure t
-      use-package-compute-statistics t
-      use-package-verbose t)
+(setopt use-package-always-ensure t
+        use-package-compute-statistics t
+        use-package-verbose t)
 #+end_src
 
 ** Tidy Emacs Directory
@@ -155,7 +154,7 @@ config and data files in =/etc= and =/var= sub-directories of
   :demand t
   :config
   ;; Save customizations in 'etc' sub-directory and load on startup
-  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+  (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
     (load custom-file)))
 #+end_src
@@ -175,10 +174,10 @@ Magic Hack" package [[[https://github.com/emacsmirror/gcmh][github/gcmh]]] to re
   (after-init . garbage-collect)
 
   ;; Must reset GC threshold values after initialization
-  (emacs-startup . (lambda () (setq gc-cons-percentage 0.1
-                                    gc-cons-threshold (* 32 1024 1024)
-                                    gcmh-high-cons-threshold (* 32 1024 1024)
-                                    gcmh-idle-delay 30))))
+  (emacs-startup . (lambda () (setopt gc-cons-percentage 0.1
+                                      gc-cons-threshold (* 32 1024 1024)
+                                      gcmh-high-cons-threshold (* 32 1024 1024)
+                                      gcmh-idle-delay 30))))
 #+end_src
 
 It is recommended that we perform garbage collection when not actively
@@ -198,15 +197,15 @@ Here, we configure default built-in Emacs settings and modes.
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Change frame title w.r.t. current buffer
-(setq frame-title-format
-      '("emacs: " (:eval (if (buffer-file-name)
-                             (abbreviate-file-name (buffer-file-name)) "%b"))))
+(setopt frame-title-format
+        '("emacs: " (:eval (if (buffer-file-name)
+                               (abbreviate-file-name (buffer-file-name)) "%b"))))
 
 ;; Maximize frame size at init
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; Unique buffers of identical files denoted with parent directory name
-(setq uniquify-buffer-name-style 'forward)
+(setopt uniquify-buffer-name-style 'forward)
 #+end_src
 
 #+begin_src emacs-lisp :tangle init.el
@@ -219,14 +218,14 @@ Here, we configure default built-in Emacs settings and modes.
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Too lazy to type 'yes-or-no'
-(setq use-short-answers t)
+(setopt use-short-answers t)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Kill buffer, even if live process attached
 ;; https://www.masteringemacs.org/article/disabling-prompts-emacs
-(setq kill-buffer-query-functions
-      (remq 'process-kill-buffer-query-function
-            kill-buffer-query-functions))
+(setopt kill-buffer-query-functions
+        (remq 'process-kill-buffer-query-function
+              kill-buffer-query-functions))
 #+end_src
 
 *** Mini-Buffer
@@ -234,7 +233,7 @@ Here, we configure default built-in Emacs settings and modes.
 
 #+begin_src emacs-lisp :tangle modules/my-completion.el
 ;; Support opening new minibuffers from inside existing minibuffers
-(setq enable-recursive-minibuffers t)
+(setopt enable-recursive-minibuffers t)
 #+end_src
 
 **** Prompt Indicator to 'completing-read-multiple'
@@ -278,12 +277,12 @@ selected or modified by the cursor. This can be useful for creating a
 visually distinct and non-editable minibuffer prompt.
 
 #+begin_src emacs-lisp :tangle modules/my-completion.el
-(setq minibuffer-prompt-properties
+(setopt minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 #+end_src
 
-For example if ~(setq minibuffer-prompt-properties nil)~ and we call
+For example if ~(setopt minibuffer-prompt-properties nil)~ and we call
 ~M-x~, it would be possible to modify the prompt by moving the cursor
 back ~C-b~ and deleting M, -, or x. _Not ideal_.
 
@@ -330,7 +329,7 @@ visualized and the following are included in our configuration:
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Built-in Emacs variable highlights empty lines
-(setq indicate-empty-lines t)
+(setopt indicate-empty-lines t)
 
 ;; Visualize whitespace and remove on cleanup
 (use-package whitespace
@@ -340,8 +339,8 @@ visualized and the following are included in our configuration:
          (org-mode . (lambda () (whitespace-mode 0)))
          ;; Whitespace-mode a bit aggressive if editing make files
          (makefile-mode . (lambda ()
-                            (setq indent-tabs-mode t
-                                  whitespace-mode nil)
+                            (setopt indent-tabs-mode t
+                                    whitespace-mode nil)
                             (add-hook 'before-save-hook
                                       #'delete-trailing-whitesapce))))
   :custom
@@ -360,13 +359,13 @@ visualized and the following are included in our configuration:
 *** Mouse/Scrolling
 
 #+begin_src emacs-lisp :tangle init.el
-(setq  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; scroll one line at a time
-       mouse-wheel-progressive-speed nil            ; don't accelerate scrolling
-       mouse-wheel-follow-mouse 't                  ; scroll window under mouse
-       mouse-yank-at-point t)                       ; Mouse paste at point, not cursor
+(setopt  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; scroll one line at a time
+         mouse-wheel-progressive-speed nil            ; don't accelerate scrolling
+         mouse-wheel-follow-mouse 't                  ; scroll window under mouse
+         mouse-yank-at-point t)                       ; Mouse paste at point, not cursor
 
 ;; Scrolling at end of document adds one line
-(setq scroll-step 1)
+(setopt scroll-step 1)
 
 ;; Use pixel scrolling instead of by line
 ;; https://tony-zorman.com/posts/emacs-potpourri.html
@@ -390,13 +389,13 @@ visualized and the following are included in our configuration:
 (delete-selection-mode 1)
 
 ;; Specify desired column width of buffer
-(setq fill-column 79)
+(setopt fill-column 79)
 
 ;; Built-in Emacs minor-mode wraps long text to next line
 (global-visual-line-mode 1)
 
 ;; Use 'fancy' ellipses for truncated strings
-(setq truncate-string-ellipsis "...")
+(setopt truncate-string-ellipsis "...")
 #+end_src
 
 *** Highlighting
@@ -467,6 +466,10 @@ instruct Emacs to treat files as UTF-8 by default (credit:
 
 #+begin_src emacs-lisp :tangle init.el
 (set-default-coding-systems 'utf-8)
+
+;; Accept 'UTF-8' (uppercase) as a valid encoding in the coding header
+;; https://github.com/Thaodan/emacs.d
+(define-coding-system-alias 'UTF-8 'utf-8)
 #+end_src
 
 *** Line Numbers
@@ -493,8 +496,8 @@ See also [[*Org Images][Org Images]].
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Show ediffs in single window between left/right buffers
-(setq ediff-split-window-function 'split-window-horizontally
-      ediff-window-setup-function 'ediff-setup-windows-plain)
+(setopt ediff-split-window-function 'split-window-horizontally
+        ediff-window-setup-function 'ediff-setup-windows-plain)
 #+end_src
 
 * my-visuals.el
@@ -515,8 +518,8 @@ See also [[*Org Images][Org Images]].
   :ensure t
   :config
   ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (setopt doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -667,7 +670,7 @@ doing the following:
 *** Emphasis Markers
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
-(setq org-hide-emphasis-markers t)
+(setopt org-hide-emphasis-markers t)
 
 ;; Interactively toggle visability if cursor between markers
 (use-package org-appear
@@ -680,16 +683,16 @@ doing the following:
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
 ;; 'C-a/e' jump to start-end of headline text
-(setq org-special-ctrl-a/e t)
+(setopt org-special-ctrl-a/e t)
 
 ;; 'C-k' behave different on headline text
-(setq org-special-ctrl-k t)
+(setopt org-special-ctrl-k t)
 
 ;; Do not delete hidden subtree with 'C-k'
-(setq org-ctrl-k-protect-subtree t)
+(setopt org-ctrl-k-protect-subtree t)
 
 ;; ? speed-key opens Speed Keys help.
-(setq org-use-speed-commands
+(setopt org-use-speed-commands
       ;; If non-nil, 'org-use-speed-commands' allows efficient
       ;; navigation of headline text when cursor is on leading
       ;; star. Custom function allows use of Speed keys if on ANY
@@ -702,9 +705,9 @@ doing the following:
 ** Org Images
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
-(setq org-startup-with-inline-images t
-      ;; Allow for inline display of remote images
-      org-display-remote-inline-images 'cache)
+(setopt org-startup-with-inline-images t
+        ;; Allow for inline display of remote images
+        org-display-remote-inline-images 'cache)
 
 ;; Refresh inline images after executing an 'src-block'
 (add-hook 'org-babel-after-execute-hook
@@ -715,12 +718,12 @@ doing the following:
 *** General Org-Babel Settings
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
-(setq org-confirm-babel-evaluate nil
+(setopt org-confirm-babel-evaluate nil
       org-src-window-setup 'current-window
       org-src-ask-before-returning-to-edit-buffer t)
 
 ;; Remove code indentation in org-src blocks
-(setq org-src-preserve-indentation t)
+(setopt org-src-preserve-indentation t)
 #+end_src
 
 *** FIX: Display ANSI Error Colors
@@ -735,7 +738,7 @@ doing the following:
 *** Org-Block Templates
 
 #+begin_src emacs-lisp :tangle modules/my-org.el
-(setq org-structure-template-alist
+(setopt org-structure-template-alist
       '(("x" . "example")
         ("q" . "quote")
         ("e" . "src emacs-lisp")
@@ -1030,15 +1033,15 @@ away. Note that this forces loading the package.
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
   ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
+  (setopt register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
   ;; Optionally tweak the register preview window. This adds thin lines,
   ;; sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window)
 
   ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+  (setopt xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
 
   :config
   ;; For some commands and buffer sources it is useful to configure the
@@ -1054,7 +1057,7 @@ away. Note that this forces loading the package.
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<")
+  (setopt consult-narrow-key "<")
 
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
@@ -1063,14 +1066,14 @@ away. Note that this forces loading the package.
   ;; By default `consult-project-function' uses `project-root' from project.el.
   ;; Optionally configure a different project root function.
   ;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
+  ;; (setopt consult-project-function #'consult--default-project--function)
   ;;;; 2. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;; (setopt consult-project-function (lambda (_) (vc-root-dir)))
   ;;;; 3. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  ;; (setopt consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   ;;;; 4. projectile.el (projectile-project-root)
   ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root))))
+  ;; (setopt consult-project-function (lambda (_) (projectile-project-root))))
   )
 #+end_src
 
@@ -1094,7 +1097,7 @@ away. Note that this forces loading the package.
 ;; Terminal emulator inside Emacs
 (use-package vterm
   ;; Requires compilation, which may not work without installing dependencies
-  :init (setq vterm-always-compile-module t)
+  :init (setopt vterm-always-compile-module t)
   :config
   (defun jh/vterm-new ()
   "Prompt the user for a new vterm buffer name and open it."
@@ -1157,7 +1160,7 @@ Porcelain) inside Emacs [https://magit.vc/].
 (use-package magit
   :bind ("C-x g" . magit-status)
   :diminish magit-minor-mode
-  :hook (git-commit-mode . (lambda () (setq fill-column 72)))
+  :hook (git-commit-mode . (lambda () (setopt fill-column 72)))
   :mode ("/\\.gitmodules\\'" . conf-mode)
   :custom
   ;; hide ^M chars at the end of the line when viewing diffs

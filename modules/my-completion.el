@@ -1,5 +1,5 @@
 ;; Support opening new minibuffers from inside existing minibuffers
-(setq enable-recursive-minibuffers t)
+(setopt enable-recursive-minibuffers t)
 
 (defun crm-indicator (args)
   "Add indicator to completion promp when using 'completing-read-multiple'"
@@ -11,7 +11,7 @@
         (cdr args)))
 (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-(setq minibuffer-prompt-properties
+(setopt minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
@@ -121,15 +121,15 @@
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
   ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
+  (setopt register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
   ;; Optionally tweak the register preview window. This adds thin lines,
   ;; sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window)
 
   ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+  (setopt xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
 
   :config
   ;; For some commands and buffer sources it is useful to configure the
@@ -145,7 +145,7 @@
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<")
+  (setopt consult-narrow-key "<")
 
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
@@ -154,14 +154,14 @@
   ;; By default `consult-project-function' uses `project-root' from project.el.
   ;; Optionally configure a different project root function.
   ;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
+  ;; (setopt consult-project-function #'consult--default-project--function)
   ;;;; 2. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;; (setopt consult-project-function (lambda (_) (vc-root-dir)))
   ;;;; 3. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  ;; (setopt consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   ;;;; 4. projectile.el (projectile-project-root)
   ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root))))
+  ;; (setopt consult-project-function (lambda (_) (projectile-project-root))))
   )
 
 (provide 'my-completion)

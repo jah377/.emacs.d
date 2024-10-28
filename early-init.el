@@ -1,10 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
 ;; Temporarily increase garbage collect for fast startup
-(setq gc-cons-threshold most-positive-fixnum)
+(setopt gc-cons-threshold most-positive-fixnum)
 
 ;; Inhibit frame resizing due to visual settings
-(setq frame-inhibit-implied-resize t)
+(setopt frame-inhibit-implied-resize t)
 
 ;; Prevent gimpse of un-styled Emacs
 (menu-bar-mode   -1)
