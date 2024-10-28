@@ -49,14 +49,18 @@ function."
   (interactive)
   (jh/kill-buffers-except "*scratch*"))
 
-(defun jh/kill-buffers-by-major-mode (mode)
-  "Kill all buffers belonging to provided major-mode."
-  (interactive "sMajor mode: ")
-  (mapcar 'kill-buffer
-          (seq-filter
-           (lambda (buffer)
-             (eq (buffer-local-value 'major-mode buffer) mode))
-           (buffer-list))))
+(defun jh/kill-buffers-by-mode (&rest modes)
+  "Kill all buffers derived from any of MODES.
+
+Ex: (jh/kill-buffers-by-mode 'help-mode 'helpful-mode)"
+  (let ((killed 0))
+    (mapc (lambda (buffer)
+            (with-current-buffer buffer
+              (when (apply #'derived-mode-p modes)
+                (kill-buffer buffer)
+                (setq killed (1+ killed)))))
+          (buffer-list))
+    (message "Killed %d buffer(s) derived from %s" killed modes)))
 
 (defun jh/find-config-file ()
   "Edit '~/.emacs.d/README.org', in other window."
