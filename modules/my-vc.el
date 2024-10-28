@@ -13,7 +13,12 @@
   (git-commit-summary-max-length 50)
 
   ;; Open status buffer in same buffer
-  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
+  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+  :config
+  (defun jh/magit-kill-all-buffers ()
+    "Kill all buffers derived from 'magit-mode'."
+    (interactive)
+    (jh/kill-buffers-by-mode 'magit-mode)))
 
 ;; Switching branchs may change file on disk; if so, refresh buffers
 (global-auto-revert-mode)
