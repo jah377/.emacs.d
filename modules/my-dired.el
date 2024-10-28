@@ -30,7 +30,7 @@
   (defun jh/dired-kill-all-buffers ()
     "Delete all open 'dired'-mode buffers."
     (interactive)
-    (jh/kill-buffers-by-major-mode 'dired-mode)))
+    (jh/kill-buffers-by-mode 'dired-mode)))
 
 (use-package dired-x
   :ensure nil
