@@ -81,6 +81,17 @@ resizing?
               initial-major-mode 'org-mode)
 #+end_src
 
+** Disable (Some) Warnings
+
+According to [[https://github.com/Thaodan/emacs.d][github/Thaodan]], some packages store their data in Elisp
+files without lexical bindings or simply don't use it yet. These
+warnings are annoying.
+
+#+begin_src emacs-lisp :tangle early-init.el
+;; Suppress warnings about lexical bindings.
+;; https://github.com/Thaodan/emacs.d
+(setopt warning-suppress-types '((lexical-binding)))
+#+end_src
 * init.el
 
 #+begin_src emacs-lisp :tangle init.el

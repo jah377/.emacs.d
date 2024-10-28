@@ -19,3 +19,7 @@
               initial-scratch-message nil  ; Empty initial *scratch* buffer
               initial-buffer-choice t      ; Open *scratch* buffer at init
               initial-major-mode 'org-mode)
+
+;; Suppress warnings about lexical bindings.
+;; https://github.com/Thaodan/emacs.d
+(setopt warning-suppress-types '((lexical-binding)))
