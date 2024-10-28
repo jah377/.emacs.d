@@ -394,6 +394,9 @@ visualized and the following are included in our configuration:
 
 ;; Built-in Emacs minor-mode wraps long text to next line
 (global-visual-line-mode 1)
+
+;; Use 'fancy' ellipses for truncated strings
+(setq truncate-string-ellipsis "...")
 #+end_src
 
 *** Highlighting

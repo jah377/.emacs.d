@@ -153,6 +153,9 @@
 ;; Built-in Emacs minor-mode wraps long text to next line
 (global-visual-line-mode 1)
 
+;; Use 'fancy' ellipses for truncated strings
+(setq truncate-string-ellipsis "...")
+
 ;; Highlight line containing point
 (global-hl-line-mode)
 
