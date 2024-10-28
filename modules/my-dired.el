@@ -23,7 +23,6 @@
   (dired-dwim-target t)
 
   :config
-
   ;; The variable 'dired-kill-when-opening-new-dired-buffer'
   ;; exists. However, there are use-cases for having multiple 'dired'
   ;; buffers open at the same time (see 'dired-dwim-target').
@@ -35,7 +34,7 @@
 (use-package dired-x
   :ensure nil
   :after dired
-  :command dired
+  :commands dired
   :custom
   ;; Files to ignore in 'dired' buffer.
   (dired-omit-files (concat dired-omit-files
@@ -54,7 +53,7 @@
 (use-package dired-aux
   :ensure nil
   :after dired
-  :command dired
+  :commands dired
   :bind (:map dired-mode-map
               ;; C-+ calls 'er/expand-region'
               ("M-+" . dired-create-empty-file))
@@ -65,8 +64,7 @@
 (use-package wdired
   :ensure nil
   :after dired
-  :command dired
-  :commands (wdired-change-to-wdired-mode)
+  :commands dired
   :custom
   ;; Change permission using 'SPC'
   (wdired-allow-to-change-permissions t))
