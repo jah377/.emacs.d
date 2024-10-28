@@ -77,7 +77,7 @@ resizing?
 (setq-default inhibit-startup-screen t     ; disable start-up screen
               inhibit-startup-message t    ; disable start-up message
               initial-scratch-message nil  ; Empty initial *scratch* buffer
-              initial-buffer-choice t       ; Open *scratch* buffer at init
+              initial-buffer-choice t      ; Open *scratch* buffer at init
               initial-major-mode 'org-mode)
 #+end_src
 
@@ -284,6 +284,7 @@ back ~C-b~ and deleting M, -, or x. _Not ideal_.
                                      (when (active-minibuffer-window)
                                        (abort-recursive-edit))))
 #+end_src
+
 *** Indentation Style
 
 #+begin_src emacs-lisp :tangle init.el
@@ -434,10 +435,10 @@ explored registers much.
 #+begin_src emacs-lisp :tangle init.el
 (use-package bookmark
   :custom
-  ;; By default 'no-littering' package stores bookmark file to 'var/', which is
-  ;; lost if performing a "fresh" Emacs install. To persist, set
-  ;; 'bookmark-default-file' to store in personal 'scratch/' directory.
-  ;; (bookmark-default-file "~/scratch/jon/.bookmarks.el")
+  ;; By default 'no-littering' package stores bookmark file to 'var/',
+  ;; which is lost if performing a "fresh" Emacs install. To persist,
+  ;; set 'bookmark-default-file' to store in personal 'scratch/'
+  ;; directory.  (bookmark-default-file "~/scratch/jon/.bookmarks.el")
   (bookmark-save-flag t "Save bookmarks when Emacs killed")
   (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
 #+end_src

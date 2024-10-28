@@ -178,10 +178,10 @@
 
 (use-package bookmark
   :custom
-  ;; By default 'no-littering' package stores bookmark file to 'var/', which is
-  ;; lost if performing a "fresh" Emacs install. To persist, set
-  ;; 'bookmark-default-file' to store in personal 'scratch/' directory.
-  ;; (bookmark-default-file "~/scratch/jon/.bookmarks.el")
+  ;; By default 'no-littering' package stores bookmark file to 'var/',
+  ;; which is lost if performing a "fresh" Emacs install. To persist,
+  ;; set 'bookmark-default-file' to store in personal 'scratch/'
+  ;; directory.  (bookmark-default-file "~/scratch/jon/.bookmarks.el")
   (bookmark-save-flag t "Save bookmarks when Emacs killed")
   (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
 
