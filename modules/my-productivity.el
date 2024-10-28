@@ -62,9 +62,9 @@
          ("C-h M" . describe-mode))
   :config
   (defun jh/helpful-kill-all-buffers ()
-    "Delete all open 'helpful'-mode buffers."
+    "Kill all buffers derived from 'help-mode' or 'helpful-mode'."
     (interactive)
-    (jh/kill-buffers-by-major-mode 'helpful-mode)))
+    (jh/kill-buffers-by-mode 'help-mode 'helpful-mode)))
 
 (provide 'my-productivity)
 
