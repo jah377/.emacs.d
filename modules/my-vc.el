@@ -20,6 +20,19 @@
     (interactive)
     (jh/kill-buffers-by-mode 'magit-mode)))
 
+(use-package with-editor
+  :config
+  ;; To use current Emacs instance as "the editor" in 'vterm'
+  (add-hook 'vterm-mode-hook 'with-editor-export-editor)
+
+  ;; Activate 'with-editor' for several git message buffers
+  (add-to-list 'auto-mode-alist
+               '("/\\(?:COMMIT\\|NOTES\\|TAG\\|PULLREQ\\)_EDITMSG\\'"
+                 . with-editor-mode))
+
+  ;; To use Emacs bindings in the EDITMSG buffer
+  (shell-command "git config --global core.editor emacsclient"))
+
 ;; Switching branchs may change file on disk; if so, refresh buffers
 (global-auto-revert-mode)
 

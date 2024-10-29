@@ -1176,6 +1176,34 @@ Porcelain) inside Emacs [https://magit.vc/].
     (jh/kill-buffers-by-mode 'magit-mode)))
 #+end_src
 
+** Command-line Git
+
+Command-line =git= is possible in =vterm=, however editing =EDITMSG= buffers
+can be tedious. Since ~core.editor vim~ is set by default, =vim= bindings
+are required to edit the message buffer. However, setting ~core.editor
+"emacs"~ will open the =EDITMSG= buffer as a new window instead of in the
+current Emacs instance. *Annoying!*
+
+Alternatively we can install the =with-editor= package (part of =magit=) to
+open the =EDITMSG= buffer inside the current Emacs instance and set ~git
+config --global core.editor "emacsclient"~ to use Emacs bindings when
+editing the message. See [[https://magit.vc/manual/with-editor/Using-With_002dEditor-commands.html][magit.vc/manual/with-editor]].
+
+#+begin_src emacs-lisp :tangle modules/my-vc.el
+(use-package with-editor
+  :config
+  ;; To use current Emacs instance as "the editor" in 'vterm'
+  (add-hook 'vterm-mode-hook 'with-editor-export-editor)
+
+  ;; Activate 'with-editor' for several git message buffers
+  (add-to-list 'auto-mode-alist
+               '("/\\(?:COMMIT\\|NOTES\\|TAG\\|PULLREQ\\)_EDITMSG\\'"
+                 . with-editor-mode))
+
+  ;; To use Emacs bindings in the EDITMSG buffer
+  (shell-command "git config --global core.editor emacsclient"))
+#+end_src
+
 ** Auto-Revert
 
 #+begin_src emacs-lisp :tangle modules/my-vc.el
