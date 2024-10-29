@@ -14,6 +14,10 @@
 
 ;; Collection of useful keybindings
 (use-package crux
+  :commands (crux-move-beginning-of-line
+             crux-kill-whole-line
+             crux-switch-to-previous-buffer
+             crux-kill-line-backwards)
   :bind (([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
          ([remap kill-whole-line] . 'crux-kill-whole-line)
          ("M-o" . 'crux-switch-to-previous-buffer)
