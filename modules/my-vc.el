@@ -21,6 +21,8 @@
     (jh/kill-buffers-by-mode 'magit-mode)))
 
 (use-package with-editor
+  :after (vterm magit)
+  :commands vterm
   :config
   ;; To use current Emacs instance as "the editor" in 'vterm'
   (add-hook 'vterm-mode-hook 'with-editor-export-editor)
