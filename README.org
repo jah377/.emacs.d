@@ -1821,9 +1821,9 @@ files.
 
 #+begin_src emacs-lisp :tangle modules/init-dired.el
 (use-package nerd-icons-dired
-  :ensure nil
   :after (dired nerd-icons)
-  :hook (dired-mode))
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
 ** Provide init-dired.el

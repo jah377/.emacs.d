@@ -73,9 +73,9 @@
   (wdired-allow-to-change-permissions t))
 
 (use-package nerd-icons-dired
-  :ensure nil
   :after (dired nerd-icons)
-  :hook (dired-mode))
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here
