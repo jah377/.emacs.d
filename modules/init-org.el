@@ -67,6 +67,35 @@
 (add-hook 'org-babel-after-execute-hook
           (lambda () (org-display-inline-images nil t)))
 
+(defconst my-agenda-dir (concat user-emacs-directory ".agendas/"))
+(defconst my-emacs-agenda (concat my-agenda-dir "emacs.org"))
+
+(setopt org-agenda-files (list my-agenda-dir))
+
+(setopt org-agenda-window-setup 'current-window
+        org-agenda-restore-windows-after-quit t)
+
+(setopt org-log-states-order-reversed nil)
+
+(setopt org-use-fast-todo-selection 'auto
+        org-use-fast-tag-selection t)
+
+(setopt org-agenda-hide-tags-regexp ".*"
+        org-auto-align-tags t)
+
+(use-package org-super-agenda
+  :defer t
+  :after org
+  :hook (org-agenda-mode . org-super-agenda-mode)
+  :custom (org-super-agenda-header-prefix "❯ ")
+  :config
+  (set-face-attribute 'org-super-agenda-header nil :weight 'bold))
+
+(setq org-agenda-custom-commands
+      '(("e" "Personal Emacs Tasks"
+         ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
+                       (org-super-agenda-groups '((:auto-tags t)))))))))
+
 (setopt org-structure-template-alist
         '(("x" . "example")
           ("q" . "quote")
@@ -74,6 +103,16 @@
           ("m" . "src emacs-lisp :tangle modules/init-XXX.el")
           ("s" . "src sh")
           ("p" . "src python")))
+
+(setq org-capture-templates
+      '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
+         "* TODO %^{Task} %^g
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
+         :empty-lines 1
+         :kill-buffer t)))
 
 (provide 'init-org)
 ;;; init-org.el ends here

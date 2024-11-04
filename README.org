@@ -1426,6 +1426,69 @@ changes ensure that the shown image is the "latest" version of that figure.
           (lambda () (org-display-inline-images nil t)))
 #+end_src
 
+** Org-Agenda
+*** Define Agenda Files
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(defconst my-agenda-dir (concat user-emacs-directory ".agendas/"))
+(defconst my-emacs-agenda (concat my-agenda-dir "emacs.org"))
+
+(setopt org-agenda-files (list my-agenda-dir))
+#+end_src
+
+*** Agenda Window Behavior
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-agenda-window-setup 'current-window
+        org-agenda-restore-windows-after-quit t)
+#+end_src
+
+*** Agenda Log Settings
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-log-states-order-reversed nil)
+#+end_src
+
+*** Agenda TODO/Tag Settings
+
+*N.B.* To increase flexibility, tags and todos are defined at the file-level and
+not by configuring =org-tag-alist-for-agenda= or
+=org-todo-keyword-alist-for-agenda=.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-use-fast-todo-selection 'auto
+        org-use-fast-tag-selection t)
+#+end_src
+
+*** Agenda View
+**** Format Tags
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-agenda-hide-tags-regexp ".*"
+        org-auto-align-tags t)
+#+end_src
+
+**** Modernize Org-Agenda
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(use-package org-super-agenda
+  :defer t
+  :after org
+  :hook (org-agenda-mode . org-super-agenda-mode)
+  :custom (org-super-agenda-header-prefix "❯ ")
+  :config
+  (set-face-attribute 'org-super-agenda-header nil :weight 'bold))
+#+end_src
+
+**** Agenda Custom Commands
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setq org-agenda-custom-commands
+      '(("e" "Personal Emacs Tasks"
+         ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
+                       (org-super-agenda-groups '((:auto-tags t)))))))))
+#+end_src
+
 ** Org Templates
 *** Org-Block Templates
 
@@ -1447,6 +1510,19 @@ we anticipate using frequently.
           ("m" . "src emacs-lisp :tangle modules/init-XXX.el")
           ("s" . "src sh")
           ("p" . "src python")))
+#+end_src
+*** Org-Capture Templates
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setq org-capture-templates
+      '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
+         "* TODO %^{Task} %^g
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
+         :empty-lines 1
+         :kill-buffer t)))
 #+end_src
 
 ** Provide init-org.el
