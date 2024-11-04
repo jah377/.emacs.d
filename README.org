@@ -810,11 +810,13 @@ with a live process attached to it.
 
 *** Cursor When Switching Buffers
 
-=beacon-mode= is a /built-in/ minor-mode that, when activated, highlights (flashes)
-the line containing the cursor when changing current buffers.
+=beacon= is an Emacs package providing =beacon-mode= minor-mode that, when
+activated, highlights (flashes) the line containing the cursor when changing
+current buffers.
 
 #+begin_src emacs-lisp :tangle modules/init-emacs.el
-(beacon-mode 1)
+(use-package beacon
+  :hook (after-init . beacon-mode))
 #+end_src
 
 *** Matching Delimiter Pairs

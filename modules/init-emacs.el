@@ -160,7 +160,8 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
         (remq 'process-kill-buffer-query-function
               kill-buffer-query-functions))
 
-(beacon-mode 1)
+(use-package beacon
+  :hook (after-init . beacon-mode))
 
 (use-package paren
   :custom
