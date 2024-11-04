@@ -1,0 +1,27 @@
+#+TITLE: Emacs-Specific Tasks
+#+DATE: Monday, November 4, 2024
+#+FILETAGS: :personal:emacs:
+#+TODO: TODO(i@/!) ONGOING(o@/!) HOLD/WAIT(h@/!) | MERGED(M@) DROPPED(D@/!)
+#+TAGS: fix(f) bug(b) notes(n) package(p) feature(F) research(r)
+#+STARTUP: overview
+
+* TODO Investigate python-mode                           :package:notes:
+:LOGBOOK:
+- State "TODO"       from              [2024-11-04 Mon 19:36]
+  + SystemCrafters :: https://www.youtube.com/watch?v=jPXIP46BnNA
+  + Naiquev :: https://www.naiquev.in/understanding-emacs-packages-for-python.html
+  + AdventuresInWhy :: https://www.adventuresinwhy.com/post/eglot/
+:END:
+* TODO Document Org-Agenda Configuration                              :notes:
+:LOGBOOK:
+- State "TODO"       from              [2024-11-04 Mon 19:45]
+
+  Must document configuration of org-agenda. This may require additional
+  denotes about org-agenda more broadly.
+
+:END:
+* TODO Customize Org-Agenda Views                                     :fix:
+:LOGBOOK:
+- State "TODO"       from              [2024-11-04 Mon 19:48]
+  What should my /personal emacs/ agenda-view look like?
+:END:
