@@ -1703,7 +1703,6 @@ operations directly within Emacs.
 (use-package dired
   :ensure nil
   :commands dired
-  :after my-functions
   :custom
   ;; -A :: Show hidden files but omit implied '.' and '..' targets
   ;; -h :: Make file sizes human-readable
@@ -2046,7 +2045,6 @@ functions, variables, keybindings, and more.
 
 #+begin_src emacs-lisp :tangle modules/init-dev.el
 (use-package helpful
-  :after init-emacs
   :bind
   (("C-h k" . helpful-kill-buffers)
     ("C-h j" . helpful-at-point)

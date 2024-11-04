@@ -101,7 +101,6 @@
   :hook (emacs-lisp-mode))
 
 (use-package helpful
-  :after init-emacs
   :bind
   (("C-h k" . helpful-kill-buffers)
     ("C-h j" . helpful-at-point)

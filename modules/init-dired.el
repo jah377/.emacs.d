@@ -8,7 +8,6 @@
 (use-package dired
   :ensure nil
   :commands dired
-  :after my-functions
   :custom
   ;; -A :: Show hidden files but omit implied '.' and '..' targets
   ;; -h :: Make file sizes human-readable
