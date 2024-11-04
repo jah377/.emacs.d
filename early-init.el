@@ -1,25 +1,47 @@
-;;; -*- lexical-binding: t -*-
+;;; early-init.el --- Early Init -*- lexical-binding: t; no-byte-compile: t -*-
 
-;; Temporarily increase garbage collect for fast startup
+;;; Commentary:
+;; The 'early-init.el' file, introduced with Emacs27, is the first file that
+;; Emacs reads when starting up. In principal, the early initialization file
+;; should set-up a few basic things before Emacs produces the initial frame,
+;; and should not depend on any packages.
+
+;;; Code:
+
+;; https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29
 (setopt gc-cons-threshold most-positive-fixnum)
+(setopt gc-cons-percentage 0.9)
 
-;; Inhibit frame resizing due to visual settings
+;; https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
+(setopt read-process-output-max (* 512 1024))
+
 (setopt frame-inhibit-implied-resize t)
 
-;; Prevent gimpse of un-styled Emacs
+(setopt frame-resize-pixelwise t)
+
 (menu-bar-mode   -1)
-(scroll-bar-mode -1) ; Visible scrollbar
-(scroll-all-mode -1) ; Synchronized scrolling of buffers
+(scroll-bar-mode -1)
+(scroll-all-mode -1)
 (tool-bar-mode   -1)
 (tooltip-mode    -1)
 
-;; No need for splash screen and echo area message
-(setq-default inhibit-startup-screen t     ; disable start-up screen
-              inhibit-startup-message t    ; disable start-up message
-              initial-scratch-message nil  ; Empty initial *scratch* buffer
-              initial-buffer-choice t      ; Open *scratch* buffer at init
-              initial-major-mode 'org-mode)
+(setq-default inhibit-startup-screen t
+              inhibit-startup-message t
+              initial-scratch-message nil
+              iniital-buffer-choice t
+              initial-major-mode 'text-mode)
 
-;; Suppress warnings about lexical bindings.
 ;; https://github.com/Thaodan/emacs.d
 (setopt warning-suppress-types '((lexical-binding)))
+
+;;; init.el --- Init -*- no-byte-compile: t; lexical-binding: t; -*-
+
+;;; Commentary:
+;; 'init.el' serves as the primary configuration file. Most settings and
+;; configurations are organized in separate 'modules/init-*.el' files and
+;; loaded at the end of this file.
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:

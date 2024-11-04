@@ -1,4 +1,9 @@
-;;; -*- lexical-binding: t -*-
+;;; init-kbd.el --- Configure keybindings + tools  -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
 
 (use-package which-key
   :config (which-key-mode)
@@ -12,13 +17,12 @@
   (which-key-add-column-padding 1    "Padding between columns of keys")
   (which-key-show-remaining-keys t   "Show count of keys in modeline"))
 
-;; Collection of useful keybindings
 (use-package crux
   :commands (crux-move-beginning-of-line
              crux-kill-whole-line
              crux-switch-to-previous-buffer
              crux-kill-line-backwards)
-  :bind (([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
+  :bind (("C-a" . 'crux-move-beginning-of-line)
          ([remap kill-whole-line] . 'crux-kill-whole-line)
          ("M-o" . 'crux-switch-to-previous-buffer)
          ("C-<backspace>" . 'crux-kill-line-backwards)
@@ -30,10 +34,7 @@
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-c C-;") 'copy-comment-region)
-(global-set-key (kbd "C-x O") 'jh/jump-to-minibuffer)
-
-;; Kill current buffer instead of selecting it from minibuffer
+(global-set-key (kbd "C-x O") 'my/jump-to-minibuffer)
 (global-set-key (kbd "C-x M-k") 'kill-current-buffer)
 
 (use-package general
@@ -53,20 +54,25 @@
 ;; :ignore t to define sub-section headers
 (my-leader-def
 
-  ;; BUFFERS
-  "b"  '(:ignore t                        :which-key "buffer")
-  "bn" '(jh/kill-buffer-name              :which-key "get-buffer-name")
-  "bp" '(jh/kill-relative-buffer-path     :which-key "get-relative-path")
-  "bl" '(jh/kill-buffer-orgmode-file-link :which-key "get-buffer-orgmode-link")
-  "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
-  "bc" '(jh/find-config-file              :which-key "jump-to-config")
-  "bf" '(ffap-other-window                :which-key "find-file-other-window")
+ "i" '(my/eval-init :which-key "eval-init")
 
-  ;; KILL BUFFERS
-  "k"  '(:ignore t                          :which-key "killing")
-  "ka" '(jh/kill-all-buffers-except-scratch :which-key "kill-all-buffers")
-  "ke" '(crux-kill-other-buffers            :which-key "kill-buffers-except-current"))
+ ;; BUFFERS
+ "b"  '(:ignore t                        :which-key "buffer")
+ "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
+ "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
+ "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
+ "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
+ "bc" '(my/find-config-file              :which-key "jump-to-config")
+ "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
+ "bf" '(ffap-other-window                :which-key "find-file-other-window")
 
-(provide 'my-bindings)
+ ;; KILL BUFFERS
+ "k"  '(:ignore t                          :which-key "killing")
+ "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
+ "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
+ "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
+ "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
+ "km" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
 
-;;; my-bindings.el ends here
+(provide 'init-kbd)
+;;; init-kbd.el ends here

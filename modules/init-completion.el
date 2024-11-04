@@ -1,56 +1,28 @@
-;; Support opening new minibuffers from inside existing minibuffers
-(setopt enable-recursive-minibuffers t)
+;;; init-completion.el --- Configure completion in Emacs -*- lexical-binding: t; no-byte-compile: t -*-
 
-(defun crm-indicator (args)
-  "Add indicator to completion promp when using 'completing-read-multiple'"
-  (cons (format "[CRM%s] %s"
-                (replace-regexp-in-string
-                 "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                 crm-separator)
-                (car args))
-        (cdr args)))
-(advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
 
-(setopt minibuffer-prompt-properties
-      '(read-only t cursor-intangible t face minibuffer-prompt))
-(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+;;; Code:
 
-;;; -*- lexical-binding: t -*-
-
-;; Copied from https://github.com/minad/vertico
 (use-package vertico
+  ;; :init recommended by author
+  :init (vertico-mode)
   :custom
   (vertico-cycle t "Return to top of list")
   (vertico-count 10 "N candidate suggestions")
-  :hook (minibuffer-setup . vertico-repeat-save)
-  :init (vertico-mode))
+  ;; Save 'vertico' session for 'vertico-repeat' extension
+  :hook (minibuffer-setup . vertico-repeat-save))
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init (savehist-mode 1))
-
-;; Configure directory extension.
+;; Copied from https://github.com/minad/vertico?tab=readme-ov-file
 (use-package vertico-directory
   :after vertico
   :ensure nil
-  ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
               ("M-DEL" . vertico-directory-delete-word))
-  ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
-
-;; Provides additional data to mini-buffer completion
-(use-package marginalia
-  :init (marginalia-mode 1))
-
-;; Add nerd-icons to mini-buffer marginalia
-(use-package nerd-icons-completion
-  :after (marginalia nerd-icons)
-  :config
-  (nerd-icons-completion-mode)
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 ;; Copied from https://github.com/oantolin/orderless/tree/master
 (use-package orderless
@@ -59,7 +31,16 @@
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
-;; For adding extra functionality to the completion interfaces
+(use-package marginalia
+  :init (marginalia-mode 1))
+
+(use-package nerd-icons-completion
+  :after (marginalia nerd-icons)
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+;; Copied from https://github.com/minad/consult
 (use-package consult
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
@@ -164,6 +145,5 @@
   ;; (setopt consult-project-function (lambda (_) (projectile-project-root))))
   )
 
-(provide 'my-completion)
-
-;;; my-completion.el ends here
+(provide 'init-completion)
+;;; init-completion.el ends here

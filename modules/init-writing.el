@@ -1,11 +1,26 @@
-;;; -*- lexical-binding: t -*-
+;;; init-writing.el --- Configure writing tools  -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
+
+(use-package avy
+  :bind (("M-j" . avy-goto-char-timer)  ;; orig. 'default-indent-new-line'
+         :map isearch-mode-map
+         ("M-j" . avy-isearch))
+  :custom
+  (avy-timeout-seconds 0.3 "Seconds before overlay appears")
+  (avy-style 'pre "Overyly single char at beginning of word")
+  :custom-face
+  ;; Change colors to improve readability
+  (avy-lead-face ((t (:background "#000000" :foreground "#33A4FF" :weight bold)))))
 
 (use-package jinx
   :hook (org-mode text-mode prog-mode conf-mode)
   :bind (("C-c j c" . jinx-correct)
          ("C-c j a" . jinx-correct-all)
-         ;; alias defined using 'jinx-correct' keybinding
-         ("C-c j d" . jinx-save-word-at-point))
+         ("C-c j d" . my/jinx-save-word-at-point))
   :custom
   ;; 'jinx-mode' only checks text possessing specific face properties like
   ;; 'font-lock-comment-face' in 'prog-mode' for example.
@@ -22,7 +37,7 @@
   (jinx-languages "en_GB")
   :config
   ;; Quickly save word-at-point to dictionary used by 'jinx'
-  (defalias 'jinx-save-word-at-point (kmacro "C-c j c @ RET"))
+  (defalias 'my/jinx-save-word-at-point (kmacro "C-c j c @ RET"))
 
   ;; 'jinx-correct' suggestions displayed as grid instead of long list
   (vertico-multiform-mode 1)
@@ -30,6 +45,7 @@
                '(jinx grid (vertico-grid-annotate . 20))))
 
 (use-package denote
+  :after org
   :commands denote
   :hook (dired-mode . denote-dired-mode)
   :custom
@@ -43,17 +59,16 @@
                                    "#+DATE: %2$s\n"
                                    "#+ID: %4$s\n"
                                    "#+FILETAGS: %3$s\n"
-                                   "#+STARTUP: overview\n"))
-  :config
-  ;; Good idea to update 'org-dblock' links/backlinks before saving buffers
-  (add-hook 'before-save-hook (lambda ()
-                                (when (denote-file-is-note-p (buffer-file-name))
-                                  (org-update-all-dblocks)))))
+                                   "#+STARTUP: overview\n")))
+
+(add-hook 'before-save-hook (lambda ()
+                              (when (denote-file-is-note-p (buffer-file-name))
+                                (org-update-all-dblocks))))
 
 (use-package consult-denote
   :after (consult denote)
   :commands (consult-denote-find))
 
-(provide 'my-writing)
+(provide 'init-writing)
 
-;;; my-writing.el ends here
+;;; init-writing.el ends here

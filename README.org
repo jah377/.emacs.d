@@ -5,98 +5,165 @@
 
 * Introduction
 
-This is my literate Emacs configuration file; there are many like it,
-but this one is mine. It serves as both documentation and the source
-for configuring Emacs. All necessary config files are generated from
-this file by calling ~org-babel-tangle~ (~C-c C-v t~), and stored in the
-=/modules= sub-directory. As such, changes should be made in this
-document, not in the individual config files.
+This is my literate Emacs configuration file; there are many like it, but this
+one is mine. It serves as both documentation and the source for configuring
+Emacs. All necessary files to configure Emacs are generated from this file by
+calling ~org-babel-tangle~ (~C-c C-v t~), and stored in the =/modules=
+sub-directory. As such, changes should be made in this document, not in the
+individual =.el= files.
 
-*N.B.* Modules are individually imported in [[*Conclusion][Conclusion]].
-
-* early-init.el
-
-The =early-init.el= file, introduced with Emacs27, is the first file
-that Emacs reads when starting up (before =init.el=). In principal, the
-early initialization file should set-up a few basic things before
-Emacs produces the initial frame, and should not depend on any
-packages.
+* Early Init File
 
 #+begin_src emacs-lisp :tangle early-init.el
-;;; -*- lexical-binding: t -*-
+;;; early-init.el --- Early Init -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; Commentary:
+;; The 'early-init.el' file, introduced with Emacs27, is the first file that
+;; Emacs reads when starting up. In principal, the early initialization file
+;; should set-up a few basic things before Emacs produces the initial frame,
+;; and should not depend on any packages.
+
+;;; Code:
 #+end_src
 
 ** Temporarily Configure Garbage Collection
+:PROPERTIES:
+:ID:       19407840-a20f-4225-9484-bbf88d3ff00d
+:END:
 
-Garbage collection (GC) ensures that a program does not exceed its
-memory quote or reach a point that it can no longer function. It also
-frees up developers from having to manually manage a program's memory
-which, in turn, reduces the potential for memory-related bugs.
-
-However, GC can extend startup time. Therefore, we (temporarily) set
-~gc-cons-threshold~ to a very large number -- effectively disabling
-garbage collection. Otherwise Emacs might freeze. This strategy is
-used by =Doom-Emacs= [[[https://github.com/doomemacs/doomemacs/blob/master/early-init.el][doomemacs/early-init.el]]].
-
-*N.B.* This value is reset later in [[*Reset Garbage Collection][Reset Garbage Collection]].
+=gc-cons-threshold= setting controls the number of bytes required to trigger
+garbage collection (GC). Setting to ~most-positive-fixnum~ effectively disables
+GC, which significantly affects startup times. Value is lowered in the [[*Reset Garbage Collection][Reset
+Garbage Collection]] section to prevent Emacs from freezing/crashing.
 
 #+begin_src emacs-lisp :tangle early-init.el
-;; Temporarily increase garbage collect for fast startup
+;; https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29
 (setopt gc-cons-threshold most-positive-fixnum)
+(setopt gc-cons-percentage 0.9)
+#+end_src
+
+** Increase Read Process
+
+=read-process-output-max= setting controls the maximum number of bytes to read
+from sub-process in a single chunk. Value is increased to improve startup time.
+
+#+begin_src emacs-lisp :tangle early-init.el
+;; https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
+(setopt read-process-output-max (* 512 1024))
 #+end_src
 
 ** Disable Frame Resizing
 
-Changing the font, bars, and fringes may resize the frame in order to
-preserve the number of columns or lines it displays. It is said that
-this affects startup times.
+=frame-inhibit-implied-resize= setting, when set to ~t~, prevents Emacs from
+automatically resizing the frame during the initialization process.
 
-Set prior to [[*Disable UI Elements][Disable UI Elements]] as those changes may affect frame
-resizing?
+Configuring visual elements like font or fringes may trigger Emacs to resize
+the frame in order to preserve the number of columns or lines it
+displays. According to the blog post [[https://tony-zorman.com/posts/emacs-potpourri.html][A Potpourri of Emacs Tweaks]], resizing may
+contribute to increased startup time (see also [[https://github.com/DamienCassou/emacs.d/blob/master/early-init.el#L25][github.com/DamienCassou]]).
 
-+ Damien Cassou :: [[https://github.com/DamienCassou/emacs.d/blob/master/early-init.el#L25][github.com/early-init.el]]
-+ Tony Zorman :: [[https://tony-zorman.com/posts/emacs-potpourri.html][A Potpourri of Emacs Tweaks]]
+*IMPORTANT:* This should be configured before [[id:534b1a9a-e956-42b1-bf81-40b4e82b2c8e][Disable UI Elements]] and [[id:1360c936-229c-44fd-b71c-30f66960d23a][UI]] sections
 
 #+begin_src emacs-lisp :tangle early-init.el
-;; Inhibit frame resizing due to visual settings
 (setopt frame-inhibit-implied-resize t)
 #+end_src
 
-** Disable UI Elements
+Similarly, =frame-resize-pixelwise= setting, when set to ~t~, disables Emacs from
+resizing the frame when changing fonts. Doing so /allegedly/ improves startup
+times when fonts are larger than the system default (see
+[[https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el][github/jamescherti/minimal-emacs.d]]).
 
 #+begin_src emacs-lisp :tangle early-init.el
-;; Prevent gimpse of un-styled Emacs
+(setopt frame-resize-pixelwise t)
+#+end_src
+
+** Disable UI Elements
+:PROPERTIES:
+:ID:       534b1a9a-e956-42b1-bf81-40b4e82b2c8e
+:END:
+
+Remove unnecessary visual elements not only enhances the aesthetics but also
+improves startup speed.
+
++ menu-bar-mode :: Menu bar at top of the Emacs frame
++ scroll-bar-mode :: Visible scroll-bar that appears when scrolling
++ scroll-all-mode :: Visible scroll-bar during synchronized scrolling
++ tool-bar-mode :: Icons like "save" button below menu
++ tooltip-mode :: Hovering over (some) elements triggers pop-up boxes
+
+#+begin_src emacs-lisp :tangle early-init.el
 (menu-bar-mode   -1)
-(scroll-bar-mode -1) ; Visible scrollbar
-(scroll-all-mode -1) ; Synchronized scrolling of buffers
+(scroll-bar-mode -1)
+(scroll-all-mode -1)
 (tool-bar-mode   -1)
 (tooltip-mode    -1)
+#+end_src
 
-;; No need for splash screen and echo area message
-(setq-default inhibit-startup-screen t     ; disable start-up screen
-              inhibit-startup-message t    ; disable start-up message
-              initial-scratch-message nil  ; Empty initial *scratch* buffer
-              initial-buffer-choice t      ; Open *scratch* buffer at init
-              initial-major-mode 'org-mode)
+
+The startup "splash page" is also unnecessary, which we will disable/configure
+below:
+
++ inhibit-startup-screen :: ~t~ to disable startup screen
++ inhibit-startup-message :: ~t~ to disable startup message
++ initial-scratch-message :: ~nil~ for empty =*scratch*= buffer
+  - Startup stats added to =*scratch*= in [[id:1269b427-94e9-4df5-98bf-c83a31db096d][Profile Emacs Startup]]
++ initial-buffer-choice :: ~t~ to open =*scratch*= buffer after init
++ initial-major-mode :: ~'text-mode~ instead of =lisp-interaction-mode=
+  - Not interested in typing/evaluating lisp-code in =*scratch*=
+
+#+begin_src emacs-lisp :tangle early-init.el
+(setq-default inhibit-startup-screen t
+              inhibit-startup-message t
+              initial-scratch-message nil
+              iniital-buffer-choice t
+              initial-major-mode 'text-mode)
 #+end_src
 
 ** Disable (Some) Warnings
 
-According to [[https://github.com/Thaodan/emacs.d][github/Thaodan]], some packages store their data in Elisp
-files without lexical bindings or simply don't use it yet. These
-warnings are annoying.
+=warning-suppress-types= setting controls the messages sent to =*Warnings*=
+buffer. Setting to ~'((lexical-binding))~ suppresses warnings caused by
+=lexical-binding=, which are triggered when Emacs packages do not come with
+=lexical-bindings=.
+
+*N.B.* Including ~;; -*- lexical-binding: t; -*-~ at the top of Emacs lisp files is
+essential for controlling how variable bindings work in the code.
 
 #+begin_src emacs-lisp :tangle early-init.el
-;; Suppress warnings about lexical bindings.
 ;; https://github.com/Thaodan/emacs.d
 (setopt warning-suppress-types '((lexical-binding)))
 #+end_src
-* init.el
+
+* Init File
+
+#+begin_src emacs-lisp :tangle early-init.el
+;;; init.el --- Init -*- no-byte-compile: t; lexical-binding: t; -*-
+
+;;; Commentary:
+;; 'init.el' serves as the primary configuration file. Most settings and
+;; configurations are organized in separate 'modules/init-*.el' files and
+;; loaded at the end of this file.
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
+#+end_src
+
+** Profile Emacs Startup
+:PROPERTIES:
+:ID:       1269b427-94e9-4df5-98bf-c83a31db096d
+:END:
+
+This custom code computes general startup statistics and returns them in
+=*scratch*=. This is possible based on our configuration of =initial-buffer-choice=
+and =initial-scratch-message= settings in the [[id:534b1a9a-e956-42b1-bf81-40b4e82b2c8e][Disable UI Elements]] section.
+
+*N.B.* If ~use-pacakge-compute statistics t~ (set in [[id:a4fb8525-6004-4685-b4cc-297699db426e][Setup Use-Package]]), calling
+~M-x use-package-report~ opens temporary buffer containing package-specific
+initialization times.
 
 #+begin_src emacs-lisp :tangle init.el
-;;; -*- lexical-binding: t -*-
-
-;; Profile emacs startup
 ;; https://github.com/LionyxML/emacs-kick/blob/master/init.el
 (add-hook 'after-init-hook
           (lambda ()
@@ -111,11 +178,16 @@ warnings are annoying.
                               gcs-done)))))
 #+end_src
 
-** Initialize Package Resources
+** Package Setup
+*** Initialize Package Resources
+
+Here, we setup package management, set up multiple package archives, and
+prioritize them for efficient package installation/updates.
 
 #+begin_src emacs-lisp :tangle init.el
-;; Initialize package resources
+;; Required for managing external packages
 (require 'package)
+
 (setopt package-archives
       '(("gnu elpa"  . "https://elpa.gnu.org/packages/")
         ("melpa"     . "https://melpa.org/packages/")
@@ -124,17 +196,35 @@ warnings are annoying.
       '(("melpa"    . 6)
         ("gnu elpa" . 5)
         ("nongnu"   . 4)))
+
+;; MANDITORY; Emacs must be aware of available packages before installing
 (package-initialize)
 #+end_src
 
-** Setup 'use-package'
+*** Setup Use-Package
+:PROPERTIES:
+:ID:       a4fb8525-6004-4685-b4cc-297699db426e
+:END:
+
++ use-package-ensure :: External package provides =use-package-always-ensure=
+  setting, describe below.
+
++ use-package-always-ensure :: Automatically installs any package specified in
+  a =use-package= declaration if not already installed. No longer need to add
+  ~:ensure t~ each time, making the configuration cleaner and less error-prone.
+
++ use-package-compute-statistics :: ~t~ in order to track package load
+  times. Setting necessary for [[id:1269b427-94e9-4df5-98bf-c83a31db096d][Profile Emacs Startup]]
+
++ use-package-verbose :: ~t~ to return output messages during the loading and
+  installation of packages. This is helpful for debugging and tracking the
+  loading process.
 
 #+begin_src emacs-lisp :tangle init.el
-;; Is this still necessary since 'use-package' now builtin?
+;; Ensures backwards compatability ('use-package' added in Emacs29)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
-;; Standardize `use-package` settings
 (require 'use-package-ensure)
 (setopt use-package-always-ensure t
         use-package-compute-statistics t
@@ -142,18 +232,23 @@ warnings are annoying.
 #+end_src
 
 ** Tidy Emacs Directory
+:PROPERTIES:
+:ID:       a0a6ce0f-55d9-415f-a70c-48716e9d8c61
+:END:
 
-Default paths used to store configuration files and persistent data
-are not consistent across Emacs packages, and are often dumped into
-~user-emacs-directory~. Alternatively, the =no-littering= package stores
-config and data files in =/etc= and =/var= sub-directories of
-~user-emacs-directory~.
+=no-littering= is an Emacs package designed to organize =.emacs.d= and prevent
+clutter from various configuration files and cached data. By default,
+configuration and data files in =/etc= and =/var= sub-directories, respectively, of
+~user-emacs-directory~. This is advantageous as default paths used to store these
+items may not be consistent across Emacs packages.
+
+*N.B.* Emacs stores customization information in =custom.el=. Here, we move that
+file to =/etc= and load.
 
 #+begin_src emacs-lisp :tangle init.el
 (use-package no-littering
   :demand t
   :config
-  ;; Save customizations in 'etc' sub-directory and load on startup
   (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
     (load custom-file)))
@@ -161,90 +256,513 @@ config and data files in =/etc= and =/var= sub-directories of
 
 ** Reset Garbage Collection
 
-In [[*Temporarily Configure Garbage Collection][Temporarily Configure Garbage Collection]] we maximized GC thresholds
-to improve startup time. Here, we use =Doom-Emacs=' "Garbage Collection
-Magic Hack" package [[[https://github.com/emacsmirror/gcmh][github/gcmh]]] to reset these values and enforce a
-"sneaky" GC strategy.
+=gcmh= (short for "Garbage Collection Magic Hack") is an Emacs package by
+=Doom-Emacs= that optimizes garbage collection (GC) behavior. When =gcmh-mode= is
+activated, improves efficiency by raising =gc-cons-threshold= when working (↓GC
+frequency) and lowing it when in idle (↑GC frequency).
+
+*N.B.* =gc-cons-threshold= previous set to large amount in [[id:19407840-a20f-4225-9484-bbf88d3ff00d][Temporarily Configure
+Garbage Collection]] to prevent GC during initialization. _Must_ reduce to avoid
+Emacs freezing.
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Garbage Collection Magic Hack
-(use-package gcmh
-  :init (gcmh-mode 1)
-  :hook
-  (after-init . garbage-collect)
+;; (use-package gcmh
+;;   :hook
+;;   (emacs-startup . gcmh-mode)
+;;   (emacs-startup . (lambda ()
+;;                      "Reset garbage collection parameters after startup"
+;;                      (setopt gc-cons-threshold (* 32 1024 1024))))
+;;   :custom
+;;   ;; https://github.com/doomemacs/doomemacs/blob/master/lisp/doom-start.el#L85
+;;   (gcmh-idle-delay 'auto)
+;;   (gcmh-auto-idle-delay-factor 10)
+;;   (gcmh-high-cons-threhsold (* 16 1024 1024) "16mb"))
 
-  ;; Must reset GC threshold values after initialization
-  (emacs-startup . (lambda () (setopt gc-cons-percentage 0.1
-                                      gc-cons-threshold (* 32 1024 1024)
-                                      gcmh-high-cons-threshold (* 32 1024 1024)
-                                      gcmh-idle-delay 30))))
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 32 1024 1024)
+                  gc-cons-percentage 0.1)))
 #+end_src
 
-It is recommended that we perform garbage collection when not actively
-using Emacs. Therefore, we perform GC if idle for 30 seconds.(credit:
-[[https://emacs.stackexchange.com/questions/34342/is-there-any-downside-to-setting-gc-cons-threshold-very-high-and-collecting-ga][StackExchange]])
+* Emacs
 
-#+begin_src emacs-lisp :tangle init.el
-;; Idle garbage collecting
-(run-with-idle-timer 30 t (lambda () (garbage-collect)))
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+;;; init-emacs.el --- Configure basic Emacs -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; Commentary:
+;; 'init-emacs.el' configures built-in settings and modes that dictate the
+;; behavior of Emacs more broadly. External packages are kept a minimum.
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
 #+end_src
 
-** Better Defaults
+** Frame
+*** Frame Size
 
-Here, we configure default built-in Emacs settings and modes.
+=default-frame-alist= setting specifies parameters of an Emacs frame. Adding
+~'(fullscreen . maximized)~ configures Emacs to automatically open in
+full-screen.
 
-*** Frame + Buffers
-
-#+begin_src emacs-lisp :tangle init.el
-;; Change frame title w.r.t. current buffer
-(setopt frame-title-format
-        '("emacs: " (:eval (if (buffer-file-name)
-                               (abbreviate-file-name (buffer-file-name)) "%b"))))
-
-;; Maximize frame size at init
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+end_src
 
-;; Unique buffers of identical files denoted with parent directory name
+*** Frame Title
+
+=frame-title-format= setting specifies the template for displaying the title bar
+of visible Emacs frames. Here, we set it to read ~emacs: <file-name>~.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt frame-title-format
+        '("emacs: "
+          (:eval (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name)) "%b"))))
+#+end_src
+
+*** Buffer Name
+
+=uniquify-buffer-name-style= setting controls how Emacs handles the naming of
+buffers displaying files containing the same name; for example
+=~/dir/subdir_1/file.el= and and =~/dir/subdir_2/file.el=.
+
+Setting to ~'forward~ displays the name as a truncated file-path in order to
+distinguish between files; resulting in =subdir_1/file.el= and =subdir_2/file.el=.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (setopt uniquify-buffer-name-style 'forward)
 #+end_src
 
-#+begin_src emacs-lisp :tangle init.el
-;; Built-in mode to record changes in the windows configuration
-;; See 'winner-undo' and 'winner-redo' functions
-(winner-mode 1)
-#+end_src
+** Minibuffer
 
-*** Prompts
+The following recommendations are suggested by the creator of the =vertico.el=
+package (see [[https://github.com/minad/vertico][github/vertico]])
 
-#+begin_src emacs-lisp :tangle init.el
-;; Too lazy to type 'yes-or-no'
-(setopt use-short-answers t)
-(fset 'yes-or-no-p 'y-or-n-p)
+*** Recursive Minibuffer
+:PROPERTIES:
+:ID:       dfe5aad6-6c0b-4e06-8c83-028a59bb9ad1
+:END:
 
-;; Kill buffer, even if live process attached
-;; https://www.masteringemacs.org/article/disabling-prompts-emacs
-(setopt kill-buffer-query-functions
-        (remq 'process-kill-buffer-query-function
-              kill-buffer-query-functions))
-#+end_src
+=enable-recursive-minibuffers=, when set to ~t~ allows us to enter multiple
+minibuffer commands consecutively without closing the previous one. This is
+useful when accessing information while already in a minibuffer prompt.
 
-*** Mini-Buffer
-**** Recursive Minibuffer
+*Example Use-Case:* Checking another file's path in the middle of a ~M-x find-file~
+prompt. Possible to call ~M-x~ again, open another minibuffer, check what we
+need, and then return to the initial minibuffer.
 
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-;; Support opening new minibuffers from inside existing minibuffers
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (setopt enable-recursive-minibuffers t)
 #+end_src
 
-**** Prompt Indicator to 'completing-read-multiple'
+*** Read-only Minibuffer
+:PROPERTIES:
+:ID:       bbc9b953-b553-4928-a0ef-daf6df48a1f8
+:END:
 
-Recommended in the configuration of =vertico= package [[[https://github.com/minad/vertico][github/vertico]]],
-the custom function ~crm-indicator~ adds an indicator to the completion
-prompt when using ~completing-read-multiple~ which can be useful for
-visually distinguishing prompts or results.
+The minibuffer-prompt is not meant to be edited. Setting
+=minibuffer-prompt-properties= to read-only and hooking the built-in
+=cursor-intangible-mode= prevents accidental modifications of the prompt text.
 
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-(defun crm-indicator (args)
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+#+end_src
+
+*N.B.* If ~(setopt minibuffer-prompt-properties nil)~ and we call ~M-x~, possible to
+modify the "M-x" by moving the cursor back and deleting "M", "-", and/or
+"x". _Not ideal_.
+
+*** Close Minibuffer Regardless of Point Location
+:PROPERTIES:
+:ID:       51c833dd-b403-40e5-8359-f3b6f15193ff
+:END:
+
+By default, the function =keyboard-quit= only closes the minibuffer if the cursor
+is inside the minibuffer-window. That is annoying. The following allows us to
+close the minibuffer regardless of the cursor location.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(advice-add 'keyboard-quit :before (lambda ()
+                                     (when (active-minibuffer-window)
+                                       (abort-recursive-edit))))
+#+end_src
+
+*** Custom Minibuffer Functions
+**** Jump to Minibuffer
+
+This is just nice to have.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/jump-to-minibuffer ()
+  "Switch to minibuffer window (if active)"
+  (interactive)
+  (when (active-minibuffer-window)
+    (select-window (active-minibuffer-window))))
+#+end_src
+
+** Cursor
+*** Cursor Style
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setq-default cursor-type 'bar)
+#+end_src
+
+** Mouse/Scrolling
+*** Precision Scrolling
+
+=pixel-scroll-precision-mode= is a /built-in/ minor-mode that, when activated,
+provides a smoother, more precise scrolling experience. Scrolling occurs by
+pixel and not by larger fixed amounts like whole lines or pages.
+
+*N.B.* Recommended by [[https://tony-zorman.com/posts/emacs-potpourri.html][tony-zorman.com]]
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(pixel-scroll-precision-mode 1)
+#+end_src
+
+*** Mouse Behavior
+
++ mouse-yank-at-point :: ~t~ to paste at cursor, not where mouse is pointing
++ mouse-wheel-follow-mouse :: ~'t~ to scroll buffer under mouse
++ mouse-wheel-progressive-speed :: ~nil~ to disable accelerated scrolling
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt mouse-yank-at-point t
+        mouse-wheel-follow-mouth 't
+        mouse-wheel-progressive-speed nil)
+#+end_src
+
+** Line Numbers
+*** Display Line Numbers in Fringe
+:PROPERTIES:
+:ID:       253507fc-cbf8-40a5-a490-c8651a7d44dd
+:END:
+
+=display-line-numbers= is an Emacs package providing =display-line-numbers-mode=
+that, when activated, displays the line number on the left side of the buffer.
+
+By default, the fringe is not a fix amount so code on line ~1_000~ will appear
+slightly indented from code on line ~1~. To prevent this,
+=display-line-numbers-width= is set to ~4~ as we do not anticipate working on files
+longer than ~9_999~ lines.
+
+*N.B.* See =global-display-line-numbers-mode=
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(use-package display-line-numbers
+  :hook (prog-mode org-mode)
+  :custom
+  (display-line-numbers-width  4 "Prevent uneven gutter due to length of linum"))
+#+end_src
+
+** Buffers
+*** Buffer Column Width
+:PROPERTIES:
+:ID:       6881fadb-9439-4939-974c-e50265bd8a0a
+:END:
+:RELATED:
++ [[id:c955493b-ad4d-4661-ba0a-ad79ce52dbc4][Cleanup White Spaces]] :: See =whitespace-line-column=
+:END:
+
+=fill-column= setting specifies the maximum width (ie number of columns) of the
+buffer before text is wrapped, or filled, to the next line. Setting to ~79~ to
+comply with =PEP8= style guide.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt fill-column 79)
+#+end_src
+
+*** Visual Line Wrapping
+
+=global-visual-line-mode= is a /built-in/ minor-mode that, when activated, enables
+visual line wrapping across all buffers. Lines that exceed the width of the
+frame are automatically wrapped.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(global-visual-line-mode 1)
+
+;; Break at whitespace, not middle of word
+(setopt word-wrap t)
+#+end_src
+
+*** Overwrite Active Region
+
+=delete-selection-mode= is a /built-in/ minor-mode that, when activated, replaces
+or overwrites the selected region. This behavior is similar to most text
+editors. Deactivated by default, Emacs will paste/enter text _after_ the selected
+region. *Annoying*.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+;; Replace active region when typing text
+(delete-selection-mode 1)
+#+end_src
+
+*** Automatic Buffer Reloading
+
+=global-auto-revert-mode= is a /built-in/ minor-mode that, when
+activated,automatically reloads buffers when the underlying file changes on
+disk. This is particularly useful when open files change should we switch =git=
+branches.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(global-auto-revert-mode 1)
+#+end_src
+
+*** Custom Buffer Functions
+:PROPERTIES:
+:ID:       453fdeac-b2bb-4217-9803-d5c89ceaf6de
+:END:
+:RELATED:
++ [[id:d831e4e4-e9b1-480e-aa1a-a152d9707275][General.el]]
+:END:
+
+**** Copy Buffer Name
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/kill-buffer-name ()
+  "Copy file-name of current buffer"
+  (interactive)
+  (kill-new (buffer-name)))
+#+end_src
+
+**** Copy Relative Buffer Path
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/kill-relative-buffer-path ()
+  "Copy relative buffer path to kill ring.
+
+Replace '/home/<username>' prefix with '~' if applicable."
+  (interactive)
+  (if-let* ((full-path (buffer-file-name))
+            (abbrev-path (abbreviate-file-name full-path)))
+      (progn
+        (kill-new abbrev-path)
+        (message "Buffer path copied to kill ring: %s" full-path))
+    (message "Buffer is not visiting a file.")))
+#+end_src
+
+**** Kill Buffers Except Scratch
+
+*N.B.* ~M-x crux-kill-other-buffers~ to kill all but current buffer
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/kill-buffers-except (buffer-name)
+  "Kill all buffers except for BUFFER-NAME."
+  (dolist (buffer (buffer-list))
+    (unless (or (string-equal (buffer-name buffer) buffer-name)
+                (string-equal (buffer-name buffer) (concat " " buffer-name)))
+      (kill-buffer buffer))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/kill-all-buffers-except-scratch ()
+  "Kill all buffers except for *scratch*."
+  (interactive)
+  (my/kill-buffers-except "*scratch*"))
+#+end_src
+
+**** Kill Buffers Given Mode
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/kill-buffers-by-mode (&rest modes)
+  "Kill all buffers derived from any of MODES.
+
+Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
+  (let ((killed 0))
+    (mapc (lambda (buffer)
+            (with-current-buffer buffer
+              (when (apply #'derived-mode-p modes)
+                (kill-buffer buffer)
+                (setq killed (1+ killed)))))
+          (buffer-list))
+    (message "Killed %d buffer(s) derived from %s" killed modes)))
+#+end_src
+
+** White Space
+*** Indicate Empty Lines
+
+=indicate-empty-lines= setting, when set to ~t~, highlights empty lines in the
+buffer. Later, we will configure the automatic removal of empty lines.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt indicate-empty-lines t)
+#+end_src
+
+*** Cleanup White Spaces
+:PROPERTIES:
+:ID:       c955493b-ad4d-4661-ba0a-ad79ce52dbc4
+:END:
+
+=whitespace= is a /built-int/ Emacs package providing =whitespace-mode= that, when
+activated, highlights white-spaces in buffers; the package also includes
+=whitespace-cleanup-mode= which automatically removes white-spaces.
+
+*N.B.* [[https://www.emacswiki.org/emacs/WhiteSpace][Emacswiki]] provides a nice overview of the settings.
+
+=whitespace-style= setting specifies /which/ white-spaces are visualized:
+  + face :: Visualize spaces by changing =face= color (instead of in table)
+  + trailing :: Flag trailing white-space
+  + lines-tail :: Columns beyond ~whitespace-line-column~ are
+    highlighted via faces (must exclude =lines= in our configuration).
+  + empty :: Flag empty lines (only at beginning/end of buffer)
+  + indentation::space :: Flag ~TABs~ at beginning of lines
+  + space-before-tab::tab :: Flag extra ~SPC~ before ~TAB~
+
+*N.B.* =fill-column= previously set in [[id:6881fadb-9439-4939-974c-e50265bd8a0a][Buffer Column Width]] section.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(use-package whitespace
+  :hook ((prog-mode . whitespace-mode)
+         (before-save . whitespace-cleanup)
+         ;; Disable in 'org'; always flags long org-links
+         (org-mode . (lambda () (whitespace-mode 0)))
+         ;; Makefiles rely heavily on indentation and whitespace
+         (makefile-mode . (lambda ()
+                            (setopt indent-tabs-mode t
+                                    whitespace-mode nil)
+                            (add-hook 'before-save-hook
+                                      #'delete-trailing-whitesapce))))
+  :custom
+  (whitespace-line-column fill-column "Highlight text beyond column")
+  (whitespace-style '(face
+                      trailing
+                      lines-tail
+                      empty
+                      indentation::space
+                      space-before-tab::tab))
+  :config
+  (global-whitespace-mode 0))
+#+end_src
+
+** Indentation
+*** Indentation Width
+
+=tab-width= setting specifies the number of spaces a single ~TAB~
+represents. Alternatively, =standard-indent= setting sets the number of spaces
+for Emacs commands that do not have a specific indentation width set. For
+consistency, we define and set both variables to =my-indent-width=.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setq my-indent-width 4)
+(setq-default tab-width my-indent-width
+              standard-indent my-indent-width)
+#+end_src
+
+*** Tab Behavior
+:PROPERTIES:
+:ID:       925b16ea-4f78-49ca-93db-0012b84ca33f
+:END:
+
+=tab-always-indent= setting specifies the behavior of ~TAB~. This is particularly
+relevant in programming modes. Setting to ~'complete~ results in ~TAB~ first
+attempting to indent the line (if the line is already properly indented);
+otherwise ~TAB~ will trigger code completion instead (if available).
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setq-default tab-always-indent 'complete)
+#+end_src
+
+*** Indent Using Spaces
+
+=indent-tabs-mode= is a /built-in/ minor-mode that, when activated, specifies that
+indentation _can_ insert ~\t~ characters. Setting to ~nil~ deactivate the mode, thus
+~\s~ is used; as recommended in the =PEP8= style guide, removing discrepancies that
+may occur between different text editors or IDEs.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setq-default indent-tabs-mode nil)
+#+end_src
+
+** History
+*** Window Layout History
+
+=winner-mode= is a /built-in/ minor-mode that, when activated, tracks changes to
+window layouts (ie splits, closing, resizing, etc). Changes are stored in
+=winner-ring-alist=. The mode includes two functions for undoing and redoing
+changes to the window:
+
++ winner-undo :: Default ~C-c <left>~ to revert window layout
++ winner-redo :: Default ~C-c <right>~ to redo the previously undone change
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(winner-mode 1)
+#+end_src
+
+*** Minibuffer History
+:PROPERTIES:
+:ID:       e010f1a6-c723-4ca1-bf39-62b3a9672797
+:END:
+
+=savehist-mode= is a /built-in/ minor-mode that, when activated, saves the
+minibuffer history (ie commands, file-names, search history, etc) across Emacs
+sessions. Minibuffer history saved in =savehist.el= (see =savehist-file= variable),
+whose location is modified by the =no-litter= package (see [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]]).
+
+*N.B.* Recommended by the creator of the =vertico.el= ([[https://github.com/minad/vertico][github/vertico]]).
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(savehist-mode 1)
+#+end_src
+
+*** Cursor Position History
+
+=saveplace-mode= is a /built-in/ minor-mode that, when activated, saves the cursor
+position in a given file; if previously visited, the cursor will move to the
+last known position. Cursor positions saved in =save-place.el= (see
+=save-place-file= variable), whose location is modified by the =no-litter= package
+(see [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]]).
+
+*N.B.* Suggested in [[https://www.jamescherti.com/essential-emacs-packages/][jamescherti.com]] blog-post.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(save-place-mode 1)
+#+end_src
+
+** Prompting
+*** Lazy Prompt Response
+
+=use-short-answers= setting, when set to ~t~, allows users to respond to
+confirmation prompts with simple ~y~ or ~n~ (instead of typing the full words).
+
+The functions =yes-or-no-p= and =y-or-n-p= are effectively the same, however the
+former requires full ~yes~ or ~no~ answers. Here, we effectively replace the
+function with =y-or-no-p= so that single letter answers may be used across all
+prompts.
+
+*N.B.* Suggested in [[https://www.masteringemacs.org/article/disabling-prompts-emacs][masteringemacs.org]] article.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt use-short-answers t)
+(fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+*** Disable New File Confirmation
+
+=confirm-nonexistent-file-or-buffer= setting, when set to ~nil~, disables user
+confirmation before visiting a new file or buffer.
+
+*N.B.* Suggested in [[https://www.masteringemacs.org/article/disabling-prompts-emacs][masteringemacs.org]] article.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt confirm-nonexistent-file-or-buffer nil)
+#+end_src
+
+*** CRM Prompt Indicator
+
+The custom function ~crm-indicator~ adds an indicator to the completion prompt
+when using ~completing-read-multiple~. This makes it easier to visualize multiple
+inputs.
+
+*N.B.* Suggested by the creator of the =vertico.el= package ([[https://github.com/minad/vertico][github/vertico]]).
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/crm-indicator (args)
   "Add indicator to completion promp when using 'completing-read-multiple'"
   (cons (format "[CRM%s] %s"
                 (replace-regexp-in-string
@@ -252,12 +770,14 @@ visually distinguishing prompts or results.
                  crm-separator)
                 (car args))
         (cdr args)))
-(advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+(advice-add #'completing-read-multiple :filter-args #'my/crm-indicator)
 #+end_src
 
-For example, calling the example function ~test-crm-indicator~ indicates
-that selecting multiple options is both possible using a
-comma-separator. *N.B.* src-block not tangled to configuration file.
+For example, calling the example function ~test-crm-indicator~ indicates that
+selecting multiple options is both possible using a comma-separator.
+
+*N.B.* src-block not tangled to configuration file.
 
 #+begin_src emacs-lisp :tangle no
 (defun test-crm-indicator ()
@@ -267,144 +787,51 @@ comma-separator. *N.B.* src-block not tangled to configuration file.
     (completing-read-multiple "Choose options: " choices)))
 #+end_src
 
-**** Make Minibuffer Prompt Read-Only
+*** Killing Buffer with Live Process
 
-Again, recommended in the configuration of the =vertico= package
-[[[https://github.com/minad/vertico][github/vertico]]]. This code defines the minibuffer prompt to be
-read-only and makes the cursor intangible when it is over the
-minibuffer prompt. In other words, text in the minibuffer cannot be
-selected or modified by the cursor. This can be useful for creating a
-visually distinct and non-editable minibuffer prompt.
+The following sidesteps the prompt that asks you if you want to kill a buffer
+with a live process attached to it.
 
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-(setopt minibuffer-prompt-properties
-      '(read-only t cursor-intangible t face minibuffer-prompt))
-(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+*N.B.* Suggested in [[https://www.masteringemacs.org/article/disabling-prompts-emacs][masteringemacs.org]] article.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(setopt kill-buffer-query-functions
+        (remq 'process-kill-buffer-query-function
+              kill-buffer-query-functions))
 #+end_src
 
-For example if ~(setopt minibuffer-prompt-properties nil)~ and we call
-~M-x~, it would be possible to modify the prompt by moving the cursor
-back ~C-b~ and deleting M, -, or x. _Not ideal_.
+** Highlighting
+:PROPERTIES:
+:ID:       1ae14e20-459c-44ec-8c2a-b5f2f64116ac
+:END:
+:RELATED:
++ [[id:5e72d5f0-fdaf-491a-9a84-9806ee295d0a][Highlight TODOs]]
+:END:
 
-**** Close Minibuffer Regardless of Point Location
+*** Cursor When Switching Buffers
 
-#+begin_src emacs-lisp :tangle init.el
-;; Closes minibuffer regardless of point location
-(advice-add 'keyboard-quit :before (lambda ()
-                                     (when (active-minibuffer-window)
-                                       (abort-recursive-edit))))
+=beacon-mode= is a /built-in/ minor-mode that, when activated, highlights (flashes)
+the line containing the cursor when changing current buffers.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(beacon-mode 1)
 #+end_src
 
-*** Indentation Style
+*** Matching Delimiter Pairs
 
-#+begin_src emacs-lisp :tangle init.el
-;; Disable 'TAB' for indentation
-(setq-default indent-tabs-mode nil)
+=paren= is a /built-in/ Emacs package providing =show-paren-mode= that, when
+activated, highlights matching pairs of parentheses/delimiters when the cursor
+is positioned at a delimiter. Several settings should be mentioned:
 
-;; Use 'TAB' for auto-completion selection
-(setq-default tab-always-indent 'complete)
++ show-paren-style :: ~'parenthesis~ to only highlight delimiter
+  - ~'expression~ highlights the entire enclosed text
++ show-paren-context-when-offscreen :: ~'overlay~
+  - Overlay popup provides additional context if matching pair off screen
 
-;; Number of spaces occupied by 'TAB'
-(setq-default tab-width 4
-              standard-indent 4)
-#+end_src
+*N.B.* The /built-in/ minor-mode =electric-pair-mode= is also activated, which
+automatically inserts a closing delimiter.
 
-*** Whitespace
-
-The builtin =whitespace-mode= is useful for visualizing and
-automatically cleaning up white-spaces in our buffers. [[https://www.emacswiki.org/emacs/WhiteSpace][Emacswiki]]
-provides a nice overview of the settings.
-
-The ~whitespace-style~ variable specifies how blank white-spaces are
-visualized and the following are included in our configuration:
-
-  + face :: Enable all visualization via faces. Required for
-    visualization of many white-spaces listed below.
-  + trailing :: Trailing blanks are visualized via faces.
-  + lines-tail :: Columns beyond ~whitespace-line-column~ are
-    highlighted via faces (must exclude =lines= in our configuration).
-  + empty :: Empty lines at beginning/end of buffer are visualized.
-  + indentation::space :: TABs at beginning of lines are visualized.
-  + space-before-tab::tab :: SPACEs before TAB are visualized.
-
-#+begin_src emacs-lisp :tangle init.el
-;; Built-in Emacs variable highlights empty lines
-(setopt indicate-empty-lines t)
-
-;; Visualize whitespace and remove on cleanup
-(use-package whitespace
-  :hook ((prog-mode . whitespace-mode)
-         (before-save . whitespace-cleanup)
-         ;; Org-links are always long
-         (org-mode . (lambda () (whitespace-mode 0)))
-         ;; Whitespace-mode a bit aggressive if editing make files
-         (makefile-mode . (lambda ()
-                            (setopt indent-tabs-mode t
-                                    whitespace-mode nil)
-                            (add-hook 'before-save-hook
-                                      #'delete-trailing-whitesapce))))
-  :custom
-  (whitespace-line-column 79 "Highlight text beyond column")
-  (whitespace-style '(face
-                      trailing
-                      lines-tail
-                      empty
-                      indentation::space
-                      space-before-tab::tab))
-  :config
-  ;; Turn off global whitespace mode
-  (global-whitespace-mode 0))
-#+end_src
-
-*** Mouse/Scrolling
-
-#+begin_src emacs-lisp :tangle init.el
-(setopt  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; scroll one line at a time
-         mouse-wheel-progressive-speed nil            ; don't accelerate scrolling
-         mouse-wheel-follow-mouse 't                  ; scroll window under mouse
-         mouse-yank-at-point t)                       ; Mouse paste at point, not cursor
-
-;; Scrolling at end of document adds one line
-(setopt scroll-step 1)
-
-;; Use pixel scrolling instead of by line
-;; https://tony-zorman.com/posts/emacs-potpourri.html
-(pixel-scroll-precision-mode 1)
-#+end_src
-
-*** Cursor
-
-#+begin_src emacs-lisp :tangle init.el
-(setq-default cursor-type 'bar)
-
-;; Flash cursor location when switching buffers
-(use-package beacon
-  :config (beacon-mode 1))
-#+end_src
-
-*** Writing
-
-#+begin_src emacs-lisp :tangle init.el
-;; Replace active region by typing text
-(delete-selection-mode 1)
-
-;; Specify desired column width of buffer
-(setopt fill-column 79)
-
-;; Built-in Emacs minor-mode wraps long text to next line
-(global-visual-line-mode 1)
-
-;; Use 'fancy' ellipses for truncated strings
-(setopt truncate-string-ellipsis "...")
-#+end_src
-
-*** Highlighting
-
-#+begin_src emacs-lisp :tangle init.el
-;; Highlight line containing point
-(global-hl-line-mode)
-
-;; Highlight matching parentheses
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (use-package paren
   :custom
   (show-paren-style 'parenthesis "Only highlight ()")
@@ -412,12 +839,48 @@ visualized and the following are included in our configuration:
   (show-paren-when-point-in-periphery t)
   ;; If cursor on ), show overlay for (
   (show-paren-context-when-offscreen 'overlay)
-  :config (electric-pair-mode 1))
+  :config
+  (show-paren-mode 1)
+  (electric-pair-mode 1))
+#+end_src
 
-;; Highlight killed region
-;; https://www.youtube.com/watch?v=oQ9JE9kRwG8
+*** Symbols/Things at Point
+
+=highlight-thing= is an Emacs package providing =highlight-thing-mode= that, when
+activated, automatically highlights all visible occurrences of the symbol/thing
+at point.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(use-package highlight-thing
+  :demand t
+  :hook ((prog-mode . highlight-thing-mode)
+         (org-mode . highlight-thing-mode))
+  :custom
+  (highlight-thing-exclude-thing-under-point t)
+  (highlight-thing-case-sensitive-p t)
+  (highlight-thing-ignore-list
+   '("False" "True", "return", "None", "if", "else", "self",
+     "import", "from", "in", "def", "class")))
+#+end_src
+
+*** Line at Point
+
+=global-hl-line-mode= is a /built-in/ minor-mode that, when activated, highlights
+the current line (see related =hl-line-mode=).
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(global-hl-line-mode 1)
+#+end_src
+
+*** Pulse Killed Region
+
+The custom function, copied from [[https://www.youtube.com/watch?v=oQ9JE9kRwG8][youtube/gopar]], highlights (pulses) the current
+region and is executed before =kill-ring-save=, making it easier to visualize
+what text/region is being copied.
+
+#+begin_src emacs-lisp :tangle init.el
 (defun gopar/pulse-current-region (&rest _)
-  "pulse the current implicit or active region"
+  "Pulse the current implicit or active region"
   (if mark-active
       (pulse-momentary-highlight-region (region-beginning) (region-end))
     (pulse-momentary-highlight-region (mark) (point))))
@@ -425,112 +888,188 @@ visualized and the following are included in our configuration:
 (advice-add #'kill-ring-save :before #'gopar/pulse-current-region)
 #+end_src
 
-*** Bookmarks
+** Files + Encoding
+*** Automatically Revert Buffer
 
-The built-in =bookmark.el= package allows us to quickly store and access
-specific locations in frequently visited files. I mostly use the
-following functions:
+=global-auto-revert-mode= is a /built-in/ minor-mode that, when activated,
+automatically refreshes the contents of buffers after the visited file changes
+on disk. This ensures buffers are automatically updated after changing =git=
+branches.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(global-auto-revert-mode)
+#+end_src
+
+*** Encoding
+
+[[https://blog.hubspot.com/website/what-is-utf-8][UTF-8]] is central to the storage and encoding of text and files. Although other
+encoding systems exist, =utf-8= is practically a standard, at least in the West,
+and so it is important that we instruct Emacs to treat files as UTF-8 by
+default. For more information, read [[https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs][MasteringEmacs]].
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+;; https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs
+(set-default-coding-systems 'utf-8)
+
+;; https://github.com/Thaodan/emacs.d
+(define-coding-system-alias 'UTF-8 'utf-8)
+#+end_src
+
+** Boookmarks
+
+=bookmark= is a /built-in/ Emacs package providing users the ability to efficiently
+store and access specific locations in frequently visited files. Bookmarks are
+saved in =bookmarks-default.el= (see =bookmark-file= variable), whose location is
+modified by the =no-litter= package (see [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]]).
+
+Frequently used functions include:
 
 + bookmark-set :: ~C-x r m~; Set bookmark at current location
   - Prompt user for desired name of bookmark
   - Bookmarked locations indicated by flag in fringe of buffer
   - Bookmark details stored in =bookmark-alist=
+
 + bookmark-jump :: ~C-x r b~; Select bookmark and jump to location
+
 + bookmark-save :: Export =bookmark-alist= to specified file
+
 + bookmark-delete :: Delete bookmark in =bookmark-alist=
+
 + bookmark-bmenu-list :: Open buffer containing all bookmarks
 
-*N.B.* The built-in =register.el= package is a more temporary alternative
-to =bookmark=, and are assigned to a single character instead of a
-name. For more information, checkout this [[https://www.youtube.com/watch?time_continue=3&v=RLPU65RLiC4&embeds_referring_euri=https%3A%2F%2Fwww.reddit.com%2F][youtube video]]. I have not
-explored registers much.
+*N.B.* Related, the =register= package is a temporary alternative where locations
+are assigned to a single character (and do not persist in memory). Something to
+explore in the future.
 
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (use-package bookmark
   :custom
-  ;; By default 'no-littering' package stores bookmark file to 'var/',
-  ;; which is lost if performing a "fresh" Emacs install. To persist,
-  ;; set 'bookmark-default-file' to store in personal 'scratch/'
-  ;; directory.  (bookmark-default-file "~/scratch/jon/.bookmarks.el")
   (bookmark-save-flag t "Save bookmarks when Emacs killed")
   (bookmark-fringe-mark t "Non-nil to show icon in fringe"))
 #+end_src
 
-*** File Encoding
+** Images
+:PROPERTIES:
+:ID:       0bdd31cb-56e6-4709-8294-a6c701dad660
+:END:
+:RELATED:
++ [[id:c934464b-8b3c-4203-ac56-d916e21d470c][Images in Org]]
+:END:
 
-[[https://blog.hubspot.com/website/what-is-utf-8][UTF-8]] is central to the storage and encoding of text and
-files. Although other encoding systems exist, =utf-8= is practically a
-standard, at least in the West, and so it is important that we
-instruct Emacs to treat files as UTF-8 by default (credit:
-[[https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs][MasteringEmacs]]).
+*** Automatically Display Image Files
 
-#+begin_src emacs-lisp :tangle init.el
-(set-default-coding-systems 'utf-8)
+=auto-image-file-mode= is a /built-in/ minor-mode that, when activated,
+automatically displays image files when opened.
 
-;; Accept 'UTF-8' (uppercase) as a valid encoding in the coding header
-;; https://github.com/Thaodan/emacs.d
-(define-coding-system-alias 'UTF-8 'utf-8)
-#+end_src
-
-*** Line Numbers
-
-#+begin_src emacs-lisp :tangle init.el
-;; Show column number in the modeline
-(column-number-mode t)
-
-;; Display line numbers in prog-mode
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-#+end_src
-
-*** Images
-
-See also [[*Org Images][Org Images]].
-
-#+begin_src emacs-lisp :tangle init.el
-;; Open image files + automatically update buffer if image changes
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (auto-image-file-mode 1)
-(add-hook 'image-mode-hook 'auto-revert-mode)
 #+end_src
 
-*** Ediff
+** Ediff
 
-#+begin_src emacs-lisp :tangle init.el
-;; Show ediffs in single window between left/right buffers
+=ediff-split-window-function= setting controls how Emacs splits the window when
+displaying two files or buffers in =ediff=. Setting to ~'split-window-horizontally~
+ensures that the buffers are side by side from each other.
+
+=ediff-window-setup-function= setting controls how =ediff= mananges the window
+layout in Emacs. Setting to ~'ediff-setup-windows-plain~ ensures that both =ediff=
+windows are open in the current Emacs frame.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
 (setopt ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain)
 #+end_src
 
-* my-visuals.el
-** Visual Advice
+** Custom Functions
+:PROPERTIES:
+:ID:       8f4885df-ad58-432b-a6cd-1f4524bfc868
+:END:
+:RELATED:
++ [[id:d831e4e4-e9b1-480e-aa1a-a152d9707275][General.el]]
+:END:
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
-;;; -*- lexical-binding: t -*-
+*** Jump to Configuration README.org
 
-;; Discard all themes before loading next
+See ~M-x crux-find-user-init-file~ to open =init.el=.
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/find-config-file ()
+  "Open 'README.org' in other window."
+  (interactive)
+  (find-file-other-window (concat user-emacs-directory "README.org")))
+#+end_src
+
+*** Evaluate init.el
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(defun my/eval-init ()
+  "To quickly reload the 'init.el' file."
+  (interactive)
+  (load-file user-init-file))
+#+end_src
+
+** Provide init-emacs.el
+
+#+begin_src emacs-lisp :tangle modules/init-emacs.el
+(provide 'init-emacs)
+;;; init-emacs.el ends here
+#+end_src
+
+* UI
+:PROPERTIES:
+:ID:       1360c936-229c-44fd-b71c-30f66960d23a
+:END:
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+;;; init-ui.el --- Configure User Interface -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; Commentary:
+;; 'init-ui.el' configures the user interface of Emacs, including themes,
+;; fonts, etc.
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
+#+end_src
+
+** Themes
+*** Load Theme Advice
+
+Emacs themes specify the colors of various ~custom-set-faces~. When switching
+between themes, some parts of the old theme remain if the new theme does not
+specify the same faces. It is possible to avoid this issue by disabling the
+current theme before switching.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+;; https://www.unwoundstack.com/blog/switching-emacs-themes.html
 (define-advice load-theme (:before (&rest _args) theme-dont-propagate)
   (mapc #'disable-theme custom-enabled-themes))
 #+end_src
 
-** Theme
+*** Doom Themes
+    :PROPERTIES:
+    :ID:       671dbaef-69f8-4ea6-870f-a72ebf5e13d7
+    :END:
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
+=doom-themes= is an Emacs package containing a number of Emacs themes.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+;; Effectively copied from https://github.com/doomemacs/themes
 (use-package doom-themes
   :ensure t
   :config
-  ;; Global settings (defaults)
-  (setopt doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  ;; Enable flashing mode-line on errors
+  (setopt doom-themes-enable-bold t
+          doom-themes-enable-italic t)
   (doom-themes-visual-bell-config)
-
-  ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 #+end_src
 
-** Toggle Light & Dark Themes
+*** Custom Theme Functions
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
+These functions make it easier to switch between light- and dark-themes.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
 (defun light ()
   (interactive)
   (load-theme 'doom-tomorrow-day t))
@@ -538,36 +1077,37 @@ See also [[*Org Images][Org Images]].
 (defun dark ()
   (interactive)
   (load-theme 'doom-one t))
+#+end_src
 
+*** Set Default Theme
+
+Below we defined the theme available at startup.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
 (dark)
 #+end_src
 
-** Icons
+** Fonts
+:PROPERTIES:
+   :ID:       a33827ca-f51c-4ad3-90e3-2b2d894c3d48
+   :END:
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
-(use-package nerd-icons
-  :config
-  ;; Download nerd-icons if directory not found
-  (unless (car (file-expand-wildcards
-                (concat user-emacs-directory "elpa/nerd-icons-*")))
-    (nerd-icons-install-fonts t)))
-#+end_src
+*** Font Style
 
-** Font
+In Emacs, fonts can be customized to improve readability and visually organize
+different content types such as code, prose, or user interfaces. Three common
+font types include:
 
-Example of emphasis markers in org-mode include *bold*, ~code~, =verbatim=,
-/italics/, _underline_.
++ default :: Primary font used if no other specifications are provided
++ fixed-pitch :: Mono-spaced (fixed-width) text typically used in programming
++ variable-pitch :: Proportional fonts often used in =org-mode=
 
-The following fonts were downloaded and added to the configuration by
-doing the following:
+This configuration uses the =Jetbrains Mono= font, which is manually downloaded
+from [[https://www.jetbrains.com/lp/mono/][jetbrains.com]]. The font was installed by following the [[https://www.jetbrains.com/lp/mono/#how-to-install][how-to]] instructions
+verbatim.
 
-+ Jetbrains Mono :: Manually downloaded from [[https://www.jetbrains.com/lp/mono/][jetbrains.com]]. The font
-  was installed by following the [[https://www.jetbrains.com/lp/mono/#how-to-install][how-to]] instructions verbatim.
-
-*N.B.* This section pulls heavily from [[https://github.com/daviwil/dotfiles/blob/emacs-home-service/.emacs.d/modules/dw-core.el][github/daviwil/.emacs.d]].
-
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
-;; Set fonts
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+;; https://github.com/daviwil/dotfiles/blob/guix-home/.emacs.d/modules/dw-core.el#L124
 (set-face-attribute 'default nil
                     :font "JetBrains Mono"
                     :height 100
@@ -582,19 +1122,59 @@ doing the following:
                     :font "JetBrains Mono"
                     :height 100
                     :weight 'medium)
+#+end_src
 
+*** Font Size
+
+In Emacs, the face attribute ~:height~ is a measurement in units of ~0.1~ of a
+point. For example, setting the height to ~120~ means a 12-point =font-size=. The
+custom function =set-font-size= enables the user to change the font w.r.t. the
+more common =font-size=.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
 ;; Modified from https://stackoverflow.com/a/50052751
-(defun set-font-size ()
+(defun font-size (fontsize)
   "Set the font-pt size."
-  (interactive)
-  (let* ((pt-size (string-to-number (read-string "Font size: ")))
-         (font-height (* 10 pt-size)))
-    (set-face-attribute 'default nil :height font-height)))
+  (interactive "nFont size: ")
+  (let* ((font-height (* 10 fontsize)))
+    (set-face-attribute 'default nil :height font-height)
+    (set-face-attribute 'fixed-pitch nil :height font-height)
+    (set-face-attribute 'variable-pitch nil :height font-height)))
+
+;; Font size at startup
+(font-size 10)
+#+end_src
+
+** Icons
+:PROPERTIES:
+:ID:       92151c77-e386-47eb-98ea-c3b6f5f0029a
+:END:
+:RELATED:
++ [[id:cac425a8-1400-4f0a-90d7-6da83bcf8ba4][Marginalia]]
++ [[id:612824a0-6d8f-4d5c-a60a-e9f76028993d][Nerd-Icons in Dired]]
+:END:
+
+=nerd-icons= is an Emacs package that provides icons for use in Emacs
+buffers. The use of icons improve readability, for example in the minibuffer
+icons are displayed next to the file name indicating whether the file is an
+=org=, =python=, or =elisp= file.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+(use-package nerd-icons
+  :config
+  ;; Download nerd-icons if directory not found
+  (unless (car (file-expand-wildcards
+                (concat user-emacs-directory "elpa/nerd-icons-*")))
+    (nerd-icons-install-fonts t)))
 #+end_src
 
 ** Modeline
+*** Doom Modeline
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
+=doom-modeline= is an Emacs package that configures a modern and visually
+appealing mode-line, developed as part of the =Doom Emacs= configuration.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
 (use-package doom-modeline
   :config (doom-modeline-mode 1)
   :custom
@@ -605,37 +1185,73 @@ doing the following:
   (doom-modeline-enable-word-count t "Turn on wordcount"))
 #+end_src
 
-** Additional Highlighting
+*** Display Column Numbers
 
-*N.B.* Built-in Emacs settings set in [[*Highlighting][Highlighting]]
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+(column-number-mode t)
+#+end_src
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
-;; Highlight occurrences of the same text in buffer
-(use-package highlight-thing
-  :demand t
-  :hook ((prog-mode . highlight-thing-mode)
-         (org-mode . highlight-thing-mode))
+*** Display Line Numbers
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+(line-number-mode t)
+#+end_src
+
+*** Display Search Matches
+
+=anzu= is an Emacs package providing =anzu-mode= that, when activated, displays the
+total number of =isearch= matches (and current match position) in the mode-line.
+
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+(use-package anzu
+  :hook (emacs-startup . global-anzu-mode)
   :custom
-  (highlight-thing-exclude-thing-under-point t)
-  (highlight-thing-case-sensitive-p t)
-  (highlight-thing-ignore-list
-   '("False" "True", "return", "None", "if", "else", "self",
-     "import", "from", "in", "def", "class")))
+  (anzu-search-threshold 1000 "Limit n words searched to reduce lag")
+  (anzu-replace-threshold 50 "Limit n replacement overlay to reduce lag")
+  (anzu-minimum-input-length 2 "Increase activation threshold to reduce lag")
+
+  ;; Cleanup mode-line information
+  (anzu-mode-lighter "" "Remove mode-name from results")
+  (anzu-replace-to-string-separator "")
+
+  :bind (;; Keybindings M-% and C-M-% do not change
+         ([remap query-replace] . anzu-query-replace)
+         ([remap query-replace-regexp] . anzu-query-replace-regexp)
+
+         :map isearch-mode-map
+         ;; Use Anzu-mode for replacing from isearch results (C-s or C-f)
+         ([remap isearch-query-replace] . anzu-isearch-query-replace)
+         ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)))
 #+end_src
 
-** Provide Visuals
+** Provide init-ui.el
 
-#+begin_src emacs-lisp :tangle modules/my-visuals.el
-(provide 'my-visuals)
+#+begin_src emacs-lisp :tangle modules/init-ui.el
+(provide 'init-ui)
+;;; init-ui.el ends here
 #+end_src
 
-* my-org.el
-** Org Basics
+* Org-Mode
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
-;;; -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :tangle modules/init-org.el
+;;; init-org.el --- Configure Org-Mode -*- lexical-binding: t; no-byte-compile: t -*-
 
-;; The essentials
+;;; Commentary:
+;; The 'org' package is a useful tool for note-taking, project management, and
+;; literative coding (like this document). It is complex and full of features,
+;; which we configure in this section.
+
+;; 'init-org.el' configures all aspects of 'org-mode'.
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
+#+end_src
+
+** General Settings
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
 (use-package org
   :demand t
   :bind (("C-c l" . org-store-link)
@@ -645,20 +1261,21 @@ doing the following:
          ;; Automatic break line at 'current-fill-column' (line wrapping)
          (org-mode . turn-on-auto-fill))
   :custom
-  (org-ellipsis " ")
-  (org-startup-folded t    "Always fold headers")
-  (org-startup-indented t  "Visually indent at startup")
+  (org-ellipsis " " "Default to 'org-modern'")
+  (org-startup-folded t "Always fold headers")
+  (org-startup-indented t "Visually indent at startup")
   (org-adapt-indentation t "Align contents with heading")
   (org-element-use-cache nil "Avoid 'org-element--cache' error")
-  ;; Link to ID not heading text; avoids broken links should heading change
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
-** Org Appearance
-*** Modernize Org UI
+** Org UI
+*** Modernize UI in Org-Mode
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
-;; "Modernizes" UI experience of 'org-mode'
+=org-modern= is an Emacs package providing =org-modern-mode= that, when activated,
+adds a more modern and polished look to =org= buffers.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
 (use-package org-modern
   :after org
   :init (global-org-modern-mode)
@@ -667,21 +1284,48 @@ doing the following:
   :commands (org-modern-mode org-modern-agenda))
 #+end_src
 
-*** Emphasis Markers
+*** Hide Emphasis Markers
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
+By default, =Doom Themes= stylizes text surrounded by emphasis markers (see [[id:671dbaef-69f8-4ea6-870f-a72ebf5e13d7][Doom
+Themes]]). As such, it is not necessary to display the emphasis markers. The
+minor-mode =org-appear-mode= reveals the markers if the cursor moves in between
+marker pairs.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
 (setopt org-hide-emphasis-markers t)
 
-;; Interactively toggle visability if cursor between markers
 (use-package org-appear
   :after org
   :hook (org-mode . org-appear-mode)
   :custom (org-appear-inside-latex t))
 #+end_src
 
-** Org Key Behavior
+** Org Behavior
+*** Speed Commands
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
+=org-use-speed-commands= settings controls whether certain single-key shortcuts
+known as /speed commands/ are enabled when the cursor is at the beginning of a
+headline. Below, we set the value to a custom lambda function (copied from
+[[https://www.reddit.com/r/orgmode/comments/ded3g8/comment/f2x1u1o/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button][reddit]]) that enables the use of speed commands if cursor is on _any_ of the
+leading stars.
+
+*N.B.* If ~non-nil~, move cursor to start of any headline and call ~?~ to view list
+of available speed commands.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+;; ? speed-key opens Speed Keys help.
+(setopt org-use-speed-commands
+      (lambda ()
+        (and (looking-at org-outline-regexp)
+             (looking-back "^\**"))))
+#+end_src
+
+*** Archive
+
+These are previous settings that I am not sure whether I want to include in
+this configuration.
+
+#+begin_src emacs-lisp :tangle no
 ;; 'C-a/e' jump to start-end of headline text
 (setopt org-special-ctrl-a/e t)
 
@@ -690,274 +1334,191 @@ doing the following:
 
 ;; Do not delete hidden subtree with 'C-k'
 (setopt org-ctrl-k-protect-subtree t)
-
-;; ? speed-key opens Speed Keys help.
-(setopt org-use-speed-commands
-      ;; If non-nil, 'org-use-speed-commands' allows efficient
-      ;; navigation of headline text when cursor is on leading
-      ;; star. Custom function allows use of Speed keys if on ANY
-      ;; stars.
-      (lambda ()
-        (and (looking-at org-outline-regexp)
-             (looking-back "^\**"))))
 #+end_src
 
-** Org Images
+** Org Babel
+*** Turn Off Confirmation
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
-(setopt org-startup-with-inline-images t
-        ;; Allow for inline display of remote images
-        org-display-remote-inline-images 'cache)
+=org-confirm-babel-evaluate= setting, when set to ~t~, prompts the user to confirm
+whether they intended to evaluate the code block. *Annoying*.
 
-;; Refresh inline images after executing an 'src-block'
-(add-hook 'org-babel-after-execute-hook
-          (lambda () (org-display-inline-images nil t)))
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-confirm-babel-evaluate nil)
 #+end_src
 
-** Org-Babel
-*** General Org-Babel Settings
+*** Org-Edit-Special Buffer
+**** Preserve Indentation
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
-(setopt org-confirm-babel-evaluate nil
-      org-src-window-setup 'current-window
-      org-src-ask-before-returning-to-edit-buffer t)
+=org-src-preserve-indentation= setting, when set to ~t~, remove leading whitespace
+automatically inserted when exiting the =org-edit-special= buffer.
 
-;; Remove code indentation in org-src blocks
+#+begin_src emacs-lisp :tangle modules/init-org.el
 (setopt org-src-preserve-indentation t)
+#+end_src
+
+**** Window Setup
+
+=org-src-window-setup= setting controls how the source code edit buffer is
+displayed. Setting to ~'split-window-right~ ensures that the widow always opens
+to the right of the current buffer. This is advantageous when we need to look
+at previous =src-blocks= in the existing narrative.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-src-window-setup 'split-window-right)
+#+end_src
+
+**** Turn off Exit Prompt
+
+=org-src-ask-before-returning-to-edit-buffer= setting, when ~t~, prompts the user
+before returning to an active source code editing buffer. This prevents
+conflicting changes should the user switch back to the current buffer and make
+changes to the =src-block= of an active =org-edit-special= buffer.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-src-ask-before-returning-to-edit-buffer t)
 #+end_src
 
 *** FIX: Display ANSI Error Colors
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
+#+begin_src emacs-lisp :tangle modules/init-org.el
 ;; https://github.com/emacs-jupyter/jupyter/issues/366
 (defun display-ansi-colors ()
   (ansi-color-apply-on-region (point-min) (point-max)))
 #+end_src
 
+** Images in Org
+:PROPERTIES:
+:ID:       c934464b-8b3c-4203-ac56-d916e21d470c
+:END:
+:RELATED:
++ [[id:0bdd31cb-56e6-4709-8294-a6c701dad660][Images]]
+:END:
+*** Show Inline Images At Open
+
+=org-startup-with-inline-images= setting, when set to ~t~, displays inline images
+when opening an =org= file. If ~nil~, only the links are displayed in the =org=
+buffer.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-startup-with-inline-images t)
+#+end_src
+
+*** Display Inline Remote Images
+
+=org-display-remote-inline-images= setting controls whether images from remote
+URLs (like websites) are displayed inline. Setting to ~'cache~ caches inline
+images such that re-opening the file does not require re-downloading the
+images.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(setopt org-display-remote-inline-images 'cache)
+#+end_src
+
+*** Refresh Images After Executing Code
+
+Figures generated in src-blocks are not refreshed automatically. The following
+changes ensure that the shown image is the "latest" version of that figure.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(add-hook 'org-babel-after-execute-hook
+          (lambda () (org-display-inline-images nil t)))
+#+end_src
+
 ** Org Templates
 *** Org-Block Templates
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
+An =org-block= is a special section of text and possess syntax that distinguish
+it from the surrounding content. Though there are many types of =org-blocks=,
+they all share the same structure and start/end with ~#+BEGIN_<type>~ and
+~#+END_<type>~.
+
+Due to the shared structure, it is possible to define custom blocks via the
+=org-structure-template-alist= setting and insert by calling
+=org-insert-structure-template= (~C-c C-,~). Here, we define a few block templates
+we anticipate using frequently.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
 (setopt org-structure-template-alist
-      '(("x" . "example")
-        ("q" . "quote")
-        ("e" . "src emacs-lisp")
-        ("m" . "src emacs-lisp :tangle modules/my-")
-        ("s" . "src sh")
-        ("p" . "src python")))
+        '(("x" . "example")
+          ("q" . "quote")
+          ("e" . "src emacs-lisp")
+          ("m" . "src emacs-lisp :tangle modules/init-XXX.el")
+          ("s" . "src sh")
+          ("p" . "src python")))
 #+end_src
 
-** Provide my-org
+** Provide init-org.el
 
-#+begin_src emacs-lisp :tangle modules/my-org.el
-(provide 'my-org)
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(provide 'init-org)
+;;; init-org.el ends here
 #+end_src
 
-* my-dired.el
-:PROPERTIES:
-:ID:       20596bd1-da74-408e-a84e-0b5b9f240398
-:END:
+* Completion
 
-The built-in =dired= package provides core functionality for navigating
-directories and performing file operations within a =dired=-buffer.
+#+begin_src emacs-lisp :tangle modules/init-completion.el
+;;; init-completion.el --- Configure completion in Emacs -*- lexical-binding: t; no-byte-compile: t -*-
 
-#+begin_src emacs-lisp :tangle modules/my-dired.el
-;;; -*- lexical-binding: t -*-
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
 
-(use-package dired
-  :ensure nil
-  :commands dired
-  :after my-functions
-  :custom
-  ;; -A :: Show hidden files but omit implied '.' and '..' targets
-  ;; -h :: Make file sizes human-readable
-  ;; -l :: Produce long=g, detailed listing (required by 'dired')
-  ;; -v :: Sort file by version number
-  ;; --group-directories-first :: List directories at top of buffer
-  ;; --time-style=long-iso     :: List %Y-%m-%d %H:%M
-  (dired-listing-switches (concat "-Ahlv"
-                                  " --group-directories-first"
-                                  " --time-style=long-iso"))
-
-  ;; Refresh 'dired' buffer if directory changes
-  (dired-auto-revert-buffer #'dired-buffer-changed-p)
-
-  ;; If two 'dired' buffers open side-by-side, Emacs will suggest the
-  ;; other buffer directory when moving files
-  (dired-dwim-target t)
-
-  :config
-  ;; The variable 'dired-kill-when-opening-new-dired-buffer'
-  ;; exists. However, there are use-cases for having multiple 'dired'
-  ;; buffers open at the same time (see 'dired-dwim-target').
-  (defun jh/dired-kill-all-buffers ()
-    "Delete all open 'dired'-mode buffers."
-    (interactive)
-    (jh/kill-buffers-by-mode 'dired-mode)))
-#+end_src
-
-** Dired-X
-
-The built-in =dired-x= package builds on =dired.el= by providing extended
-and optional features including, but not limited to:
-
-+ Omitted files :: =dired-omit-mode= tidies the =dired= buffer by hiding
-  files based on regex patterns
-
-+ Jumping to files :: Adds commands to quickly jump to files or
-  directories in a project
-
-#+begin_src emacs-lisp :tangle modules/my-dired.el
-(use-package dired-x
-  :ensure nil
-  :after dired
-  :commands dired
-  :custom
-  ;; Files to ignore in 'dired' buffer.
-  (dired-omit-files (concat dired-omit-files
-                            "\|"
-                            (rx (or (: bos (or "\.DS_Store"
-                                               "__MACOSX"
-                                               "\.git")
-                                       eos)
-                                    (: bos "__pycache__")
-                                    ".ipynb_checkpoints"
-                                    "\.~.*#"))))
-  :config
-  ;; Must activate 'dired-omit-mode' to omit 'dired-omit-files'.
-  (add-hook 'dired-after-readin-hook 'dired-omit-mode))
-#+end_src
-
-** Dired-Aux
-
-Finally, the =dired-aux= package includes auxiliary functions to support
-additional functionality in =dired=, including (but not limited to):
-
-+ Bulk operations :: Handle operations on multiple files more
-  robustly, such as renaming and copying
-
-+ File compression and decompression :: Adds commands for compressing
-  and decompressing files directly from a =dired= buffer
-
-+ Backup and auto-save file cleanup :: Includes features to clean up
-  backup files and other temporary files more effectively
-
-#+begin_src emacs-lisp :tangle modules/my-dired.el
-(use-package dired-aux
-  :ensure nil
-  :after dired
-  :commands dired
-  :bind (:map dired-mode-map
-              ;; C-+ calls 'er/expand-region'
-              ("M-+" . dired-create-empty-file))
-  :custom
-  ;; Revert dired-buffer after 'dired-do' operations
-  (dired-do-revert-buffer t))
-#+end_src
-
-** wDired
-
-The built-in ~wDired~ package is used to make =dired=-buffers
-writable. This is useful for quickly renaming multiple files.
-
-#+begin_src emacs-lisp :tangle modules/my-dired.el
-(use-package wdired
-  :ensure nil
-  :after dired
-  :commands dired
-  :custom
-  ;; Change permission using 'SPC'
-  (wdired-allow-to-change-permissions t))
-#+end_src
-
-** Dired Icons
-
-#+begin_src emacs-lisp :tangle modules/my-dired.el
-(use-package nerd-icons-dired
-  :ensure nil
-  :after (dired nerd-icons)
-  :hook (dired-mode))
-#+end_src
-
-** Provide my-dired.el
-
-#+begin_src emacs-lisp :tangle modules/my-dired.el
-(provide 'my-dired)
-
-;;; my-dired.el ends here
-#+end_src
-
-* my-completion.el
-
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-;;; -*- lexical-binding: t -*-
+;;; Code:
 #+end_src
 
 ** Vertico
-*** Vertico + Save-hist
+:RELATED:
++ Recommended by =vertico= author ::
+  - [[id:e010f1a6-c723-4ca1-bf39-62b3a9672797][Minibuffer History]]
+  - [[id:dfe5aad6-6c0b-4e06-8c83-028a59bb9ad1][Recursive Minibuffer]]
+  - [[id:bbc9b953-b553-4928-a0ef-daf6df48a1f8][Read-only Minibuffer]]
+  - [[id:51c833dd-b403-40e5-8359-f3b6f15193ff][Close Minibuffer Regardless of Point Location]]
++ [[id:8a9a6083-929e-4329-b009-c33529b0e5a7][Spell Checking]]:: Uses =vertico-multiform= for =jinx= recommendations
+:END:
 
-The =vertico= package provides mini-buffer completion. Without it, for
-instance, I am required to blindly type the name of the desired buffer
-or file-path when calling ~switch-to-buffer~ or ~find-file~. Previous
-completions are more quickly available
+=vertico= is an Emacs package providing =vertico-mode= that, when activated,
+provides an efficient completion framework that enhances Emacs' built-in
+minibuffer completion. Completion candidates are displayed vertically in the
+minibuffer.
 
-The =savehist= package saves the mini-buffer history so previous
-completions are more quickly available.
+The package includes several extensions:
 
-*N.B.* The author recommends activating the packages in the ~:init~
-section of =use-package= such that the mode gets enabled right
-away. Note that this forces loading the package.
++ vertico-directory :: Convenient directory navigation commands
++ vertico-repeat :: Command to repeat last completion session
++ vertico-grid :: Display candidates in grid, not as list
++ vertico-multiform :: Control display of candidates per mode
 
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-;; Copied from https://github.com/minad/vertico
+*N.B.* Author recommends activating =savehist-mode= to store previous completion
+candidates (see [[https://github.com/minad/vertico][github/vertico]]).
+
+#+begin_src emacs-lisp :tangle modules/init-completion.el
 (use-package vertico
+  ;; :init recommended by author
+  :init (vertico-mode)
   :custom
   (vertico-cycle t "Return to top of list")
   (vertico-count 10 "N candidate suggestions")
-  :hook (minibuffer-setup . vertico-repeat-save)
-  :init (vertico-mode))
+  ;; Save 'vertico' session for 'vertico-repeat' extension
+  :hook (minibuffer-setup . vertico-repeat-save))
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init (savehist-mode 1))
-#+end_src
-
-*** Vertico-Directory
-
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-;; Configure directory extension.
+;; Copied from https://github.com/minad/vertico?tab=readme-ov-file
 (use-package vertico-directory
   :after vertico
   :ensure nil
-  ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
               ("M-DEL" . vertico-directory-delete-word))
-  ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
-#+end_src
-
-** Marginalia
-
-*N.B.* =nerd-icons= package added in [[*Icons][Icons]].
-
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-;; Provides additional data to mini-buffer completion
-(use-package marginalia
-  :init (marginalia-mode 1))
-
-;; Add nerd-icons to mini-buffer marginalia
-(use-package nerd-icons-completion
-  :after (marginalia nerd-icons)
-  :config
-  (nerd-icons-completion-mode)
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 #+end_src
 
 ** Orderless
 
-#+begin_src emacs-lisp :tangle modules/my-completion.el
+=orderless= is an Emacs package that enhances completion style in the minibuffer
+by allowing flexible, non-sequential matching on input patters. For example, if
+we are searching for a buffer named =project-report.txt=, entering ~report txt
+project~ would return the expected file instead of typing out the complete name.
+
+#+begin_src emacs-lisp :tangle modules/init-completion.el
 ;; Copied from https://github.com/oantolin/orderless/tree/master
 (use-package orderless
   :ensure t
@@ -966,10 +1527,49 @@ away. Note that this forces loading the package.
   (completion-category-overrides '((file (styles basic partial-completion)))))
 #+end_src
 
-** Consult
+** Marginalia
+:PROPERTIES:
+:ID:       cac425a8-1400-4f0a-90d7-6da83bcf8ba4
+:END:
+:RELATED:
++ [[id:92151c77-e386-47eb-98ea-c3b6f5f0029a][Icons]]
+:END:
 
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-;; For adding extra functionality to the completion interfaces
+=marginalia= is an Emacs package providing =marginalia-mode= that, when activated,
+enhances completion by providing additional annotation and contextual
+information alongside candidates. In the minibuffer, for example, =marginalia=
+will add file size or date modified.
+
+Related, =nerd-icons-completion= is an Emacs package providing
+=nerd-icons-completion-mode= that, when activated, adds icons to completion
+candidates.
+
+#+begin_src emacs-lisp :tangle modules/init-completion.el
+(use-package marginalia
+  :init (marginalia-mode 1))
+
+(use-package nerd-icons-completion
+  :after (marginalia nerd-icons)
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+#+end_src
+
+** Consult
+:PROPERTIES:
+:ID:       8b393fcc-9d43-4afb-b249-9a72bc6089ea
+:END:
+:RELATED:
++ [[id:614d6cd5-6eb8-40cc-8ed1-538bcdca253d][Consult-Denote Extension]]
+:END:
+
+=consult= is an Emacs package that provides a powerful and flexible completion
+and selection framework that streamlines various interactive commands. For
+example, calling ~consult-buffer~ will preview the buffer as completion options
+are scrolled over in the minibuffer.
+
+#+begin_src emacs-lisp :tangle modules/init-completion.el
+;; Copied from https://github.com/minad/consult
 (use-package consult
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
@@ -1074,39 +1674,240 @@ away. Note that this forces loading the package.
   ;; (setopt consult-project-function (lambda (_) (projectile-project-root))))
   )
 #+end_src
+** Provide init-completion.el
 
-** Provide my-completion.el
-
-#+begin_src emacs-lisp :tangle modules/my-completion.el
-(provide 'my-completion)
-
-;;; my-completion.el ends here
+#+begin_src emacs-lisp :tangle modules/init-completion.el
+(provide 'init-completion)
+;;; init-completion.el ends here
 #+end_src
 
-* my-dev.el
+* DIRED
 
-#+begin_src emacs-lisp :tangle modules/my-dev.el
-;;; -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+;;; init-dired.el --- Configure DIRED  -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
 #+end_src
 
-** Terminal
+** Dired
 
-#+begin_src emacs-lisp :tangle modules/my-dev.el
-;; Terminal emulator inside Emacs
-(use-package vterm
-  ;; Requires compilation, which may not work without installing dependencies
-  :init (setopt vterm-always-compile-module t)
+=dired=, short for "DIsk REDitor", is a /built-in/ Emacs package providing an
+interface for file and directory management. With =dired=, it is possible to
+navigate directories, view file details, and perform a wide range of file
+operations directly within Emacs.
+
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+(use-package dired
+  :ensure nil
+  :commands dired
+  :after my-functions
+  :custom
+  ;; -A :: Show hidden files but omit implied '.' and '..' targets
+  ;; -h :: Make file sizes human-readable
+  ;; -l :: Produce long=g, detailed listing (required by 'dired')
+  ;; -v :: Sort file by version number
+  ;; --group-directories-first :: List directories at top of buffer
+  ;; --time-style=long-iso     :: List %Y-%m-%d %H:%M
+  (dired-listing-switches (concat "-Ahlv"
+                                  " --group-directories-first"
+                                  " --time-style=long-iso"))
+
+  ;; Refresh 'dired' buffer if directory changes
+  (dired-auto-revert-buffer #'dired-buffer-changed-p)
+
+  ;; If two 'dired' buffers open side-by-side, Emacs will suggest the
+  ;; other buffer directory when moving files
+  (dired-dwim-target t)
+
   :config
-  (defun jh/vterm-new ()
-  "Prompt the user for a new vterm buffer name and open it."
-  (interactive)
-  (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
-    (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
+  ;; The variable 'dired-kill-when-opening-new-dired-buffer'
+  ;; exists. However, there are use-cases for having multiple 'dired'
+  ;; buffers open at the same time (see 'dired-dwim-target').
+  (defun jh/dired-kill-all-buffers ()
+    "Delete all open 'dired'-mode buffers."
+    (interactive)
+    (jh/kill-buffers-by-mode 'dired-mode)))
 #+end_src
 
-** Projectile-Mode
+** Extended Dired Features
 
-#+begin_src emacs-lisp :tangle modules/my-dev.el
+=dired-x= is a /built-in/ Emacs package providing extended and optional features to
+=dired= including, but not limited to:
+
++ Omitted files :: =dired-omit-mode= tidies the =dired= buffer by hiding files
+  based on regex patterns
+
++ Jumping to files :: Adds commands to quickly jump to files or directories in
+  a project
+
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+(use-package dired-x
+  :ensure nil
+  :after dired
+  :commands dired
+  :custom
+  ;; Files to ignore in 'dired' buffer.
+  (dired-omit-files (concat dired-omit-files
+                            "\|"
+                            (rx (or (: bos (or "\.DS_Store"
+                                               "__MACOSX"
+                                               "\.git")
+                                       eos)
+                                    (: bos "__pycache__")
+                                    ".ipynb_checkpoints"
+                                    "\.~.*#"))))
+  :config
+  ;; Must activate 'dired-omit-mode' to omit 'dired-omit-files'.
+  (add-hook 'dired-after-readin-hook 'dired-omit-mode))
+#+end_src
+
+** Auxiliary Dired Functions
+
+=dired-aux= is a /built-in/ Emacs package providing auxiliary functions in
+=dired=. The additional functionality includes, but is not limited to:
+
++ Bulk operations :: Handle operations on multiple files more robustly, such as
+  renaming and copying
+
++ File compression and decompression :: Adds commands for compressing and
+  decompressing files directly from a =dired= buffer
+
++ Backup and auto-save file cleanup :: Includes features to clean up backup
+  files and other temporary files more effectively
+
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+(use-package dired-aux
+  :ensure nil
+  :after dired
+  :commands dired
+  :bind (:map dired-mode-map
+              ;; 'f' calls 'dired-find-file'
+              ("F" . dired-create-empty-file))
+  :custom
+  (dired-do-revert-buffer t "Revert buffer after any 'dired-do' operations"))
+#+end_src
+
+** Writable Dired Buffers
+
+=wdired= is a /built-in/ Emacs package providing the ability to make =dired=-buffers
+_writable_. In other words, it is possible to edit file and directory names as if
+they are regular text. This is advantageous for quickly renaming multiple
+files.
+
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+(use-package wdired
+  :ensure nil
+  :after dired
+  :commands dired
+  :custom
+  ;; Change permission using 'SPC'
+  (wdired-allow-to-change-permissions t))
+#+end_src
+
+** Nerd-Icons in Dired
+:PROPERTIES:
+:ID:       612824a0-6d8f-4d5c-a60a-e9f76028993d
+:END:
+:RELATED:
++ [[id:92151c77-e386-47eb-98ea-c3b6f5f0029a][Icons]]
+:END:
+
+=nerd-icons-dired= is an Emacs package extension that provides icons inside
+=dired=-buffers.
+
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+(use-package nerd-icons-dired
+  :ensure nil
+  :after (dired nerd-icons)
+  :hook (dired-mode))
+#+end_src
+
+** Provide init-dired.el
+
+#+begin_src emacs-lisp :tangle modules/init-dired.el
+(provide 'init-dired)
+;;; init-dired.el ends here
+#+end_src
+
+* Development
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+;;; init-dev.el --- Configure development tools  -*- lexical-binding: t; no-byte-compile: t -*-
+
+
+;;; Commentary:
+;; 'init-dev.el' configures settings and packages required for
+;; programming. This includes general programming settings as well as
+;; language-specific configurations.
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
+#+end_src
+
+** Rainbow Delimiters
+
+=rainbow-delimiters= is an Emacs package providing =rainbow-delimiters-mode= that,
+when activated, improves code readability by visually distinguishing pairs of
+delimiters using different colors.
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package rainbow-delimiters
+  :hook (prog-mode))
+#+end_src
+
+** Highlight TODOs
+:PROPERTIES:
+:ID:       5e72d5f0-fdaf-491a-9a84-9806ee295d0a
+:END:
+:RELATED:
++ [[id:1ae14e20-459c-44ec-8c2a-b5f2f64116ac][Highlighting]]
+:END:
+
+=hl-todo= is an Emacs package providing =hl-todo-mode= that, when activated,
+highlight TODO keywords in text files. Since =org= includes TODO tags, we will
+only activate in =prog-mode=.
+
+*Notable functions:*
++ hl-todo-next :: Jump to next TODO-keyword
++ hl-todo-previous :: Jump to previous TODO-keyword
++ hl-toqdo-occur :: Open ibuffer of all occurrences
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package hl-todo
+  :hook (prog-mode)
+  :custom
+  (hl-todo-keyword-faces
+   '(("TODO"   . "#FFBF00")
+     ("FIXME"  . "#DE3163"))))
+#+end_src
+
+** Expand Region Selection
+
+=expand-region= is an Emacs package that provides the ability to incrementally
+expand a selected region of text. Calling ~er/expand-region~ selects an initial
+region; ~=~ and ~-~ can then be used to expand or contract the selected region.
+
+*N.B.* The package includes =python-mode-expandsions.el= and other modules that may
+be of interest.
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package expand-region
+  :commands er/expand-region
+  :bind ("C-=" . er/expand-region))
+#+end_src
+
+** Project Navigation
+
+=projectile= is an Emacs package providing =projectile-mode= that, when activated,
+provides functionality to more quickly navigate, manage, and work with files
+within a repository.
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
 ;; To provide project management + navigation features
 (use-package projectile
   :init (projectile-mode 1)
@@ -1117,44 +1918,13 @@ away. Note that this forces loading the package.
               ("C-c p" . projectile-command-map)))
 #+end_src
 
-** Lisp
-*** Aggressive-Indent-Mode
+** Version Control
+*** Magit
 
-No longer have to worry about indents getting messed up in emacs-lisp.
+=magit= is an Emacs package that provides a text-based user interface to =git=
+(otherwise referred to as a "git porcelain"). See [[https://magit.vc/][magit.vc]] for documentation.
 
-#+begin_src emacs-lisp :tangle modules/my-dev.el
-;; Update indentation in response to changes to code
-(use-package aggressive-indent
-  :hook (emacs-lisp-mode))
-#+end_src
-
-** Yaml
-
-#+begin_src emacs-lisp :tangle modules/my-dev.el
-(use-package yaml-mode
-  :mode ("\\.yml\\'" "\\.yaml\\'"))
-#+end_src
-
-** Provide my-dev.el
-
-#+begin_src emacs-lisp :tangle modules/my-dev.el
-(provide 'my-dev)
-
-;;; my-dev.el ends here
-#+end_src
-
-* my-vc.el
-
-#+begin_src emacs-lisp :tangle modules/my-vc.el
-;;; -*- lexical-binding: t -*-
-#+end_src
-
-** Magit
-
-The =magit= package is a texted-based user interface to Git (Git
-Porcelain) inside Emacs [https://magit.vc/].
-
-#+begin_src emacs-lisp :tangle modules/my-vc.el
+#+begin_src emacs-lisp :tangle modules/init-dev.el
 (use-package magit
   :bind ("C-x g" . magit-status)
   :diminish magit-minor-mode
@@ -1170,26 +1940,28 @@ Porcelain) inside Emacs [https://magit.vc/].
   ;; Open status buffer in same buffer
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
   :config
-  (defun jh/magit-kill-all-buffers ()
+  ;; Must define here to ensure underlying function defined in
+  ;; 'init-emacs' is loaded before 'magit'.
+  (defun my/magit-kill-all-buffers ()
     "Kill all buffers derived from 'magit-mode'."
     (interactive)
-    (jh/kill-buffers-by-mode 'magit-mode)))
+    (my/kill-buffers-by-mode 'magit-mode)))
 #+end_src
 
-** Command-line Git
+*** Tweaks for CLI Git in Emacs
 
-Command-line =git= is possible in =vterm=, however editing =EDITMSG= buffers
-can be tedious. Since ~core.editor vim~ is set by default, =vim= bindings
-are required to edit the message buffer. However, setting ~core.editor
-"emacs"~ will open the =EDITMSG= buffer as a new window instead of in the
-current Emacs instance. *Annoying!*
+Command-line =git= is possible in =vterm=, however editing =EDITMSG= buffers can be
+tedious. Since ~core.editor vim~ is set by default, =vim= bindings are required to
+edit the message buffer. However, setting ~core.editor "emacs"~ will open the
+=EDITMSG= buffer as a new window instead of in the current Emacs
+instance. *Annoying!*
 
-Alternatively we can install the =with-editor= package (part of =magit=) to
-open the =EDITMSG= buffer inside the current Emacs instance and set ~git
-config --global core.editor "emacsclient"~ to use Emacs bindings when
-editing the message. See [[https://magit.vc/manual/with-editor/Using-With_002dEditor-commands.html][magit.vc/manual/with-editor]].
+Alternatively we can install the =with-editor= package (part of =magit=) to open
+the =EDITMSG= buffer inside the current Emacs instance and set ~git config
+--global core.editor "emacsclient"~ to use Emacs bindings when editing the
+message. See [[https://magit.vc/manual/with-editor/Using-With_002dEditor-commands.html][magit.vc/manual/with-editor]].
 
-#+begin_src emacs-lisp :tangle modules/my-vc.el
+#+begin_src emacs-lisp :tangle modules/init-dev.el
 (use-package with-editor
   :after (vterm magit)
   :commands vterm
@@ -1206,76 +1978,124 @@ editing the message. See [[https://magit.vc/manual/with-editor/Using-With_002dEd
   (shell-command "git config --global core.editor emacsclient"))
 #+end_src
 
-** Auto-Revert
+*** Git-Gutter
 
-#+begin_src emacs-lisp :tangle modules/my-vc.el
-;; Switching branchs may change file on disk; if so, refresh buffers
-(global-auto-revert-mode)
-#+end_src
+=git-gutter= is an Emacs package providing =git-gutter-mode= that, when activated,
+provides visual indication of changes to files inside a =git= repository. Colored
+icons located in the gutter indicate which lines have been modified, added, or
+deleted since the previous commit.
 
-** Git-Gutter
+*N.B.* The mode does not play nice with =linum-mode=, so we must also install the
+=git-gutter-fringe= package (see [[id:253507fc-cbf8-40a5-a490-c8651a7d44dd][Display Line Numbers in Fringe]]).
 
-#+begin_src emacs-lisp :tangle modules/my-vc.el
+#+begin_src emacs-lisp :tangle modules/init-dev.el
 (use-package git-gutter
-  :hook (prog-mode org-mode)
+  :hook ((prog-mode org-mode) . git-gutter-mode)
+  :custom
+  (git-gutter:modified-sign "=")
+  (git-gutter:added-sign "++")
+  (git-gutter:deleted-sign "--")
   :bind (("C-x P" . git-gutter:previous-hunk)
          ("C-x N" . git-gutter:next-hunk)
          ("C-x G" . git-gutter:popup-hunk))
   :config
-  ;; Must include if 'linum-mode' activated (common in 'prog-mode')
-  ;; because 'git-gutter' does not work with 'linum-mode'.
   (use-package git-gutter-fringe
     :commands git-gutter-mode
     :config (global-git-gutter-mode)))
 #+end_src
 
-** Provide my-vc.el
+** Virtual Terminal
 
-#+begin_src emacs-lisp :tangle modules/my-vc.el
-(provide 'my-vc)
+=vterm= is an Emacs package providing a terminal emulator inside Emacs. Based on
+=libvterm=, a C library that enables near-native terminal performance.
 
-;;; my-vc.el ends here
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package vterm
+  :defer t
+  :commands vterm
+  ;; Requires compilation, which may not work without installing dependencies
+  :init (setopt vterm-always-compile-module t)
+  :config
+  (defun my/vterm-new ()
+  "Prompt the user for a new vterm buffer name and open it."
+  (interactive)
+  (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
+    (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
 #+end_src
 
-* my-productivity.el
+** Lisp
+*** Automatic Indentation
 
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
-;;; -*- lexical-binding: t -*-
+=aggressive-indent= is an Emacs package providing =aggressive-indent-mode= that,
+when activated, correctly indents code as you type. Changes to indentation on
+one line of a function, for example, automatically adjusts the remaining lines
+of code. Primarily used as a "dumb" formatter for =emacs-lisp= code.
+
+*N.B.* Less important for =python= as other code formatter packages exist.
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package aggressive-indent
+  :hook (emacs-lisp-mode))
 #+end_src
 
-** Anzu-mode
+*** Elisp Documentation Lookup
 
-The =anzu= package provides a minor mode which displays the "current
-match" and "total matches" information in the mode-line.
+=helpful= is an Emacs package extends the /built-in/ =help= package and
+provides efficient, user-friendly documentation for =emacs-lisp=
+functions, variables, keybindings, and more.
 
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
-(use-package anzu
-  :hook (emacs-startup . global-anzu-mode)
-  :custom
-  (anzu-search-threshold 1000 "Limit n words searched to reduce lag")
-  (anzu-replace-threshold 50 "Limit n replacement overlay to reduce lag")
-  (anzu-minimum-input-length 2 "Increase activation threshold to reduce lag")
-
-  ;; Cleanup mode-line information
-  (anzu-mode-lighter "" "Remove mode-name from results")
-  (anzu-replace-to-string-separator "")
-
-  :bind (;; Keybindings M-% and C-M-% do not change
-         ([remap query-replace] . anzu-query-replace)
-         ([remap query-replace-regexp] . anzu-query-replace-regexp)
-
-         :map isearch-mode-map
-         ;; Use Anzu-mode for replacing from isearch results (C-s or C-f)
-         ([remap isearch-query-replace] . anzu-isearch-query-replace)
-         ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)))
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package helpful
+  :after init-emacs
+  :bind
+  (("C-h k" . helpful-kill-buffers)
+    ("C-h j" . helpful-at-point)
+    ("C-h f" . helpful-callable)
+    ("C-h F" . helpful-function)
+    ("C-h v" . helpful-variable)
+    ("C-h k" . helpful-key)
+    ("C-h c" . helpful-command)
+    ("C-h m" . helpful-mode)
+    ("C-h M" . describe-macro))
+  :config
+  ;; Must define here to ensure underlying function defined in
+  ;; 'init-emacs' is loaded before 'helpful'.
+  (defun my/helpful-kill-all-buffers ()
+    (interactive)
+    (my/kill-buffers-by-mode 'help-mode 'helpful-mode)))
 #+end_src
 
-** Avy
+** Yaml
 
-The =avy= package is useful for jumping to visible text using a
-char-based decision tree.
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(use-package yaml-mode
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
+#+end_src
 
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
+** Provide init-dev.el
+
+#+begin_src emacs-lisp :tangle modules/init-dev.el
+(provide 'init-dev)
+;;; init-dev.el ends here
+#+end_src
+
+* Writing
+
+#+begin_src emacs-lisp :tangle modules/init-writing.el
+;;; init-writing.el --- Configure writing tools  -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
+#+end_src
+
+** Improve Navigation
+
+=avy= is an Emacs package providing efficient navigation by allowing users to
+jump to visible text within the buffer.
+
+#+begin_src emacs-lisp :tangle modules/init-writing.el
 (use-package avy
   :bind (("M-j" . avy-goto-char-timer)  ;; orig. 'default-indent-new-line'
          :map isearch-mode-map
@@ -1288,91 +2108,21 @@ char-based decision tree.
   (avy-lead-face ((t (:background "#000000" :foreground "#33A4FF" :weight bold)))))
 #+end_src
 
-** Type-break Mode
-
-It is not healthy to sit all day; even worse to not take breaks to
-eat/drink/stretch/walk. The built-in =type-break-mode= enforces a
-pomodoro-style break routine.
-
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
-(use-package type-break
-  :hook (after-init)
-  :custom
-  (type-break-interval (* 50 60) "Work session duration")
-  (type-break-good-break-interval (* 5 60) "Break duration")
-  (type-break-good-rest-interval nil "Start break immediately")
-  (type-break-keystroke-threshold '(nil . nil) "Break due to time, not keystroke")
-  (type-break-file-name nil "Donot save break info")
-  (type-break-query-mode t "Remind later, if break declined")
-  (type-break-query-function 'y-or-n-p)
-  (type-break-query-interval (* 10 60))
-  (type-break-mode-line-message-mode t))
-#+end_src
-
-** Expand-Region
-
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
-(use-package expand-region
-  :commands er/expand-region
-  :bind ("C-=" . er/expand-region))
-#+end_src
-
-** Helpful
+** Spell Checking
 :PROPERTIES:
-:ID:       8fceb308-3d5f-4c30-bd85-105bc0d09ae7
+:ID:       8a9a6083-929e-4329-b009-c33529b0e5a7
 :END:
 
-The =Helpful= package is an alternative to the built-in Emacs and
-provides a number of additional features such as more readable
-doc-strings, and links to function calls and source-code.
-
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
-;; Alternative to built-in Emacs help
-(use-package helpful
-  :after my-functions
-  :bind (("C-h k" . helpful-kill-buffers)
-         ("C-h j" . helpful-at-point)
-         ("C-h f" . helpful-callable)
-         ("C-h F" . helpful-function)
-         ("C-h v" . helpful-variable)
-         ("C-h k" . helpful-key)
-         ("C-h c" . helpful-command)
-         ("C-h m" . helpful-macro)
-         ("C-h M" . describe-mode))
-  :config
-  (defun jh/helpful-kill-all-buffers ()
-    "Kill all buffers derived from 'help-mode' or 'helpful-mode'."
-    (interactive)
-    (jh/kill-buffers-by-mode 'help-mode 'helpful-mode)))
-#+end_src
-
-** Provide my-productivity.el
-
-#+begin_src emacs-lisp :tangle modules/my-productivity.el
-(provide 'my-productivity)
-
-;;; my-productivity.el ends here
-#+end_src
-
-* my-writing.el
-
-#+begin_src emacs-lisp :tangle modules/my-writing.el
-;;; -*- lexical-binding: t -*-
-#+end_src
-
-** Spell Check
-
 Spell checking is important for both things like narratives and git
-commits.  The [[https://github.com/minad/jinx][jinx]] package is preferred over the builtin =flyspell= due
-to efficiency, keybindings, and ability to save words to a dictionary.
+commits. The [[https://github.com/minad/jinx][jinx]] package is preferred over the builtin =flyspell= due to
+efficiency, keybindings, and ability to save words to a dictionary.
 
-The package uses the API of the =Enchant= library [[[https://abiword.github.io/enchant/][github/enchant]]] and
-only analyses visible text (instead of the entire buffer). The =jinx=
-package requires the following local packages to provide
-spell-checking. Both =enchant= and =pkgconf= are
-Arch-specific. Dictionaries are provided by =nuspell= (the modern
-version of =hunspell=). See [[https://github.com/minad/jinx][gitub/jinx]] for more details. In Arch,
-packages can be download by ~yay enchant pkgconf hunspell~.
+The package uses the API of the =Enchant= library [[[https://abiword.github.io/enchant/][github/enchant]]] and only
+analyses visible text (instead of the entire buffer). The =jinx= package requires
+the following local packages to provide spell-checking. Both =enchant= and
+=pkgconf= are Arch-specific. Dictionaries are provided by =nuspell= (the modern
+version of =hunspell=). See [[https://github.com/minad/jinx][gitub/jinx]] for more details. In Arch, packages can be
+download by ~yay enchant pkgconf hunspell~.
 
   + hunspell :: Spell-checker dictionaries
   + enchant :: Wrapper for spelling libraries
@@ -1384,23 +2134,20 @@ Useful commands include:
   + jinx-correct-all :: Allow user to correct all spelling errors in
     buffer
 
-*QUIRK:* Comments in =src-blocks= are only checked if viewed in an
-=org-edit-special= buffer accessed via ~C-c '~ . This is because =jinx= only
-checks text possessing specific face properties (see
-~jinx-include-faces~ and ~jinx-exclude-faces~). When coding, we are only
-interested in checking comments and doc-strings;
-~tree-sitter-hl-face:comment~, for example extends this functionality to
-=.py= files (see [[*Syntax Highlighting][Syntax Highlighting]]). To check a comment, we would need
-to remove =org-block= in ~jinx-exclude-faces~ at the expense of checking
-ALL of the code.
+*QUIRK:* Comments in =src-blocks= are only checked if viewed in an =org-edit-special=
+buffer accessed via ~C-c '~ . This is because =jinx= only checks text possessing
+specific face properties (see ~jinx-include-faces~ and ~jinx-exclude-faces~). When
+coding, we are only interested in checking comments and doc-strings;
+~tree-sitter-hl-face:comment~, for example extends this functionality to =.py=
+files (see [[*Syntax Highlighting][Syntax Highlighting]]). To check a comment, we would need to remove
+=org-block= in ~jinx-exclude-faces~ at the expense of checking ALL of the code.
 
-#+begin_src elisp :tangle modules/my-writing.el
+#+begin_src elisp :tangle modules/init-writing.el
 (use-package jinx
   :hook (org-mode text-mode prog-mode conf-mode)
   :bind (("C-c j c" . jinx-correct)
          ("C-c j a" . jinx-correct-all)
-         ;; alias defined using 'jinx-correct' keybinding
-         ("C-c j d" . jinx-save-word-at-point))
+         ("C-c j d" . my/jinx-save-word-at-point))
   :custom
   ;; 'jinx-mode' only checks text possessing specific face properties like
   ;; 'font-lock-comment-face' in 'prog-mode' for example.
@@ -1417,7 +2164,7 @@ ALL of the code.
   (jinx-languages "en_GB")
   :config
   ;; Quickly save word-at-point to dictionary used by 'jinx'
-  (defalias 'jinx-save-word-at-point (kmacro "C-c j c @ RET"))
+  (defalias 'my/jinx-save-word-at-point (kmacro "C-c j c @ RET"))
 
   ;; 'jinx-correct' suggestions displayed as grid instead of long list
   (vertico-multiform-mode 1)
@@ -1426,13 +2173,17 @@ ALL of the code.
 #+end_src
 
 ** Denote
+*** Denote
 
-The =denote= package is a simple note-taking tool for Emacs that follows
-a predictable and descriptive file-naming scheme. See [[denote:20241010T181237][How To Use
-Denote]].
+=denote= is an Emacs package that helps users manage and organize their notes
+more effectively.
 
-#+begin_src emacs-lisp :tangle modules/my-writing.el
+Related notes:
++ [[denote:20241010T181237][How To Use Denote]]
+
+#+begin_src emacs-lisp :tangle modules/init-writing.el
 (use-package denote
+  :after org
   :commands denote
   :hook (dired-mode . denote-dired-mode)
   :custom
@@ -1446,239 +2197,72 @@ Denote]].
                                    "#+DATE: %2$s\n"
                                    "#+ID: %4$s\n"
                                    "#+FILETAGS: %3$s\n"
-                                   "#+STARTUP: overview\n"))
-  :config
-  ;; Good idea to update 'org-dblock' links/backlinks before saving buffers
-  (add-hook 'before-save-hook (lambda ()
-                                (when (denote-file-is-note-p (buffer-file-name))
-                                  (org-update-all-dblocks)))))
+                                   "#+STARTUP: overview\n")))
 #+end_src
 
-The =consult-denote= package extends the preview-functionality of
-=consult= and provides the following functions:
+*** Update dblocks Before Saving
+
+=denote= takes advantage of dynamic =org-blocks= to dynamically organize links and
+back-links. Annoyingly, they must be manually updated. Here, we add a hook to
+update dynamic blocks before saving the =denote= buffer.
+
+#+begin_src emacs-lisp :tangle modules/init-writing.el
+(add-hook 'before-save-hook (lambda ()
+                              (when (denote-file-is-note-p (buffer-file-name))
+                                (org-update-all-dblocks))))
+#+end_src
+
+*** Consult-Denote Extension
+:PROPERTIES:
+:ID:       614d6cd5-6eb8-40cc-8ed1-538bcdca253d
+:END:
+:RELATED:
++ [[id:8b393fcc-9d43-4afb-b249-9a72bc6089ea][Consult]]
+:END:
+
+=consult-denote= is an Emacs accessory package for =denote= that extends the
+preview-functionality of =consult=.  The package provides the following
+functions:
 
 + consult-denote-find :: Alternative to ~denote-open-or-create~
 + consult-denote-grep :: Regex to filter files in =denote-directory=
 
-#+begin_src emacs-lisp :tangle modules/my-writing.el
+#+begin_src emacs-lisp :tangle modules/init-writing.el
 (use-package consult-denote
   :after (consult denote)
   :commands (consult-denote-find))
 #+end_src
 
-** Provide my-writing.el
+** Provide init-writing.el
 
-#+begin_src emacs-lisp :tangle modules/my-writing.el
-(provide 'my-writing)
+#+begin_src emacs-lisp :tangle modules/init-writing.el
+(provide 'init-writing)
 
-;;; my-writing.el ends here
+;;; init-writing.el ends here
 #+end_src
 
-* my-functions.el
+* Keybindings
 
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-;;; -*- lexical-binding: t -*-
-#+end_src
+#+begin_src emacs-lisp :tangle modules/init-kbd.el
+;;; init-kbd.el --- Configure keybindings + tools  -*- lexical-binding: t; no-byte-compile: t -*-
 
-** Evaluate init.el
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
 
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-;; Quickly re-evaluate init file
-(defun jh/eval-init ()
-  (interactive)
-  (load-file user-init-file))
-#+end_src
-
-** Copy Buffer Name
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/kill-buffer-name ()
-  (interactive)
-  (kill-new (buffer-name)))
-#+end_src
-
-** Copy Relative Buffer Path
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/kill-relative-buffer-path ()
-  "Copy relative buffer path to kill ring.
-
-Replace '/home/<username>' prefix with '~' if applicable."
-  (interactive)
-  (if-let* ((full-path (buffer-file-name))
-            (abbrev-path (abbreviate-file-name full-path)))
-      (progn
-        (kill-new abbrev-path)
-        (message "Buffer path copied to kill ring: %s" full-path))
-    (message "Buffer is not visiting a file.")))
-#+end_src
-
-** Create Org-Mode :file Link to Buffer
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/kill-buffer-orgmode-file-link ()
-  "Build [[:file file-path][file-name]] org-link from current
-buffer.
-
-The function 'buffer-file-name' returns the absolute path of the
-buffer, which breaks should other users open the link. Instead,
-the relative path is referenced using the 'abbreviate-file-name'
-function."
-
-  (interactive)
-  (if-let ((absolute-path (buffer-file-name)))
-      (kill-new (message "[[file:%s][%s]]"
-                         (abbreviate-file-name absolute-path)
-                         (buffer-name)))
-    (message "Buffer is not a file")))
-#+end_src
-
-** Cleaning Buffer-List
-
-*N.B.* ~M-x crux-kill-other-buffers~ to kill all buffers except current one
-
-*** Kill Buffers Except BUFFER-NAME
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/kill-buffers-except (buffer-name)
-  "Kill all buffers except for BUFFER-NAME."
-  (dolist (buffer (buffer-list))
-    (unless (or (string-equal (buffer-name buffer) buffer-name)
-                (string-equal (buffer-name buffer) (concat " " buffer-name)))
-      (kill-buffer buffer))))
-#+end_src
-
-*** Kill Buffers Except SCRATCH
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/kill-all-buffers-except-scratch ()
-  "Kill all buffers except for *scratch*."
-  (interactive)
-  (jh/kill-buffers-except "*scratch*"))
-#+end_src
-
-*** Kill Buffers By Major-Mode
-
-Quickly kill numerous =dired-mode= or =helpful-mode= buffers that
-accumulate over time.
-
-*N.B.* Mode-specific functions defined in relevant ~use-package~ calls,
-including:
-
-+ [[id:20596bd1-da74-408e-a84e-0b5b9f240398][my-dired.el]]
-+ [[id:8fceb308-3d5f-4c30-bd85-105bc0d09ae7][Helpful]]
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/kill-buffers-by-mode (&rest modes)
-  "Kill all buffers derived from any of MODES.
-
-Ex: (jh/kill-buffers-by-mode 'help-mode 'helpful-mode)"
-  (let ((killed 0))
-    (mapc (lambda (buffer)
-            (with-current-buffer buffer
-              (when (apply #'derived-mode-p modes)
-                (kill-buffer buffer)
-                (setq killed (1+ killed)))))
-          (buffer-list))
-    (message "Killed %d buffer(s) derived from %s" killed modes)))
-#+end_src
-
-** Jump to Configuration README.org
-
-*N.B.* See related ~M-x crux-find-user-init-file~
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/find-config-file ()
-  "Edit '~/.emacs.d/README.org', in other window."
-  (interactive)
-  (find-file-other-window "~/.emacs.d/README.org"))
-#+end_src
-
-** Jump to Minibuffer
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/jump-to-minibuffer ()
-  "Switch to minibuffer window (if active)"
-  (interactive)
-  (when (active-minibuffer-window)
-    (select-window (active-minibuffer-window))))
-#+end_src
-
-** Parse 'defcustom' of Elisp Files
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(defun jh/parse-package-defcustoms ()
-  "Parse all `defcustom` variables and their docstrings in the
-current buffer, and organize them in an `org-mode` description
-list. The variables are sorted alphabetically, and only the first
-sentence of each docstring is included."
-  (interactive)
-  (let ((output-buffer (get-buffer-create "*Parsed defcustom Variables*"))
-        ;; Match 'defcustom' followed by the variable name
-        (regex "^(defcustom\\s-+\\(\\_<[^[:space:]]+\\_>\\)")
-        ;; To store matched defcustom variables and docstrings
-        (result '()))
-    ;; Search the current buffer for all occurrences of defcustom
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward regex nil t)
-        (let ((var-name (match-string 1))
-              docstring)
-          ;; Move point to skip over the default value
-          (forward-sexp)
-          ;; Now search for the docstring (next string literal)
-          (when (re-search-forward "\"\\([^\"]*\\)\"" nil t)
-            (setq docstring (match-string 1)))
-          ;; Extract only the first sentence of the docstring
-          (when docstring
-            (setq docstring (car (split-string docstring "\\.\\s-" t))))
-          ;; Collect the variable name and docstring
-          (push (list var-name docstring) result))))
-
-    ;; Sort the collected variables alphabetically by name
-    (setq result (sort result (lambda (a b) (string< (car a) (car b)))))
-
-    ;; Insert the collected information into the temporary buffer with
-    ;; org-mode formatting
-    (with-current-buffer output-buffer
-      (erase-buffer)
-      (org-mode)  ;; Set buffer to org-mode
-      (insert "#+TITLE: Parsed defcustom Variables\n\n")
-      (dolist (item result)
-        (let ((var-name (nth 0 item))
-              (docstring (nth 1 item)))
-          (insert (format "+ %s :: %s.\n\n" var-name docstring))))
-      (goto-char (point-min)))
-    (display-buffer output-buffer)
-    (mark-whole-buffer)
-    (fill-paragraph)))
-#+end_src
-** Provide my-functions.el
-
-#+begin_src emacs-lisp :tangle modules/my-functions.el
-(provide 'my-functions)
-
-;;; my-functions.el ends here
-#+end_src
-
-* my-bindings.el
-
-#+begin_src emacs-lisp :tangle modules/my-bindings.el
-;;; -*- lexical-binding: t -*-
+;;; Code:
 #+end_src
 
 ** Which-Key
 
-The =which-key= minor-mode displays the available keybindings following
-an incomplete command [[[https://github.com/justbur/emacs-which-key][github/whichkey]]]. For example, typing ~C-x~ will
-open a window showing available keybindings (and descriptions) sharing
-the ~C-x~ prefix.
+=which-key= is an Emacs package providing the minor-mode =which-key-mode= that,
+when activated, displays the available keybindings following an incomplete
+command [[[https://github.com/justbur/emacs-which-key][github/whichkey]]]. For example, typing ~C-x~ will open a window showing
+available keybindings (and descriptions) sharing the ~C-x~ prefix.
 
 *N.B.* After popup window appears, use ~C-h~ to open additional navigation
-options. This is helpful not all keybindings can fit in the popup
-window.
+options. This is helpful not all keybindings can fit in the popup window.
 
-#+begin_src emacs-lisp :tangle modules/my-bindings.el
+#+begin_src emacs-lisp :tangle modules/init-kbd.el
 (use-package which-key
   :config (which-key-mode)
   :custom
@@ -1693,27 +2277,30 @@ window.
 #+end_src
 
 ** Crux
+:PROPERTIES:
+:ID:       28b8a358-e893-4390-a882-7239a36efcd4
+:END:
+:RELATED:
++ [[id:d831e4e4-e9b1-480e-aa1a-a152d9707275][General.el]]
+:END:
 
-The "Collection of Ridiculously Useful eXtensions" =crux= package
-bundles many useful interactive commands to enhance your overall Emacs
-experience. There are many functions [[[https://github.com/bbatsov/crux/blob/master/crux.el][github.com/crux]]] to choose from.
+=crux= ("Collection of Ridiculously Useful eXtensions") is an Emacs package that
+bundles many useful interactive commands to enhance the Emacs experience. There
+are many functions [[[https://github.com/bbatsov/crux/blob/master/crux.el][github.com/crux]]] to choose from.
 
 Below, we add a number of useful functions:
   + crux-move-beginning-of-line :: Move point to indentation of line
-  + crux-kill-line-backwards :: Kill line backwards and adjust the
-    indentation
-  + crux-switch-to-previous-buffer :: Switch to previously opened
-    buffer
+  + crux-kill-line-backwards :: Kill line backwards and adjust the indentation
+  + crux-switch-to-previous-buffer :: Switch to previously opened buffer
   + crux-view-url :: Open new buffer containing contents of URL
 
-#+begin_src emacs-lisp :tangle modules/my-bindings.el
-;; Collection of useful keybindings
+#+begin_src emacs-lisp :tangle modules/init-kbd.el
 (use-package crux
   :commands (crux-move-beginning-of-line
              crux-kill-whole-line
              crux-switch-to-previous-buffer
              crux-kill-line-backwards)
-  :bind (([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
+  :bind (("C-a" . 'crux-move-beginning-of-line)
          ([remap kill-whole-line] . 'crux-kill-whole-line)
          ("M-o" . 'crux-switch-to-previous-buffer)
          ("C-<backspace>" . 'crux-kill-line-backwards)
@@ -1721,27 +2308,39 @@ Below, we add a number of useful functions:
 #+end_src
 
 ** Global Bindings
+:PROPERTIES:
+:ID:       77a39f08-8fcf-4b4f-b7c4-aef965d87cab
+:END:
+:RELATED:
++ [[id:d831e4e4-e9b1-480e-aa1a-a152d9707275][General.el]]
+:END:
 
-#+begin_src emacs-lisp :tangle modules/my-bindings.el
+#+begin_src emacs-lisp :tangle modules/init-kbd.el
 ;; 'Find-File-At-Point' package adds additional functionality to
 ;; existing keybindings
 (ffap-bindings)
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-c C-;") 'copy-comment-region)
-(global-set-key (kbd "C-x O") 'jh/jump-to-minibuffer)
-
-;; Kill current buffer instead of selecting it from minibuffer
+(global-set-key (kbd "C-x O") 'my/jump-to-minibuffer)
 (global-set-key (kbd "C-x M-k") 'kill-current-buffer)
 #+end_src
 
 ** General.el
+:PROPERTIES:
+:ID:       d831e4e4-e9b1-480e-aa1a-a152d9707275
+:END:
+:RELATED:
++ [[id:453fdeac-b2bb-4217-9803-d5c89ceaf6de][Custom Buffer Functions]]
++ [[id:8f4885df-ad58-432b-a6cd-1f4524bfc868][Custom Functions]]
++ [[id:28b8a358-e893-4390-a882-7239a36efcd4][Crux]]
++ [[id:77a39f08-8fcf-4b4f-b7c4-aef965d87cab][Global Bindings]]
+:END:
 
-Similar to =use-package=, the =general= package provides a more convenient
-method for binding keys in Emacs.
+=general= is an Emacs package is a keybinding management library that allows
+users to setup global and local keybindings more easily.
 
-#+BEGIN_src emacs-lisp :tangle modules/my-bindings.el
+#+BEGIN_src emacs-lisp :tangle modules/init-kbd.el
 (use-package general
   :custom
   (general-describe-priority-keymaps nil)
@@ -1759,30 +2358,35 @@ method for binding keys in Emacs.
 ;; :ignore t to define sub-section headers
 (my-leader-def
 
-  ;; BUFFERS
-  "b"  '(:ignore t                        :which-key "buffer")
-  "bn" '(jh/kill-buffer-name              :which-key "get-buffer-name")
-  "bp" '(jh/kill-relative-buffer-path     :which-key "get-relative-path")
-  "bl" '(jh/kill-buffer-orgmode-file-link :which-key "get-buffer-orgmode-link")
-  "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
-  "bc" '(jh/find-config-file              :which-key "jump-to-config")
-  "bf" '(ffap-other-window                :which-key "find-file-other-window")
+ "i" '(my/eval-init :which-key "eval-init")
 
-  ;; KILL BUFFERS
-  "k"  '(:ignore t                          :which-key "killing")
-  "ka" '(jh/kill-all-buffers-except-scratch :which-key "kill-all-buffers")
-  "ke" '(crux-kill-other-buffers            :which-key "kill-buffers-except-current"))
+ ;; BUFFERS
+ "b"  '(:ignore t                        :which-key "buffer")
+ "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
+ "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
+ "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
+ "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
+ "bc" '(my/find-config-file              :which-key "jump-to-config")
+ "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
+ "bf" '(ffap-other-window                :which-key "find-file-other-window")
+
+ ;; KILL BUFFERS
+ "k"  '(:ignore t                          :which-key "killing")
+ "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
+ "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
+ "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
+ "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
+ "km" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
 #+end_src
 
-** Provide my-bindings.el
+** Provide init-kbd.el
 
-#+begin_src emacs-lisp :tangle modules/my-bindings.el
-(provide 'my-bindings)
-
-;;; my-bindings.el ends here
+#+begin_src emacs-lisp :tangle modules/init-kbd.el
+(provide 'init-kbd)
+;;; init-kbd.el ends here
 #+end_src
 
-* Conclusion
+* Conclusions
 :PROPERTIES:
 :ID:       8b5ba82d-d303-4970-ade6-39f82fc08b56
 :END:
@@ -1791,20 +2395,15 @@ Finally, we specify the packages (ie top-level org-headers) to be
 included in our configuration.
 
 #+begin_src emacs-lisp :tangle init.el
-;; Add configuration modules to load path
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 
-;; Load Pertinent Modules
-(require 'my-visuals)
-(require 'my-org)
-(require 'my-completion)
-(require 'my-bindings)
-(require 'my-vc)
-(require 'my-writing)
-(require 'my-productivity)
-(require 'my-dev)
-(require 'my-functions)
-(require 'my-dired)
-
+(require 'init-emacs)
+(require 'init-ui)
+(require 'init-org)
+(require 'init-completion)
+(require 'init-dired)
+(require 'init-dev)
+(require 'init-writing)
+(require 'init-kbd)
 ;;; init.el ends here
 #+end_src

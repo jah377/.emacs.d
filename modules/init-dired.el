@@ -1,4 +1,9 @@
-;;; -*- lexical-binding: t -*-
+;;; init-dired.el --- Configure DIRED  -*- lexical-binding: t; no-byte-compile: t -*-
+
+;;; IMPORTANT:
+;; Changes to this file should be done in 'README.org' and re-tangled.
+
+;;; Code:
 
 (use-package dired
   :ensure nil
@@ -55,11 +60,10 @@
   :after dired
   :commands dired
   :bind (:map dired-mode-map
-              ;; C-+ calls 'er/expand-region'
-              ("M-+" . dired-create-empty-file))
+              ;; 'f' calls 'dired-find-file'
+              ("F" . dired-create-empty-file))
   :custom
-  ;; Revert dired-buffer after 'dired-do' operations
-  (dired-do-revert-buffer t))
+  (dired-do-revert-buffer t "Revert buffer after any 'dired-do' operations"))
 
 (use-package wdired
   :ensure nil
@@ -74,6 +78,5 @@
   :after (dired nerd-icons)
   :hook (dired-mode))
 
-(provide 'my-dired)
-
-;;; my-dired.el ends here
+(provide 'init-dired)
+;;; init-dired.el ends here
