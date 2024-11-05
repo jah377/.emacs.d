@@ -129,10 +129,11 @@ contain the :project: property"
       '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
          "* TODO %^{Task} %^g
 :PROPERTIES:
-:project: %(org-capture--select-project-entry agenda-work)
+:project: %(org-capture--select-project-entry my-emacs-agenda)
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
+
   %?
 :END:"
          :empty-lines 1
