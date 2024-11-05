@@ -1514,9 +1514,33 @@ we anticipate using frequently.
 *** Org-Capture Templates
 
 #+begin_src emacs-lisp :tangle modules/init-org.el
+;; I use the ':project:' property to connect related tasks. It is imperative
+;; that the value is consistent. Givne a specific file, these functions provide
+;; a list of previously used project values for me to select from.
+(defun org-capture--get-project-entry-from-file (agenda-file-name)
+  "Compile list of project names from org-headers in FILE that
+contain the :project: property"
+  (let (project-names)
+    (with-current-buffer (find-file-noselect agenda-file-name)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\*+ " nil t)
+        (when (and (org-entry-get nil "project")
+                   (not (org-entry-is-done-p)))
+          (add-to-list 'project-names (org-entry-get nil "project")))))
+    project-names))
+
+(defun org-capture--select-project-entry (agenda-file-name)
+  "Prompt user to select :project: property from FILE"
+  (let ((projects (org-capture--get-project-entry-from-file agenda-file-name)))
+    (completing-read "Select project:" projects nil nil)))
+
+
 (setq org-capture-templates
       '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
          "* TODO %^{Task} %^g
+:PROPERTIES:
+:project: %(org-capture--select-project-entry agenda-work)
+:END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
   %?
