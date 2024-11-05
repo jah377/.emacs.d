@@ -95,7 +95,9 @@
 (setq org-agenda-custom-commands
       '(("e" "Personal Emacs Tasks"
          ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
-                       (org-super-agenda-groups '((:auto-tags t)))))))))
+                       (org-super-agenda-groups '((:discard (:not (:tag ("personal" "emacs"))))
+                                                  (:discard (:tag "work"))
+                                                  (:auto-property "project")))))))))t
 
 (setopt org-structure-template-alist
         '(("x" . "example")
