@@ -1446,7 +1446,8 @@ changes ensure that the shown image is the "latest" version of that figure.
 *** Agenda Log Settings
 
 #+begin_src emacs-lisp :tangle modules/init-org.el
-(setopt org-log-states-order-reversed nil)
+(setopt org-log-states-order-reversed nil
+         org-log-into-drawer t)
 #+end_src
 
 *** Agenda TODO/Tag Settings

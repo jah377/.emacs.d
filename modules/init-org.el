@@ -75,7 +75,8 @@
 (setopt org-agenda-window-setup 'current-window
         org-agenda-restore-windows-after-quit t)
 
-(setopt org-log-states-order-reversed nil)
+(setopt org-log-states-order-reversed nil
+         org-log-into-drawer t)
 
 (setopt org-use-fast-todo-selection 'auto
         org-use-fast-tag-selection t)
