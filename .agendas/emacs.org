@@ -13,7 +13,6 @@
 - State "TODO"       from              [2024-11-05 Tue 15:30]
   Organize list of resources for configuring =python-mode=
 :END:
-
 * TODO Add docs/ denote silo in .emacs.d?                         :feature:
 :PROPERTIES:
 :project: denote
@@ -25,8 +24,7 @@
   did. However, it seems like a good idea to create a =docs/= subdirectory to
   document how to use the various packages found in my configuration.
 :END:
-
-* TODO Fix loading of dired-x                                         :fix:
+* HOLD/WAIT Fix loading of dired-x                                    :fix:
 :PROPERTIES:
 :project: dired
 :END:
@@ -39,14 +37,15 @@
   same ~:commands~, ~:after~, and ~:ensure~ =use-package= handles. _I don't know why
   this is_.
 :END:
-
-* TODO Document org-agenda configuration                            :notes:
+* MERGED Document org-agenda configuration                          :notes:
 :PROPERTIES:
 :project: org-agenda
 :END:
 :LOGBOOK:
 - State "TODO"       from              [2024-11-05 Tue 15:38]
-
   The =add-org-agenda= branch includes a minimal configuration of =org-agenda=. I
   need to document the settings and functionality by the changes.
+- State "ONGOING"    from "TODO"       [2024-11-06 Wed 11:00]
+- State "MERGED"     from "ONGOING"    [2024-11-06 Wed 12:21] \\
+  Initial process is done!
 :END:
