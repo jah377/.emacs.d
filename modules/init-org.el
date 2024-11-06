@@ -111,7 +111,7 @@ contain the :project: property"
          :empty-lines 1
          :kill-buffer t)))
 
-(setopt org-agenda-window-setup 'only-window)
+(setopt org-agenda-window-setup 'only-window
         org-agenda-restore-windows-after-quit t)
 
 (setopt org-log-into-drawer t

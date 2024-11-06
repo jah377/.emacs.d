@@ -1546,7 +1546,7 @@ displayed. Setting ~'only-window~ shows the agenda in in full screen. Setting
 after exiting the agenda view.
 
 #+begin_src emacs-lisp :tangle modules/init-org.el
-(setopt org-agenda-window-setup 'only-window)
+(setopt org-agenda-window-setup 'only-window
         org-agenda-restore-windows-after-quit t)
 #+end_src
 
