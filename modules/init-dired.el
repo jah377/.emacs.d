@@ -38,6 +38,7 @@
 (use-package dired-x
   :ensure nil
   :after dired
+  ;; ':commands dired' removed in commit 67d0400
   :custom
   ;; Files to ignore in 'dired' buffer.
   (dired-omit-files (concat "\\`[.]?#\\|\\`[.][.]?\\'"
