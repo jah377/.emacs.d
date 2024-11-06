@@ -242,7 +242,10 @@ bookmarks should we re-clone this repo. Alternatively, it is possible to store
 these files in a directory that is backed up to the "cloud" like ==keybase=.
 
 This was achieved by creating a symulink to =/run/user/1001/keybase/...=; we
-assign that directory to ~my-persist-dir~
+assign that directory to ~my-persist-dir~ which is used in the following
+locations:
++ [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]]
++ [[id:e62f2c9a-f7fa-4972-afc6-b0dd072d6474][Org-Agenda]]
 :END:
 
 =no-littering= is an Emacs package designed to organize =.emacs.d= and prevent
@@ -1464,6 +1467,9 @@ changes ensure that the shown image is the "latest" version of that figure.
 #+end_src
 
 ** Org-Agenda
+:PROPERTIES:
+:ID:       e62f2c9a-f7fa-4972-afc6-b0dd072d6474
+:END:
 
 /How do you organize related TODO items?/
 
@@ -2376,6 +2382,9 @@ files. To check a comment, we would need to remove =org-block= in
 
 ** Denote
 *** Denote
+:PROPERTIES:
+:ID:       7fed44cb-7196-48f4-9708-b6012d1c6c5d
+:END:
 
 =denote= is an Emacs package that helps users manage and organize their notes
 more effectively.
