@@ -35,8 +35,14 @@
         use-package-compute-statistics t
         use-package-verbose t)
 
+;; Directory to be backed up in the cloud
+(defconst my-persist-dir "/home/jon/.kb_persistent_emacs/")
+
 (use-package no-littering
   :demand t
+  :init
+  (setopt no-littering-etc-directory (concat my-persist-dir "no-littering/"))
+  (setopt no-littering-var-directory (concat my-persist-dir "no-littering/"))
   :config
   (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)

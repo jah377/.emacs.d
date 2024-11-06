@@ -235,6 +235,15 @@ prioritize them for efficient package installation/updates.
 :PROPERTIES:
 :ID:       a0a6ce0f-55d9-415f-a70c-48716e9d8c61
 :END:
+:MY-PERSIST-DIR:
+It does not make sense to version control configuration and data files; they
+are updated too frequently. However, it is annoying to lose customizations like
+bookmarks should we re-clone this repo. Alternatively, it is possible to store
+these files in a directory that is backed up to the "cloud" like ==keybase=.
+
+This was achieved by creating a symulink to =/run/user/1001/keybase/...=; we
+assign that directory to ~my-persist-dir~
+:END:
 
 =no-littering= is an Emacs package designed to organize =.emacs.d= and prevent
 clutter from various configuration files and cached data. By default,
@@ -246,8 +255,14 @@ items may not be consistent across Emacs packages.
 file to =/etc= and load.
 
 #+begin_src emacs-lisp :tangle init.el
+;; Directory to be backed up in the cloud
+(defconst my-persist-dir "/home/jon/.kb_persistent_emacs/")
+
 (use-package no-littering
   :demand t
+  :init
+  (setopt no-littering-etc-directory (concat my-persist-dir "no-littering/"))
+  (setopt no-littering-var-directory (concat my-persist-dir "no-littering/"))
   :config
   (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
