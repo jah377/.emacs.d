@@ -1492,8 +1492,8 @@ Templates]]). Therefore, we create the custom variables ~my-agenda-dir~ and
 ~my-emacs-agenda~.
 
 #+begin_src emacs-lisp :tangle modules/init-org.el
-(defconst my-agenda-dir (concat user-emacs-directory ".agendas/"))
-(defconst my-emacs-agenda (concat my-agenda-dir "emacs.org"))
+(defconst my-agenda-dir (concat my-persist-dir "agendas/"))
+(defconst my-emacs-agenda (concat my-agenda-dir "agenda_emacs.org"))
 
 (setopt org-agenda-files (list my-agenda-dir))
 #+end_src

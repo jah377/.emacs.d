@@ -75,8 +75,8 @@
 (add-hook 'org-babel-after-execute-hook
           (lambda () (org-display-inline-images nil t)))
 
-(defconst my-agenda-dir (concat user-emacs-directory ".agendas/"))
-(defconst my-emacs-agenda (concat my-agenda-dir "emacs.org"))
+(defconst my-agenda-dir (concat my-persist-dir "agendas/"))
+(defconst my-emacs-agenda (concat my-agenda-dir "agenda_emacs.org"))
 
 (setopt org-agenda-files (list my-agenda-dir))
 
