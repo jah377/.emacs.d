@@ -48,6 +48,14 @@
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
 
+(setopt org-structure-template-alist
+        '(("x" . "example")
+          ("q" . "quote")
+          ("e" . "src emacs-lisp")
+          ("m" . "src emacs-lisp :tangle modules/init-XXX.el")
+          ("s" . "src sh")
+          ("p" . "src python")))
+
 (setopt org-confirm-babel-evaluate nil)
 
 (setopt org-src-preserve-indentation t)
@@ -72,44 +80,6 @@
 
 (setopt org-agenda-files (list my-agenda-dir))
 
-(setopt org-agenda-window-setup 'current-window
-        org-agenda-restore-windows-after-quit t)
-
-(setopt org-log-states-order-reversed nil
-         org-log-into-drawer t)
-
-(setopt org-use-fast-todo-selection 'auto
-        org-use-fast-tag-selection t)
-
-(setopt org-agenda-hide-tags-regexp ".*"
-        org-auto-align-tags t)
-
-(use-package org-super-agenda
-  :defer t
-  :after org
-  :hook (org-agenda-mode . org-super-agenda-mode)
-  :custom (org-super-agenda-header-prefix "❯ ")
-  :config
-  (set-face-attribute 'org-super-agenda-header nil :weight 'bold))
-
-(setq org-agenda-custom-commands
-      '(("e" "Personal Emacs Tasks"
-         ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
-                       (org-super-agenda-groups '((:discard (:not (:tag ("personal" "emacs"))))
-                                                  (:discard (:tag "work"))
-                                                  (:auto-property "project")))))))))t
-
-(setopt org-structure-template-alist
-        '(("x" . "example")
-          ("q" . "quote")
-          ("e" . "src emacs-lisp")
-          ("m" . "src emacs-lisp :tangle modules/init-XXX.el")
-          ("s" . "src sh")
-          ("p" . "src python")))
-
-;; I use the ':project:' property to connect related tasks. It is imperative
-;; that the value is consistent. Givne a specific file, these functions provide
-;; a list of previously used project values for me to select from.
 (defun org-capture--get-project-entry-from-file (agenda-file-name)
   "Compile list of project names from org-headers in FILE that
 contain the :project: property"
@@ -127,7 +97,6 @@ contain the :project: property"
   (let ((projects (org-capture--get-project-entry-from-file agenda-file-name)))
     (completing-read "Select project:" projects nil nil)))
 
-
 (setq org-capture-templates
       '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
          "* TODO %^{Task} %^g
@@ -141,6 +110,35 @@ contain the :project: property"
 :END:"
          :empty-lines 1
          :kill-buffer t)))
+
+(setopt org-agenda-window-setup 'only-window)
+        org-agenda-restore-windows-after-quit t)
+
+(setopt org-log-into-drawer t
+        org-log-states-order-reversed nil)
+
+(setopt org-use-fast-todo-selection 'auto)
+
+(setopt org-use-fast-tag-selection 'auto)
+
+(setopt org-auto-align-tags t)
+
+(setopt org-agenda-remove-tags t)
+
+(use-package org-super-agenda
+  :defer t
+  :after org
+  :hook (org-agenda-mode . org-super-agenda-mode)
+  :custom (org-super-agenda-header-prefix "❯ ")
+  :config
+  (set-face-attribute 'org-super-agenda-header nil :weight 'bold))
+
+(setq org-agenda-custom-commands
+      '(("e" "Personal Emacs Tasks"
+         ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
+                       (org-super-agenda-groups '((:discard (:not (:tag ("personal" "emacs"))))
+                                                  (:discard (:tag "work"))
+                                                  (:auto-property "project")))))))))
 
 (provide 'init-org)
 ;;; init-org.el ends here
