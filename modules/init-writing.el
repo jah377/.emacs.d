@@ -49,7 +49,7 @@
   :commands denote
   :hook (dired-mode . denote-dired-mode)
   :custom
-  (denote-directory "~/notes/")
+  (denote-directory (concat my-persist-dir "notes/"))
   (denote-file-type "org")
   (denote-prompts '(title keywords))
   (denote-known-keywords '("emacs" "python" "linux" "ml" "work"))
