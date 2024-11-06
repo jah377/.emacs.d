@@ -38,10 +38,9 @@
 (use-package dired-x
   :ensure nil
   :after dired
-  :commands dired
   :custom
   ;; Files to ignore in 'dired' buffer.
-  (dired-omit-files (concat dired-omit-files
+  (dired-omit-files (concat "\\`[.]?#\\|\\`[.][.]?\\'"
                             "\|"
                             (rx (or (: bos (or "\.DS_Store"
                                                "__MACOSX"
