@@ -111,8 +111,8 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
          (org-mode . (lambda () (whitespace-mode 0)))
          ;; Makefiles rely heavily on indentation and whitespace
          (makefile-mode . (lambda ()
-                            (setopt indent-tabs-mode t
-                                    whitespace-mode nil)
+                            (setq indent-tabs-mode t
+                                  whitespace-mode nil)
                             (add-hook 'before-save-hook
                                       #'delete-trailing-whitesapce))))
   :custom
