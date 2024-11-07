@@ -63,8 +63,8 @@
 
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 32 1024 1024)
-                  gc-cons-percentage 0.1)))
+            (setopt gc-cons-threshold (* 32 1024 1024)
+                    gc-cons-percentage 0.1)))
 
 (defun gopar/pulse-current-region (&rest _)
   "Pulse the current implicit or active region"
