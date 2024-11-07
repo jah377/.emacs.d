@@ -38,8 +38,8 @@ Garbage Collection]] section to prevent Emacs from freezing/crashing.
 
 #+begin_src emacs-lisp :tangle early-init.el
 ;; https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29
-(setopt gc-cons-threshold most-positive-fixnum)
-(setopt gc-cons-percentage 0.9)
+(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-percentage 0.9)
 #+end_src
 
 ** Increase Read Process

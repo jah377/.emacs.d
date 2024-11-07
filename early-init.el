@@ -9,8 +9,8 @@
 ;;; Code:
 
 ;; https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29
-(setopt gc-cons-threshold most-positive-fixnum)
-(setopt gc-cons-percentage 0.9)
+(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-percentage 0.9)
 
 ;; https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
 (setopt read-process-output-max (* 512 1024))
