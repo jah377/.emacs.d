@@ -60,7 +60,7 @@
 
 (setopt org-src-preserve-indentation t)
 
-(setopt org-src-window-setup 'split-window-right)
+(setopt org-src-window-setup 'current-window)
 
 (setopt org-src-ask-before-returning-to-edit-buffer t)
 

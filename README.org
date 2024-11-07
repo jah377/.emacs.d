@@ -1401,12 +1401,11 @@ automatically inserted when exiting the =org-edit-special= buffer.
 **** Window Setup
 
 =org-src-window-setup= setting controls how the source code edit buffer is
-displayed. Setting to ~'split-window-right~ ensures that the widow always opens
-to the right of the current buffer. This is advantageous when we need to look
-at previous =src-blocks= in the existing narrative.
+displayed. Setting to ~'current-window~ ensures that the widow always opens in
+the current buffer.
 
 #+begin_src emacs-lisp :tangle modules/init-org.el
-(setopt org-src-window-setup 'split-window-right)
+(setopt org-src-window-setup 'current-window)
 #+end_src
 
 **** Turn off Exit Prompt
