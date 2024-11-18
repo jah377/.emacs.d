@@ -114,7 +114,7 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
                             (setq indent-tabs-mode t
                                   whitespace-mode nil)
                             (add-hook 'before-save-hook
-                                      #'delete-trailing-whitesapce))))
+                                      #'delete-trailing-whitespace))))
   :custom
   (whitespace-line-column fill-column "Highlight text beyond column")
   (whitespace-style '(face
