@@ -1,16 +1,41 @@
+:PROPERTIES:
+:TOC:      :include all :depth 10 :force ((depth)) :ignore ((descendants)) :local ((depth))
+:END:
 #+TITLE: My GNU Emacs Configuration
 #+DATE: Wednesday, September 25, 2024
 #+PROPERTY: header-args:emacs-lisp :results silent
 #+STARTUP: overview
 
-* Introduction
 
-This is my literate Emacs configuration file; there are many like it, but this
-one is mine. It serves as both documentation and the source for configuring
-Emacs. All necessary files to configure Emacs are generated from this file by
-calling ~org-babel-tangle~ (~C-c C-v t~), and stored in the =/modules=
-sub-directory. As such, changes should be made in this document, not in the
-individual =.el= files.
+* Table of Contents
+:PROPERTIES:
+:TOC:      :include all :depth 1 :ignore this
+:END:
+:CONTENTS:
+- [[#introduction][Introduction]]
+- [[#early-init-file][Early Init File]]
+- [[#init-file][Init File]]
+- [[#emacs][Emacs]]
+- [[#ui][UI]]
+- [[#org-mode][Org-Mode]]
+- [[#completion][Completion]]
+- [[#dired][DIRED]]
+- [[#development][Development]]
+- [[#writing][Writing]]
+- [[#keybindings][Keybindings]]
+- [[#load-modules][Load Modules]]
+:END:
+
+* Introduction
+:PROPERTIES:
+:TOC:      :include all :force (depth) :ignore (nothing) :local (nothing)
+:END:
+
+This is my literate Emacs configuration file. It serves as both documentation
+and the source for configuring Emacs. All necessary files to configure Emacs
+are generated from this file by calling ~org-babel-tangle~ (~C-c C-v t~) and
+stored in the =/modules= sub-directory. As such, changes should be made in this
+document, not in the individual =.el= files.
 
 * Early Init File
 
@@ -1289,6 +1314,24 @@ total number of =isearch= matches (and current match position) in the mode-line.
   (org-adapt-indentation t "Align contents with heading")
   (org-element-use-cache nil "Avoid 'org-element--cache' error")
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+#+end_src
+
+** Org Table of Contents
+
+=org-make-tock= is an Emacs package providing =org-make-toc-mode= that, when
+activated, generates a "Table of Contents" (=TOC=) for =org= files. This makes it
+easier to navigate large documents. Calling ~org-make-toc-insert~ adds a custom
+~:TOC:~ property to the current header. The function ~org-make-toc~ updates the =TOC=
+in the current buffer.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(use-package org-make-toc
+  :after org
+  :hook ((org-mode . org-make-toc-mode)
+         (org-mode . (lambda ()
+                       ;; 'nil' specifies that this is not a "local" addition
+                       ;; 't' ensures the hook is buffer-local
+                       (add-hook 'before-save-hook #'org-make-toc nil t)))))
 #+end_src
 
 ** Org UI
@@ -2598,7 +2641,7 @@ users to setup global and local keybindings more easily.
 ;;; init-kbd.el ends here
 #+end_src
 
-* Conclusions
+* Load Modules
 :PROPERTIES:
 :ID:       8b5ba82d-d303-4970-ade6-39f82fc08b56
 :END:

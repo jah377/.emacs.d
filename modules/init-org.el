@@ -28,6 +28,14 @@
   (org-element-use-cache nil "Avoid 'org-element--cache' error")
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
+(use-package org-make-toc
+  :after org
+  :hook ((org-mode . org-make-toc-mode)
+         (org-mode . (lambda ()
+                       ;; 'nil' specifies that this is not a "local" addition
+                       ;; 't' ensures the hook is buffer-local
+                       (add-hook 'before-save-hook #'org-make-toc nil t)))))
+
 (use-package org-modern
   :after org
   :init (global-org-modern-mode)
