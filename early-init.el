@@ -19,11 +19,11 @@
 
 (setopt frame-resize-pixelwise t)
 
-(menu-bar-mode   -1)
-(scroll-bar-mode -1)
-(scroll-all-mode -1)
-(tool-bar-mode   -1)
-(tooltip-mode    -1)
+(menu-bar-mode   -1) ;; Menu bar at top of framen
+(scroll-bar-mode -1) ;; Visible scroll-bar that appears when scrolling
+(scroll-all-mode -1) ;; Visible scroll-bar during synchronized scrolling
+(tool-bar-mode   -1) ;; Icons like "save" button below menu
+(tooltip-mode    -1) ;; Hoving over (some) elements triggers pop-up boxes
 
 (setq-default inhibit-startup-screen t
               inhibit-startup-message t

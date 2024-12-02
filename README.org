@@ -1,6 +1,3 @@
-:PROPERTIES:
-:TOC:      :include all :depth 10 :force ((depth)) :ignore ((descendants)) :local ((depth))
-:END:
 #+TITLE: My GNU Emacs Configuration
 #+DATE: Wednesday, September 25, 2024
 #+PROPERTY: header-args:emacs-lisp :results silent
@@ -153,18 +150,12 @@ times when fonts are larger than the system default (see
 Remove unnecessary visual elements not only enhances the aesthetics but also
 improves startup speed.
 
-+ menu-bar-mode :: Menu bar at top of the Emacs frame
-+ scroll-bar-mode :: Visible scroll-bar that appears when scrolling
-+ scroll-all-mode :: Visible scroll-bar during synchronized scrolling
-+ tool-bar-mode :: Icons like "save" button below menu
-+ tooltip-mode :: Hovering over (some) elements triggers pop-up boxes
-
 #+begin_src emacs-lisp :tangle early-init.el
-(menu-bar-mode   -1)
-(scroll-bar-mode -1)
-(scroll-all-mode -1)
-(tool-bar-mode   -1)
-(tooltip-mode    -1)
+(menu-bar-mode   -1) ;; Menu bar at top of framen
+(scroll-bar-mode -1) ;; Visible scroll-bar that appears when scrolling
+(scroll-all-mode -1) ;; Visible scroll-bar during synchronized scrolling
+(tool-bar-mode   -1) ;; Icons like "save" button below menu
+(tooltip-mode    -1) ;; Hoving over (some) elements triggers pop-up boxes
 #+end_src
 
 
@@ -174,7 +165,7 @@ below:
 + inhibit-startup-screen :: ~t~ to disable startup screen
 + inhibit-startup-message :: ~t~ to disable startup message
 + initial-scratch-message :: ~nil~ for empty =*scratch*= buffer
-  - Startup stats added to =*scratch*= in [[id:1269b427-94e9-4df5-98bf-c83a31db096d][Profile Emacs Startup]]
+  - Startup stats added to =*scratch*= in [[id:1269b427-94e9-4df5-98bf-c83a31db096d][Profile Emacs Startup]] section
 + initial-buffer-choice :: ~t~ to open =*scratch*= buffer after init
 + initial-major-mode :: ~'text-mode~ instead of =lisp-interaction-mode=
   - Not interested in typing/evaluating lisp-code in =*scratch*=
@@ -249,7 +240,7 @@ initialization times.
 ** Package Setup
 *** Initialize Package Resources
 
-Here, we setup package management, set up multiple package archives, and
+Here, we setup package management, specify desired package archives, and
 prioritize them for efficient package installation/updates.
 
 #+begin_src emacs-lisp :tangle init.el
@@ -265,7 +256,7 @@ prioritize them for efficient package installation/updates.
         ("gnu elpa" . 5)
         ("nongnu"   . 4)))
 
-;; MANDITORY; Emacs must be aware of available packages before installing
+;; MANDITORY: Emacs must be aware of available packages before installing
 (package-initialize)
 #+end_src
 
@@ -273,6 +264,9 @@ prioritize them for efficient package installation/updates.
 :PROPERTIES:
 :ID:       a4fb8525-6004-4685-b4cc-297699db426e
 :END:
+
+~use-package~ is an Emacs macro (added in Emacs29) designed to simplify and
+optimize the configuration and management of Emacs packages.
 
 + use-package-ensure :: External package provides =use-package-always-ensure=
   setting, describe below.
@@ -303,18 +297,6 @@ prioritize them for efficient package installation/updates.
 :PROPERTIES:
 :ID:       a0a6ce0f-55d9-415f-a70c-48716e9d8c61
 :END:
-:MY-PERSIST-DIR:
-It does not make sense to version control configuration and data files; they
-are updated too frequently. However, it is annoying to lose customizations like
-bookmarks should we re-clone this repo. Alternatively, it is possible to store
-these files in a directory that is backed up to the "cloud" like ==keybase=.
-
-This was achieved by creating a symulink to =/run/user/1001/keybase/...=; we
-assign that directory to ~my-persist-dir~ which is used in the following
-locations:
-+ [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]]
-+ [[id:e62f2c9a-f7fa-4972-afc6-b0dd072d6474][Org-Agenda]]
-:END:
 
 =no-littering= is an Emacs package designed to organize =.emacs.d= and prevent
 clutter from various configuration files and cached data. By default,
@@ -324,6 +306,14 @@ items may not be consistent across Emacs packages.
 
 *N.B.* Emacs stores customization information in =custom.el=. Here, we move that
 file to =/etc= and load.
+
+*N.B.* It does not make sense to version control configuration and data files;
+they are updated too frequently. However, it is annoying to lose customizations
+like bookmarks should we re-clone this repo. Alternatively, it is possible to
+store these files in a directory that is backed up to the "cloud" like
+=keybase=. This was achieved by creating a simulink to
+=/run/user/1001/keybase/...=; we assign that directory to ~my-persist-dir~ which is
+referenced in the [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]] and [[id:e62f2c9a-f7fa-4972-afc6-b0dd072d6474][Org-Agenda]] sub-sections.
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Directory to be backed up in the cloud
@@ -342,14 +332,11 @@ file to =/etc= and load.
 
 ** Reset Garbage Collection
 
-=gcmh= (short for "Garbage Collection Magic Hack") is an Emacs package by
-=Doom-Emacs= that optimizes garbage collection (GC) behavior. When =gcmh-mode= is
-activated, improves efficiency by raising =gc-cons-threshold= when working (↓GC
-frequency) and lowing it when in idle (↑GC frequency).
+Previously in [[id:19407840-a20f-4225-9484-bbf88d3ff00d][Temporarily Configure Garbage Collection]] , =gc-cons-threshold= and
+=gc-cons-percentage= were set to a large amount in order to prevent GC during
+initialization. _Must_ reduce to avoid Emacs freezing.
 
-*N.B.* =gc-cons-threshold= previous set to large amount in [[id:19407840-a20f-4225-9484-bbf88d3ff00d][Temporarily Configure
-Garbage Collection]] to prevent GC during initialization. _Must_ reduce to avoid
-Emacs freezing.
+*TODO:* Select appropriate values based on computer specs.
 
 #+begin_src emacs-lisp :tangle init.el
 ;; Garbage Collection Magic Hack

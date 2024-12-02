@@ -23,7 +23,7 @@
         ("gnu elpa" . 5)
         ("nongnu"   . 4)))
 
-;; MANDITORY; Emacs must be aware of available packages before installing
+;; MANDITORY: Emacs must be aware of available packages before installing
 (package-initialize)
 
 ;; Ensures backwards compatability ('use-package' added in Emacs29)
