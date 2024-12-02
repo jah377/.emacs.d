@@ -13,6 +13,7 @@
 :END:
 :CONTENTS:
 - [[#introduction][Introduction]]
+- [[#resources][Resources]]
 - [[#early-init-file][Early Init File]]
 - [[#init-file][Init File]]
 - [[#emacs][Emacs]]
@@ -36,6 +37,48 @@ and the source for configuring Emacs. All necessary files to configure Emacs
 are generated from this file by calling ~org-babel-tangle~ (~C-c C-v t~) and
 stored in the =/modules= sub-directory. As such, changes should be made in this
 document, not in the individual =.el= files.
+
+* Resources
+
+The structure and contents of this Emacs configuration was heavily inspired by
+a number of individuals. Below is a list of high quality configurations that
+are updated with some frequency.
+
++ [[https://github.com/daviwil/dotfiles][daviwil/dotfiles]]
++ [[https://github.com/karthink/.emacs.d][karthink/.emacs.d]]
++ [[https://github.com/MArpogaus/emacs.d][MArpogaus/emacs.d]]
++ [[https://github.com/angrybacon/dotemacs][angrybacon/dotemacs]]
++ [[https://github.com/gopar/.emacs.d/tree/main][gopar/.emacs.d]]
++ [[https://github.com/dakrone/eos][dakrone/eos]]
++ [[https://github.com/jeremyf/dotemacs/tree/main][jeremyf/dotemacs]]
++ [[https://config.phundrak.com/emacs/][Phundrak/emacs]]
++ [[https://github.com/jwiegley/dot-emacs/blob/master/init.org][jwiegley/dot-emacs]]
++ [[https://github.com/novoid/dot-emacs/blob/master/config.org][novoid/dot-emacs]]
++ [[https://github.com/jackkamm/.emacs.d][jackkamm/.emacs.d]]
++ [[https://github.com/Thaodan/emacs.d][Thaodan/emacs.d]]
++ [[https://github.com/suvratapte/dot-emacs-dot-d/tree/master][suvratapte/dot-emacs-dot-d]]
++ [[https://protesilaos.com/emacs/dotemacs][protesilaos.com/emacs/dotemacs]]
++ [[https://github.com/dakra/dmacs/][dakra/dmacs]]
++ [[https://forgemacs.bharathpalavalli.com/][forgemacs.bharathpalavalli.com]]
++ [[https://github.com/konrad1977/emacs][konrad1977/emacs]]
++ [[https://github.com/PythonNut/quark-emacs][PythonNut/quark-emacs]]
++ [[https://github.com/radian-software/radian][radian-software/radian]]
++ [[https://sachachua.com/dotemacs/index.html][sachachua.com/dotemacs]]
++ [[https://github.com/syohex/dot_files/tree/master/emacs][syohex/dot_files]]
++ [[https://github.com/purcell/emacs.d][purcell/emacs.d]]
++ [[https://github.com/thierryvolpiatto/emacs-config][thierryvolpiatto/emacs-config]]
++ [[https://github.com/xiongtx/.emacs.d][xiongtx/.emacs.d]]
++ [[https://github.com/Wilfred/.emacs.d][Wilfred/.emacs.d]]
++ [[https://panadestein.github.io/emacsd/][panadestein.github.io/emacsd/]]
++ 
+
+Other resources that I found helpful include: frequently visit include:
+
++ [[https://sachachua.com/blog/][Sacha Chua: Emacs Summary Blog]]
++ [[https://www.reddit.com/r/emacs/new/][reddit.com/emacs]]
++ [[https://github.com/caisah/emacs.dz?tab=readme-ov-file][github/caisah: Example Configurations]]
++ [[https://idiomdrottning.org/bad-emacs-defaults][Idiomdrottning: Bad Emacs Defaults]]
++ [[https://systemcrafters.net/emacs-from-scratch/the-best-default-settings/][SystemCrafters: Six Emacs Settings Every User Should Consider]]
 
 * Early Init File
 
