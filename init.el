@@ -1,3 +1,22 @@
+;;; init.el --- Emacs configuration file  -*- lexical-binding: t; -*-
+;; Copyright (C) 2024-2024 Jonathan A. Harris
+
+;; Author: Jonathan A. Harris, MSc.
+;; Created: 2024-12-03
+;; Keywords: configuration
+;; Homepage: https://github.com/jah377/.emacs.d
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+
+;; This file has been generated from 'README.org'. DO NOT EDIT.
+
+;; Changes to the configuration should be done in 'README.org' and then
+;; re-tangled by calling 'C-c C-v C-t'.
+
+;;; Code:
+
 ;; https://github.com/LionyxML/emacs-kick/blob/master/init.el
 (add-hook 'after-init-hook
           (lambda ()
@@ -67,14 +86,6 @@
                     gc-cons-percentage 0.1)))
 
 (add-hook 'emacs-startup-hook (lambda () (garbage-collect)))
-
-(defun gopar/pulse-current-region (&rest _)
-  "Pulse the current implicit or active region"
-  (if mark-active
-      (pulse-momentary-highlight-region (region-beginning) (region-end))
-    (pulse-momentary-highlight-region (mark) (point))))
-
-(advice-add #'kill-ring-save :before #'gopar/pulse-current-region)
 
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 

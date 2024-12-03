@@ -1,11 +1,19 @@
-;;; init-emacs.el --- Configure basic Emacs -*- lexical-binding: t; no-byte-compile: t -*-
+;;; init-emacs.el --- Emacs configuration file  -*- lexical-binding: t; -*-
+;; Copyright (C) 2024-2024 Jonathan A. Harris
+
+;; Author: Jonathan A. Harris, MSc.
+;; Created: 2024-12-03
+;; Keywords: configuration
+;; Homepage: https://github.com/jah377/.emacs.d
+
+;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
-;; 'init-emacs.el' configures built-in settings and modes that dictate the
-;; behavior of Emacs more broadly. External packages are kept a minimum.
 
-;;; IMPORTANT:
-;; Changes to this file should be done in 'README.org' and re-tangled.
+;; This file has been generated from 'README.org'. DO NOT EDIT.
+
+;; Changes to the configuration should be done in 'README.org' and then
+;; re-tangled by calling 'C-c C-v C-t'.
 
 ;;; Code:
 
@@ -186,6 +194,14 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
      "import", "from", "in", "def", "class")))
 
 (global-hl-line-mode 1)
+
+(defun gopar/pulse-current-region (&rest _)
+  "Pulse the current implicit or active region"
+  (if mark-active
+      (pulse-momentary-highlight-region (region-beginning) (region-end))
+    (pulse-momentary-highlight-region (mark) (point))))
+
+(advice-add #'kill-ring-save :before #'gopar/pulse-current-region)
 
 (global-auto-revert-mode)
 

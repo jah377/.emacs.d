@@ -1,13 +1,19 @@
-;;; init-dev.el --- Configure development tools  -*- lexical-binding: t; no-byte-compile: t -*-
+;;; init-dev.el --- Emacs configuration file  -*- lexical-binding: t; -*-
+;; Copyright (C) 2024-2024 Jonathan A. Harris
 
+;; Author: Jonathan A. Harris, MSc.
+;; Created: 2024-12-03
+;; Keywords: configuration
+;; Homepage: https://github.com/jah377/.emacs.d
+
+;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
-;; 'init-dev.el' configures settings and packages required for
-;; programming. This includes general programming settings as well as
-;; language-specific configurations.
 
-;;; IMPORTANT:
-;; Changes to this file should be done in 'README.org' and re-tangled.
+;; This file has been generated from 'README.org'. DO NOT EDIT.
+
+;; Changes to the configuration should be done in 'README.org' and then
+;; re-tangled by calling 'C-c C-v C-t'.
 
 ;;; Code:
 

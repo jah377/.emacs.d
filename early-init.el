@@ -1,10 +1,19 @@
-;;; early-init.el --- Early Init -*- lexical-binding: t; no-byte-compile: t -*-
+;;; early-init.el --- Emacs configuration file  -*- lexical-binding: t; -*-
+;; Copyright (C) 2024-2024 Jonathan A. Harris
+
+;; Author: Jonathan A. Harris, MSc.
+;; Created: 2024-12-03
+;; Keywords: configuration
+;; Homepage: https://github.com/jah377/.emacs.d
+
+;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
-;; The 'early-init.el' file, introduced with Emacs27, is the first file that
-;; Emacs reads when starting up. In principal, the early initialization file
-;; should set-up a few basic things before Emacs produces the initial frame,
-;; and should not depend on any packages.
+
+;; This file has been generated from 'README.org'. DO NOT EDIT.
+
+;; Changes to the configuration should be done in 'README.org' and then
+;; re-tangled by calling 'C-c C-v C-t'.
 
 ;;; Code:
 
@@ -33,15 +42,3 @@
 
 ;; https://github.com/Thaodan/emacs.d
 (setopt warning-suppress-types '((lexical-binding)))
-
-;;; init.el --- Init -*- no-byte-compile: t; lexical-binding: t; -*-
-
-;;; Commentary:
-;; 'init.el' serves as the primary configuration file. Most settings and
-;; configurations are organized in separate 'modules/init-*.el' files and
-;; loaded at the end of this file.
-
-;;; IMPORTANT:
-;; Changes to this file should be done in 'README.org' and re-tangled.
-
-;;; Code:

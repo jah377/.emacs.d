@@ -1,14 +1,19 @@
-;;; init-org.el --- Configure Org-Mode -*- lexical-binding: t; no-byte-compile: t -*-
+;;; init-org.el --- Emacs configuration file  -*- lexical-binding: t; -*-
+;; Copyright (C) 2024-2024 Jonathan A. Harris
+
+;; Author: Jonathan A. Harris, MSc.
+;; Created: 2024-12-03
+;; Keywords: configuration
+;; Homepage: https://github.com/jah377/.emacs.d
+
+;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
-;; The 'org' package is a useful tool for note-taking, project management, and
-;; literative coding (like this document). It is complex and full of features,
-;; which we configure in this section.
 
-;; 'init-org.el' configures all aspects of 'org-mode'.
+;; This file has been generated from 'README.org'. DO NOT EDIT.
 
-;;; IMPORTANT:
-;; Changes to this file should be done in 'README.org' and re-tangled.
+;; Changes to the configuration should be done in 'README.org' and then
+;; re-tangled by calling 'C-c C-v C-t'.
 
 ;;; Code:
 
