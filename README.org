@@ -1432,6 +1432,18 @@ this configuration.
 #+end_src
 
 ** Org Babel
+*** Languages
+
+=org-babel-load-languages= setting specifies the languages which can be evaluated
+in =org= buffers, which must be loaded using the function
+~org-babel-do-load-languages~.
+
+#+begin_src emacs-lisp :tangle modules/init-org.el
+(org-babel-do-load-languages 'org-babel-load-languages
+                             '((emacs-lisp . t)
+                               (shell . t)))
+#+end_src
+
 *** Add Org-Block Templates
 
 An =org-block= is a special section of text and possess syntax that distinguish
