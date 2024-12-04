@@ -74,7 +74,9 @@ The DWIM behaviour of this command is as follows:
         mouse-wheel-progressive-speed nil)
 
 (use-package display-line-numbers
-  :hook (prog-mode org-mode)
+  :after org-mode
+  :hook ((prog-mode conf-mode text-mode)
+         (org-mode . (lambda () (display-line-numbers-mode 0))))
   :custom
   (display-line-numbers-width  4 "Prevent uneven gutter due to length of linum"))
 
