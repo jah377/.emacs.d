@@ -2,7 +2,6 @@
 ;; Copyright (C) 2024-2024 Jonathan A. Harris
 
 ;; Author: Jonathan A. Harris, MSc.
-;; Created: 2024-12-03
 ;; Keywords: configuration
 ;; Homepage: https://github.com/jah377/.emacs.d
 

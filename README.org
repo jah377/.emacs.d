@@ -94,7 +94,6 @@ echo ";;; $FILENAME --- Emacs configuration file  -*- lexical-binding: t; -*-
 ;; Copyright (C) 2024-$(date +%Y) Jonathan A. Harris
 
 ;; Author: Jonathan A. Harris, MSc.
-;; Created: $(date -I)
 ;; Keywords: configuration
 ;; Homepage: https://github.com/jah377/.emacs.d
 

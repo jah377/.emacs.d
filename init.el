@@ -2,7 +2,6 @@
 ;; Copyright (C) 2024-2024 Jonathan A. Harris
 
 ;; Author: Jonathan A. Harris, MSc.
-;; Created: 2024-12-03
 ;; Keywords: configuration
 ;; Homepage: https://github.com/jah377/.emacs.d
 
@@ -66,26 +65,6 @@
   (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
     (load custom-file)))
-
-;; Garbage Collection Magic Hack
-;; (use-package gcmh
-;;   :hook
-;;   (emacs-startup . gcmh-mode)
-;;   (emacs-startup . (lambda ()
-;;                      "Reset garbage collection parameters after startup"
-;;                      (setopt gc-cons-threshold (* 32 1024 1024))))
-;;   :custom
-;;   ;; https://github.com/doomemacs/doomemacs/blob/master/lisp/doom-start.el#L85
-;;   (gcmh-idle-delay 'auto)
-;;   (gcmh-auto-idle-delay-factor 10)
-;;   (gcmh-high-cons-threhsold (* 16 1024 1024) "16mb"))
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setopt gc-cons-threshold (* 32 1024 1024)
-                    gc-cons-percentage 0.1)))
-
-(add-hook 'emacs-startup-hook (lambda () (garbage-collect)))
 
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 
