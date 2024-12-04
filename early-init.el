@@ -31,17 +31,19 @@
 
 (setopt frame-resize-pixelwise t)
 
-(menu-bar-mode   -1) ;; Menu bar at top of framen
-(scroll-bar-mode -1) ;; Visible scroll-bar that appears when scrolling
-(scroll-all-mode -1) ;; Visible scroll-bar during synchronized scrolling
-(tool-bar-mode   -1) ;; Icons like "save" button below menu
-(tooltip-mode    -1) ;; Hoving over (some) elements triggers pop-up boxes
+(menu-bar-mode   -1) ; Menu bar at top of framen
+(scroll-bar-mode -1) ; Visible scroll-bar that appears when scrolling
+(scroll-all-mode -1) ; Visible scroll-bar during synchronized scrolling
+(tool-bar-mode   -1) ; Icons like "save" button below menu
+(tooltip-mode    -1) ; Hoving over (some) elements triggers pop-up boxes
 
-(setq-default inhibit-startup-screen t
-              inhibit-startup-message t
-              initial-scratch-message nil
-              iniital-buffer-choice t
-              initial-major-mode 'text-mode)
+(setq-default initial-major-mode 'text-mode
+              inhibit-startup-echo-area-message t ; Disable initial echo message
+              inhibit-startup-message t    ; Disable startup message
+              inhibit-startup-screen t     ; Disable start-up screen
+              inhibit-splash-screen t      ; Disable startup screens/messages
+              initial-scratch-message nil  ; Empty '*scratch*' buffer
+              initial-buffer-choice t)     ; Open '*scratch*' buffer
 
 (setopt warning-suppress-types '((defvaralias) (lexical-binding)))
 

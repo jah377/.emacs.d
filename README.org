@@ -194,31 +194,21 @@ Remove unnecessary visual elements not only enhances the aesthetics but also
 improves startup speed.
 
 #+begin_src emacs-lisp 
-(menu-bar-mode   -1) ;; Menu bar at top of framen
-(scroll-bar-mode -1) ;; Visible scroll-bar that appears when scrolling
-(scroll-all-mode -1) ;; Visible scroll-bar during synchronized scrolling
-(tool-bar-mode   -1) ;; Icons like "save" button below menu
-(tooltip-mode    -1) ;; Hoving over (some) elements triggers pop-up boxes
+(menu-bar-mode   -1) ; Menu bar at top of framen
+(scroll-bar-mode -1) ; Visible scroll-bar that appears when scrolling
+(scroll-all-mode -1) ; Visible scroll-bar during synchronized scrolling
+(tool-bar-mode   -1) ; Icons like "save" button below menu
+(tooltip-mode    -1) ; Hoving over (some) elements triggers pop-up boxes
 #+end_src
 
-
-The startup "splash page" is also unnecessary, which we will disable/configure
-below:
-
-+ inhibit-startup-screen :: ~t~ to disable startup screen
-+ inhibit-startup-message :: ~t~ to disable startup message
-+ initial-scratch-message :: ~nil~ for empty =*scratch*= buffer
-  - Startup stats added to =*scratch*= in [[id:1269b427-94e9-4df5-98bf-c83a31db096d][Profile Emacs Startup]] section
-+ initial-buffer-choice :: ~t~ to open =*scratch*= buffer after init
-+ initial-major-mode :: ~'text-mode~ instead of =lisp-interaction-mode=
-  - Not interested in typing/evaluating lisp-code in =*scratch*=
-
 #+begin_src emacs-lisp 
-(setq-default inhibit-startup-screen t
-              inhibit-startup-message t
-              initial-scratch-message nil
-              iniital-buffer-choice t
-              initial-major-mode 'text-mode)
+(setq-default initial-major-mode 'text-mode
+              inhibit-startup-echo-area-message t ; Disable initial echo message
+              inhibit-startup-message t    ; Disable startup message
+              inhibit-startup-screen t     ; Disable start-up screen
+              inhibit-splash-screen t      ; Disable startup screens/messages
+              initial-scratch-message nil  ; Empty '*scratch*' buffer
+              initial-buffer-choice t)     ; Open '*scratch*' buffer
 #+end_src
 
 ** Disable (Some) Warnings
@@ -292,7 +282,6 @@ performance. The following was copied from [[https://github.com/doomemacs/doomem
 ;; receiving input, which should help a little with scrolling performance.
 (setq redisplay-skip-fontification-on-input t)
 #+end_src
-
 
 * Init File
 :PROPERTIES:
