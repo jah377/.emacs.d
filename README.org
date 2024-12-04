@@ -2343,8 +2343,8 @@ deleted since the previous commit.
   :hook ((prog-mode org-mode) . git-gutter-mode)
   :custom
   (git-gutter:modified-sign "=")
-  (git-gutter:added-sign "++")
-  (git-gutter:deleted-sign "--")
+  (git-gutter:added-sign "+")
+  (git-gutter:deleted-sign "-")
   :bind (("C-x P" . git-gutter:previous-hunk)
          ("C-x N" . git-gutter:next-hunk)
          ("C-x G" . git-gutter:popup-hunk))
