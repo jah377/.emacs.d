@@ -45,5 +45,4 @@
               iniital-buffer-choice t
               initial-major-mode 'text-mode)
 
-;; https://github.com/Thaodan/emacs.d
 (setopt warning-suppress-types '((lexical-binding)))
