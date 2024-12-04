@@ -146,5 +146,17 @@
   :commands which-function-mode
   :hook (prog-mode . which-function-mode))
 
+(use-package spacious-padding
+  :hook (after-init . spacious-padding-mode)
+  :custom
+  (spacious-padding-widths
+   '( :internal-border-width 10 ;; Space between frame & contents
+      :right-divider-width 10   ;; Space between side-by-side windows
+      :fringe-width 8           ;; Fringe on either side of window
+      :header-line-width 4      ;; Space surrpounding 'header-line'
+      :mode-line-width 2        ;; Space surrounding 'mode-line'
+      :scroll-bar-width nil))   ;; 'scroll-bar' disabled
+  (spacious-padding-subtle-mode-line t))
+
 (provide 'init-ui)
 ;;; init-ui.el ends here
