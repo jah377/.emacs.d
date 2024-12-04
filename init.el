@@ -63,8 +63,7 @@
   (setopt no-littering-var-directory (concat my-persist-dir "no-littering/"))
   :config
   (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
-  (when (file-exists-p custom-file)
-    (load custom-file)))
+  (load custom-file :no-error-if-file-is-missing))
 
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 
