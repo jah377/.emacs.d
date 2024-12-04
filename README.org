@@ -170,10 +170,16 @@ from sub-process in a single chunk. Value is increased to improve startup time.
 =frame-inhibit-implied-resize= setting, when set to ~t~, prevents Emacs from
 automatically resizing the frame during the initialization process.
 
-Configuring visual elements like font or fringes may trigger Emacs to resize
-the frame in order to preserve the number of columns or lines it
-displays. According to the blog post [[https://tony-zorman.com/posts/emacs-potpourri.html][A Potpourri of Emacs Tweaks]], resizing may
-contribute to increased startup time (see also [[https://github.com/DamienCassou/emacs.d/blob/master/early-init.el#L25][github.com/DamienCassou]]).
+Configuring visual elements like font or fringes may trigger Eamcs to resize
+the frame in order to preserver a number of columns or lines it
+displays. Resizing can be a terribly expensive part of changing the font. By
+inhibiting this, it is possible to reduce startup times with fonts that are
+larger than the system default.
+
+*Source:*
++ [[https://tony-zorman.com/posts/emacs-potpourri.html][A Potpourri of Emacs Tweaks]]
++ [[https://github.com/DamienCassou/emacs.d/blob/master/early-init.el#L25][github.com/DamienCassou]]
++ [[https://github.com/MArpogaus/emacs.d?tab=readme-ov-file#optimize-startup-time][github.com/MArpogaus]]
 
 *IMPORTANT:* This should be configured before [[id:534b1a9a-e956-42b1-bf81-40b4e82b2c8e][Disable UI Elements]] and [[id:1360c936-229c-44fd-b71c-30f66960d23a][UI]] sections
 
@@ -183,8 +189,10 @@ contribute to increased startup time (see also [[https://github.com/DamienCassou
 
 Similarly, =frame-resize-pixelwise= setting, when set to ~t~, disables Emacs from
 resizing the frame when changing fonts. Doing so /allegedly/ improves startup
-times when fonts are larger than the system default (see
-[[https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el][github/jamescherti/minimal-emacs.d]]).
+times when fonts are larger than the system default.
+
+*Source:*
++ [[https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el][github/jamescherti/minimal-emacs.d]]
 
 #+begin_src emacs-lisp 
 (setopt frame-resize-pixelwise t)
