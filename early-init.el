@@ -16,9 +16,16 @@
 
 ;;; Code:
 
-;; https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29
 (setq gc-cons-threshold most-positive-fixnum)
-(setq gc-cons-percentage 0.9)
+(setq gc-cons-percentage 0.6)
+
+;; Restore after startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setopt gc-cons-threshold (* 16 1024 1024))))
+
+;; Perform GC after startup
+(add-hook 'emacs-startup-hook (lambda () (garbage-collect)))
 
 ;; https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
 (setopt read-process-output-max (* 512 1024))

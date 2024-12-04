@@ -129,14 +129,27 @@ not depend on any packages.
 :END:
 
 =gc-cons-threshold= setting controls the number of bytes required to trigger
-garbage collection (GC). Setting to ~most-positive-fixnum~ effectively disables
-GC, which significantly affects startup times. Value is lowered in the [[*Reset Garbage Collection][Reset
-Garbage Collection]] section to prevent Emacs from freezing/crashing.
+garbage collection (GC); =gc-cons-percentage= related. Setting to
+~most-positive-fixnum~ effectively disables GC, which significantly affects
+startup times.
+
+Values are lowered after startup to prevent freezing or crashing.
+
+*Source:*
++ [[https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29][github.com/doomemacs/early-init.el]]
++ [[https://github.com/nilcons/emacs-use-package-fast#a-trick-less-gc-during-startup][github.com/nilcons/emacs-use-package-fast#a-trick-less-gc-during-startup]]
 
 #+begin_src emacs-lisp 
-;; https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29
 (setq gc-cons-threshold most-positive-fixnum)
-(setq gc-cons-percentage 0.9)
+(setq gc-cons-percentage 0.6)
+
+;; Restore after startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setopt gc-cons-threshold (* 16 1024 1024))))
+
+;; Perform GC after startup
+(add-hook 'emacs-startup-hook (lambda () (garbage-collect))) 
 #+end_src
 
 ** Increase Read Process
@@ -357,36 +370,6 @@ referenced in the [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]] and [[id:e
   (setopt custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
     (load custom-file)))
-#+end_src
-
-** Reset Garbage Collection
-
-Previously in [[id:19407840-a20f-4225-9484-bbf88d3ff00d][Temporarily Configure Garbage Collection]] , =gc-cons-threshold= and
-=gc-cons-percentage= were set to a large amount in order to prevent GC during
-initialization. _Must_ reduce to avoid Emacs freezing.
-
-*TODO:* Select appropriate values based on computer specs.
-
-#+begin_src emacs-lisp 
-;; Garbage Collection Magic Hack
-;; (use-package gcmh
-;;   :hook
-;;   (emacs-startup . gcmh-mode)
-;;   (emacs-startup . (lambda ()
-;;                      "Reset garbage collection parameters after startup"
-;;                      (setopt gc-cons-threshold (* 32 1024 1024))))
-;;   :custom
-;;   ;; https://github.com/doomemacs/doomemacs/blob/master/lisp/doom-start.el#L85
-;;   (gcmh-idle-delay 'auto)
-;;   (gcmh-auto-idle-delay-factor 10)
-;;   (gcmh-high-cons-threhsold (* 16 1024 1024) "16mb"))
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setopt gc-cons-threshold (* 32 1024 1024)
-                    gc-cons-percentage 0.1)))
-
-(add-hook 'emacs-startup-hook (lambda () (garbage-collect)))
 #+end_src
 
 * Emacs
