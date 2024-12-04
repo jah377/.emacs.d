@@ -157,9 +157,12 @@ Values are lowered after startup to prevent freezing or crashing.
 =read-process-output-max= setting controls the maximum number of bytes to read
 from sub-process in a single chunk. Value is increased to improve startup time.
 
+*Source:*
++ https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
++ https://github.com/alexluigit/dirvish/blob/main/docs/.emacs.d.example/early-init.el
+
 #+begin_src emacs-lisp 
-;; https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
-(setopt read-process-output-max (* 512 1024))
+(setopt read-process-output-max (* 1024 1024))
 #+end_src
 
 ** Disable Frame Resizing

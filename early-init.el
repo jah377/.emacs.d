@@ -27,8 +27,7 @@
 ;; Perform GC after startup
 (add-hook 'emacs-startup-hook (lambda () (garbage-collect)))
 
-;; https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el#L114
-(setopt read-process-output-max (* 512 1024))
+(setopt read-process-output-max (* 1024 1024))
 
 (setopt frame-inhibit-implied-resize t)
 
