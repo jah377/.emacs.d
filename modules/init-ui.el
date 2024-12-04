@@ -74,14 +74,35 @@
                 (concat user-emacs-directory "elpa/nerd-icons-*")))
     (nerd-icons-install-fonts t)))
 
-(use-package doom-modeline
-  :config (doom-modeline-mode 1)
+;; (use-package doom-modeline
+;;   :config (doom-modeline-mode 1)
+;;   :custom
+;;   ;; Display project_name/../file_name
+;;   (doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;   (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
+;;   (doom-modeline-vcs-max-length 30   "Limit branch name length")
+;;   (doom-modeline-enable-word-count t "Turn on wordcount"))
+
+(use-package mood-line
+  :hook (after-init . mood-line-mode)
   :custom
-  ;; Display project_name/../file_name
-  (doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
-  (doom-modeline-vcs-max-length 30   "Limit branch name length")
-  (doom-modeline-enable-word-count t "Turn on wordcount"))
+  (mood-line-glyph-alist mood-line-glyphs-fira-code)
+  (mood-line-format
+   (mood-line-defformat
+    :left
+    (((mood-line-segment-modal)                  . " ")
+     ((or (mood-line-segment-buffer-status) " ") . " ")
+     ((mood-line-segment-project) . "/")
+     ((mood-line-segment-buffer-name)            . "\t\t")
+     ((mood-line-segment-cursor-position)        . " | ")
+     ((mood-line-segment-scroll)                 . "\t\t")
+     ((mood-line-segment-anzu)                   . "  "))
+    :right
+    (((mood-line-segment-major-mode) . "  ")
+     ((mood-line-segment-vc)         . "  ")
+     ((mood-line-segment-misc-info)  . "  ")
+     ((mood-line-segment-checker)    . "  ")
+     ((mood-line-segment-process)    . "  ")))))
 
 (column-number-mode t)
 

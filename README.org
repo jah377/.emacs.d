@@ -1312,20 +1312,43 @@ icons are displayed next to the file name indicating whether the file is an
 #+end_src
 
 ** Modeline
-*** Doom Modeline
+*** Mood-line
 
-=doom-modeline= is an Emacs package that configures a modern and visually
-appealing mode-line, developed as part of the =Doom Emacs= configuration.
+=doom-modeline= is the most feature-rich mode-line package for Emacs. For some
+reason the right end of the mode-line would be cut off so I could not see the
+repo name. Instead, defer to =mood-line=, the lightweight alternative to
+=doom-modeline=.
 
-#+begin_src emacs-lisp 
-(use-package doom-modeline
-  :config (doom-modeline-mode 1)
+#+begin_src emacs-lisp
+;; (use-package doom-modeline
+;;   :config (doom-modeline-mode 1)
+;;   :custom
+;;   ;; Display project_name/../file_name
+;;   (doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;   (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
+;;   (doom-modeline-vcs-max-length 30   "Limit branch name length")
+;;   (doom-modeline-enable-word-count t "Turn on wordcount"))
+
+(use-package mood-line
+  :hook (after-init . mood-line-mode)
   :custom
-  ;; Display project_name/../file_name
-  (doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (doom-modeline-buffer-encoding nil "Dont care about UTF-8 badge")
-  (doom-modeline-vcs-max-length 30   "Limit branch name length")
-  (doom-modeline-enable-word-count t "Turn on wordcount"))
+  (mood-line-glyph-alist mood-line-glyphs-fira-code)
+  (mood-line-format
+   (mood-line-defformat
+    :left
+    (((mood-line-segment-modal)                  . " ")
+     ((or (mood-line-segment-buffer-status) " ") . " ")
+     ((mood-line-segment-project) . "/")
+     ((mood-line-segment-buffer-name)            . "\t\t")
+     ((mood-line-segment-cursor-position)        . " | ")
+     ((mood-line-segment-scroll)                 . "\t\t")
+     ((mood-line-segment-anzu)                   . "  "))
+    :right
+    (((mood-line-segment-major-mode) . "  ")
+     ((mood-line-segment-vc)         . "  ")
+     ((mood-line-segment-misc-info)  . "  ")
+     ((mood-line-segment-checker)    . "  ")
+     ((mood-line-segment-process)    . "  ")))))
 #+end_src
 
 *** Display Column Numbers
