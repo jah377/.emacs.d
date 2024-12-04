@@ -1367,6 +1367,15 @@ total number of =isearch= matches (and current match position) in the mode-line.
          ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)))
 #+end_src
 
+*** Display Current Function
+
+#+begin_src emacs-lisp
+;; Display current function() in mode-line
+(use-package which-func
+  :commands which-function-mode
+  :hook (prog-mode . which-function-mode))
+#+end_src
+
 ** Provide init-ui.el
 
 #+begin_src emacs-lisp 

@@ -107,5 +107,10 @@
          ([remap isearch-query-replace] . anzu-isearch-query-replace)
          ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)))
 
+;; Display current function() in mode-line
+(use-package which-func
+  :commands which-function-mode
+  :hook (prog-mode . which-function-mode))
+
 (provide 'init-ui)
 ;;; init-ui.el ends here
