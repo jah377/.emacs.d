@@ -2,7 +2,7 @@
 #+DATE: Wednesday, September 25, 2024
 #+PROPERTY: header-args:emacs-lisp :results silent
 #+STARTUP: overview
-
+#+auto_tangle: t
 
 * Table of Contents
 :PROPERTIES:
@@ -1532,6 +1532,19 @@ of available speed commands.
       (lambda ()
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
+#+end_src
+*** Auto-Tangle
+
+=org-auto-tangle-mode=, when activated, automatically tangles =org=-files on
+save. Automatically tangling can be annoying, so we set ~org-auto-tangle-default
+nil~. Therefore, automatic tangling only occurs if =#+auto_tangle: t= is added to
+the file header.
+
+#+begin_src emacs-lisp
+(use-package org-auto-tangle
+  :after org
+  :hook (org-mode . org-auto-tangle-mode)
+  :custom (org-auto-tangle-default nil))
 #+end_src
 
 *** Archive

@@ -60,6 +60,11 @@
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
 
+(use-package org-auto-tangle
+  :after org
+  :hook (org-mode . org-auto-tangle-mode)
+  :custom (org-auto-tangle-default nil))
+
 (org-babel-do-load-languages 'org-babel-load-languages
                              '((emacs-lisp . t)
                                (shell . t)))
