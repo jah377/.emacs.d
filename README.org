@@ -245,7 +245,7 @@ which are triggered when Emacs packages do not come with =lexical-bindings=.
 + [[https://github.com/MArpogaus/emacs.d?tab=readme-ov-file#optimize-startup-time][github.com/MArpogaus]]
 
 #+begin_src emacs-lisp 
-(setopt warning-suppress-types '((lexical-binding)))
+(setopt warning-suppress-types '((defvaralias) (lexical-binding)))
 #+end_src
 
 *N.B.* Including ~;; -*- lexical-binding: t; -*-~ at the top of Emacs lisp files is

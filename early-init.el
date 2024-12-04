@@ -45,4 +45,4 @@
               iniital-buffer-choice t
               initial-major-mode 'text-mode)
 
-(setopt warning-suppress-types '((lexical-binding)))
+(setopt warning-suppress-types '((defvaralias) (lexical-binding)))
