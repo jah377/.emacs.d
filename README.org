@@ -504,19 +504,44 @@ The minibuffer-prompt is not meant to be edited. Setting
 modify the "M-x" by moving the cursor back and deleting "M", "-", and/or
 "x". _Not ideal_.
 
-*** Close Minibuffer Regardless of Point Location
+*** Make C-g a Bit More Helpful
 :PROPERTIES:
 :ID:       51c833dd-b403-40e5-8359-f3b6f15193ff
 :END:
 
 By default, the function =keyboard-quit= only closes the minibuffer if the cursor
-is inside the minibuffer-window. That is annoying. The following allows us to
-close the minibuffer regardless of the cursor location.
+is inside the minibuffer-window. That is annoying. The following adds some
+quality-of-life refinement.
+
+*Source:* [[https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/#h:1e468b2a-9bee-4571-8454-e3f5462d9321][protesilaos.com/basic-emacs-configuration]]
 
 #+begin_src emacs-lisp 
-(advice-add 'keyboard-quit :before (lambda ()
-                                     (when (active-minibuffer-window)
-                                       (abort-recursive-edit))))
+(defun prot/keyboard-quit-dwim ()
+  "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.  When a minibuffer is
+- open, but not focused, close the minibuffer.  When the
+- Completions buffer is selected, close it.  In every other case
+- use the regular `keyboard-quit'."
+  
+  (interactive)
+  (cond
+   ((region-active-p)
+    (keyboard-quit))
+   ((derived-mode-p 'completion-list-mode)
+    (delete-completion-window))
+   ((> (minibuffer-depth) 0)
+    (abort-recursive-edit))
+   (t
+    (keyboard-quit))))
+
+(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 #+end_src
 
 *** Custom Minibuffer Functions
