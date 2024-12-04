@@ -6,6 +6,7 @@
 
 * Table of Contents
 :PROPERTIES:
+:visibility: folded
 :TOC:      :include all :depth 1 :ignore this
 :END:
 :CONTENTS:
@@ -26,6 +27,9 @@
 :END:
 
 * Introduction
+:PROPERTIES:
+:visibility: folded
+:END:
 
 This is my literate Emacs configuration file. It serves as both documentation
 and the source for configuring Emacs. All necessary files to configure Emacs
@@ -34,6 +38,9 @@ in the =/modules= sub-directory. As such, changes should be made in this
 document, not in the individual =.el= files.
 
 * Resources
+:PROPERTIES:
+:visibility: folded
+:END:
 
 The structure and contents of this Emacs configuration was heavily inspired by
 a number of individuals. Below is a list of high quality configurations that
@@ -75,6 +82,9 @@ Other resources that I found helpful include:
 + [[https://systemcrafters.net/emacs-from-scratch/the-best-default-settings/][SystemCrafters: Six Emacs Settings Every User Should Consider]]
 
 * Common Header For Emacs Libraries
+:PROPERTIES:
+:visibility: folded
+:END:
 
 Copied from [[https://github.com/MArpogaus/emacs.d/blob/master/emacs.org#common-header-for-emacs-libraries][github.com/MArpogaus]].
 
