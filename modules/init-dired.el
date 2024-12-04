@@ -83,10 +83,5 @@
   ;; Change permission using 'SPC'
   (wdired-allow-to-change-permissions t))
 
-(use-package nerd-icons-dired
-  :after (dired nerd-icons)
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
-
 (provide 'init-dired)
 ;;; init-dired.el ends here

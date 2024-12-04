@@ -1289,13 +1289,6 @@ more common =font-size=.
 #+end_src
 
 ** Icons
-:PROPERTIES:
-:ID:       92151c77-e386-47eb-98ea-c3b6f5f0029a
-:END:
-:RELATED:
-+ [[id:cac425a8-1400-4f0a-90d7-6da83bcf8ba4][Marginalia]]
-+ [[id:612824a0-6d8f-4d5c-a60a-e9f76028993d][Nerd-Icons in Dired]]
-:END:
 
 =nerd-icons= is an Emacs package that provides icons for use in Emacs
 buffers. The use of icons improve readability, for example in the minibuffer
@@ -1309,6 +1302,19 @@ icons are displayed next to the file name indicating whether the file is an
   (unless (car (file-expand-wildcards
                 (concat user-emacs-directory "elpa/nerd-icons-*")))
     (nerd-icons-install-fonts t)))
+
+;; Icons inside mini-buffer
+(use-package nerd-icons-completion
+  :after (marginalia nerd-icons)
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+;; Icons inside 'dired' buffers
+(use-package nerd-icons-dired
+  :after (dired nerd-icons)
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
 ** Modeline
@@ -1915,31 +1921,15 @@ project~ would return the expected file instead of typing out the complete name.
 #+end_src
 
 ** Marginalia
-:PROPERTIES:
-:ID:       cac425a8-1400-4f0a-90d7-6da83bcf8ba4
-:END:
-:RELATED:
-+ [[id:92151c77-e386-47eb-98ea-c3b6f5f0029a][Icons]]
-:END:
 
 =marginalia= is an Emacs package providing =marginalia-mode= that, when activated,
 enhances completion by providing additional annotation and contextual
 information alongside candidates. In the minibuffer, for example, =marginalia=
 will add file size or date modified.
 
-Related, =nerd-icons-completion= is an Emacs package providing
-=nerd-icons-completion-mode= that, when activated, adds icons to completion
-candidates.
-
 #+begin_src emacs-lisp 
 (use-package marginalia
   :init (marginalia-mode 1))
-
-(use-package nerd-icons-completion
-  :after (marginalia nerd-icons)
-  :config
-  (nerd-icons-completion-mode)
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 #+end_src
 
 ** Consult
@@ -2191,24 +2181,6 @@ files.
   :custom
   ;; Change permission using 'SPC'
   (wdired-allow-to-change-permissions t))
-#+end_src
-
-** Nerd-Icons in Dired
-:PROPERTIES:
-:ID:       612824a0-6d8f-4d5c-a60a-e9f76028993d
-:END:
-:RELATED:
-+ [[id:92151c77-e386-47eb-98ea-c3b6f5f0029a][Icons]]
-:END:
-
-=nerd-icons-dired= is an Emacs package extension that provides icons inside
-=dired=-buffers.
-
-#+begin_src emacs-lisp 
-(use-package nerd-icons-dired
-  :after (dired nerd-icons)
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
 ** Provide init-dired.el

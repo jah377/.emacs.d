@@ -45,12 +45,6 @@
 (use-package marginalia
   :init (marginalia-mode 1))
 
-(use-package nerd-icons-completion
-  :after (marginalia nerd-icons)
-  :config
-  (nerd-icons-completion-mode)
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
-
 ;; Copied from https://github.com/minad/consult
 (use-package consult
   :bind (;; C-c bindings in `mode-specific-map'

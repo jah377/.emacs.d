@@ -74,6 +74,19 @@
                 (concat user-emacs-directory "elpa/nerd-icons-*")))
     (nerd-icons-install-fonts t)))
 
+;; Icons inside mini-buffer
+(use-package nerd-icons-completion
+  :after (marginalia nerd-icons)
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+;; Icons inside 'dired' buffers
+(use-package nerd-icons-dired
+  :after (dired nerd-icons)
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
 ;; (use-package doom-modeline
 ;;   :config (doom-modeline-mode 1)
 ;;   :custom
