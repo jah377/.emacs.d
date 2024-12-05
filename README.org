@@ -1465,10 +1465,10 @@ presentation.
          ;; Automatic break line at 'current-fill-column' (line wrapping)
          (org-mode . turn-on-auto-fill))
   :custom
-  (org-ellipsis " " "Default to 'org-modern'")
-  (org-startup-folded t "Always fold headers")
-  (org-startup-indented t "Visually indent headers/blocks at startup")
-  (org-adapt-indentation t "Align contents with heading")
+  (org-ellipsis " "          "Configured by 'org-modern'")
+  (org-startup-folded t      "Always fold headers")
+  (org-startup-indented t    "Visually indent headers/blocks at startup")
+  (org-adapt-indentation t   "Align contents with heading")
   (org-element-use-cache nil "Avoid 'org-element--cache' error")
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
