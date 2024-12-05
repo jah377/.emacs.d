@@ -2116,7 +2116,7 @@ are scrolled over in the minibuffer.
 #+end_src
 
 
-** Dired
+** dired
 
 =dired=, short for "DIsk REDitor", is a /built-in/ Emacs package providing an
 interface for file and directory management. With =dired=, it is possible to
@@ -2155,7 +2155,7 @@ operations directly within Emacs.
     (jh/kill-buffers-by-mode 'dired-mode)))
 #+end_src
 
-** Extended Dired Features
+** dired-x
 
 =dired-x= is a /built-in/ Emacs package providing extended and optional features to
 =dired= including, but not limited to:
@@ -2187,7 +2187,7 @@ operations directly within Emacs.
   (add-hook 'dired-after-readin-hook 'dired-omit-mode))
 #+end_src
 
-** Auxiliary Dired Functions
+** dired-aux
 
 =dired-aux= is a /built-in/ Emacs package providing auxiliary functions in
 =dired=. The additional functionality includes, but is not limited to:
@@ -2213,7 +2213,7 @@ operations directly within Emacs.
   (dired-do-revert-buffer t "Revert buffer after any 'dired-do' operations"))
 #+end_src
 
-** Writable Dired Buffers
+** wdired
 
 =wdired= is a /built-in/ Emacs package providing the ability to make =dired=-buffers
 _writable_. In other words, it is possible to edit file and directory names as if
