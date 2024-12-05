@@ -144,7 +144,7 @@ Values are lowered after startup to prevent freezing or crashing.
 + [[https://github.com/doomemacs/doomemacs/blob/master/early-init.el#L29][github.com/doomemacs/early-init.el]]
 + [[https://github.com/nilcons/emacs-use-package-fast#a-trick-less-gc-during-startup][github.com/nilcons/emacs-use-package-fast#a-trick-less-gc-during-startup]]
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq gc-cons-threshold most-positive-fixnum)
 (setq gc-cons-percentage 0.6)
 
@@ -154,7 +154,7 @@ Values are lowered after startup to prevent freezing or crashing.
             (setopt gc-cons-threshold (* 16 1024 1024))))
 
 ;; Perform GC after startup
-(add-hook 'emacs-startup-hook (lambda () (garbage-collect))) 
+(add-hook 'emacs-startup-hook (lambda () (garbage-collect)))
 #+end_src
 
 ** Disable Frame Resizing
@@ -175,7 +175,7 @@ larger than the system default.
 
 *IMPORTANT:* This should be configured before [[id:534b1a9a-e956-42b1-bf81-40b4e82b2c8e][Disable UI Elements]] and [[id:1360c936-229c-44fd-b71c-30f66960d23a][UI]] sections
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt frame-inhibit-implied-resize t)
 #+end_src
 
@@ -186,7 +186,7 @@ times when fonts are larger than the system default.
 *Source:*
 + [[https://github.com/jamescherti/minimal-emacs.d/blob/main/init.el][github/jamescherti/minimal-emacs.d]]
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt frame-resize-pixelwise t)
 #+end_src
 
@@ -198,7 +198,7 @@ times when fonts are larger than the system default.
 Remove unnecessary visual elements not only enhances the aesthetics but also
 improves startup speed.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (menu-bar-mode   -1) ; Menu bar at top of framen
 (scroll-bar-mode -1) ; Visible scroll-bar that appears when scrolling
 (scroll-all-mode -1) ; Visible scroll-bar during synchronized scrolling
@@ -206,7 +206,7 @@ improves startup speed.
 (tooltip-mode    -1) ; Hoving over (some) elements triggers pop-up boxes
 #+end_src
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq-default initial-major-mode 'text-mode
               inhibit-startup-echo-area-message t ; Disable initial echo message
               inhibit-startup-message t    ; Disable startup message
@@ -226,7 +226,7 @@ which are triggered when Emacs packages do not come with =lexical-bindings=.
 + [[https://github.com/Thaodan/emacs.d][github.com/Thaodan]]
 + [[https://github.com/MArpogaus/emacs.d?tab=readme-ov-file#optimize-startup-time][github.com/MArpogaus]]
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt warning-suppress-types '((defvaralias) (lexical-binding)))
 #+end_src
 
@@ -314,7 +314,7 @@ and =initial-scratch-message= settings in the [[id:534b1a9a-e956-42b1-bf81-40b4e
 ~M-x use-package-report~ opens temporary buffer containing package-specific
 initialization times.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; https://github.com/LionyxML/emacs-kick/blob/master/init.el
 (add-hook 'after-init-hook
           (lambda ()
@@ -335,7 +335,7 @@ initialization times.
 Here, we setup package management, specify desired package archives, and
 prioritize them for efficient package installation/updates.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Required for managing external packages
 (require 'package)
 
@@ -374,7 +374,7 @@ optimize the configuration and management of Emacs packages.
   installation of packages. This is helpful for debugging and tracking the
   loading process.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Ensures backwards compatability ('use-package' added in Emacs29)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
@@ -407,7 +407,7 @@ store these files in a directory that is backed up to the "cloud" like
 =/run/user/1001/keybase/...=; we assign that directory to ~my-persist-dir~ which is
 referenced in the [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]] and [[id:e62f2c9a-f7fa-4972-afc6-b0dd072d6474][Org-Agenda]] sub-sections.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Directory to be backed up in the cloud
 (defconst my-persist-dir "/home/jon/.kb_persistent_emacs/")
 
@@ -437,7 +437,7 @@ referenced in the [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]] and [[id:e
 ~'(fullscreen . maximized)~ configures Emacs to automatically open in
 full-screen.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 
@@ -446,7 +446,7 @@ full-screen.
 =frame-title-format= setting specifies the template for displaying the title bar
 of visible Emacs frames. Here, we set it to read ~emacs: <file-name>~.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt frame-title-format
         '("emacs: "
           (:eval (if (buffer-file-name)
@@ -462,7 +462,7 @@ buffers displaying files containing the same name; for example
 Setting to ~'forward~ displays the name as a truncated file-path in order to
 distinguish between files; resulting in =subdir_1/file.el= and =subdir_2/file.el=.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt uniquify-buffer-name-style 'forward)
 #+end_src
 
@@ -484,7 +484,7 @@ useful when accessing information while already in a minibuffer prompt.
 prompt. Possible to call ~M-x~ again, open another minibuffer, check what we
 need, and then return to the initial minibuffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt enable-recursive-minibuffers t)
 #+end_src
 
@@ -497,7 +497,7 @@ The minibuffer-prompt is not meant to be edited. Setting
 =minibuffer-prompt-properties= to read-only and hooking the built-in
 =cursor-intangible-mode= prevents accidental modifications of the prompt text.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
 
@@ -519,7 +519,7 @@ quality-of-life refinement.
 
 *Source:* [[https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/#h:1e468b2a-9bee-4571-8454-e3f5462d9321][protesilaos.com/basic-emacs-configuration]]
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun prot/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
 
@@ -533,7 +533,7 @@ The DWIM behaviour of this command is as follows:
 - open, but not focused, close the minibuffer.  When the
 - Completions buffer is selected, close it.  In every other case
 - use the regular `keyboard-quit'."
-  
+
   (interactive)
   (cond
    ((region-active-p)
@@ -553,7 +553,7 @@ The DWIM behaviour of this command is as follows:
 
 This is just nice to have.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/jump-to-minibuffer ()
   "Switch to minibuffer window (if active)"
   (interactive)
@@ -564,7 +564,7 @@ This is just nice to have.
 ** Cursor
 *** Cursor Style
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq-default cursor-type 'bar)
 #+end_src
 
@@ -577,7 +577,7 @@ pixel and not by larger fixed amounts like whole lines or pages.
 
 *N.B.* Recommended by [[https://tony-zorman.com/posts/emacs-potpourri.html][tony-zorman.com]]
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (pixel-scroll-precision-mode 1)
 #+end_src
 
@@ -587,7 +587,7 @@ pixel and not by larger fixed amounts like whole lines or pages.
 + mouse-wheel-follow-mouse :: ~'t~ to scroll buffer under mouse
 + mouse-wheel-progressive-speed :: ~nil~ to disable accelerated scrolling
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt mouse-yank-at-point t
         mouse-wheel-follow-mouth 't
         mouse-wheel-progressive-speed nil)
@@ -609,7 +609,7 @@ longer than ~9_999~ lines.
 
 *N.B.* See =global-display-line-numbers-mode=
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package display-line-numbers
   :after org-mode
   :hook ((prog-mode conf-mode text-mode)
@@ -631,7 +631,7 @@ longer than ~9_999~ lines.
 buffer before text is wrapped, or filled, to the next line. Setting to ~79~ to
 comply with =PEP8= style guide.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt fill-column 79)
 #+end_src
 
@@ -641,7 +641,7 @@ comply with =PEP8= style guide.
 visual line wrapping across all buffers. Lines that exceed the width of the
 frame are automatically wrapped.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-visual-line-mode 1)
 
 ;; Break at whitespace, not middle of word
@@ -655,7 +655,7 @@ or overwrites the selected region. This behavior is similar to most text
 editors. Deactivated by default, Emacs will paste/enter text _after_ the selected
 region. *Annoying*.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Replace active region when typing text
 (delete-selection-mode 1)
 #+end_src
@@ -667,7 +667,7 @@ activated,automatically reloads buffers when the underlying file changes on
 disk. This is particularly useful when open files change should we switch =git=
 branches.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-auto-revert-mode 1)
 #+end_src
 
@@ -681,7 +681,7 @@ branches.
 
 **** Copy Buffer Name
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/kill-buffer-name ()
   "Copy file-name of current buffer"
   (interactive)
@@ -690,7 +690,7 @@ branches.
 
 **** Copy Relative Buffer Path
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/kill-relative-buffer-path ()
   "Copy relative buffer path to kill ring.
 
@@ -708,7 +708,7 @@ Replace '/home/<username>' prefix with '~' if applicable."
 
 *N.B.* ~M-x crux-kill-other-buffers~ to kill all but current buffer
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/kill-buffers-except (buffer-name)
   "Kill all buffers except for BUFFER-NAME."
   (dolist (buffer (buffer-list))
@@ -717,7 +717,7 @@ Replace '/home/<username>' prefix with '~' if applicable."
       (kill-buffer buffer))))
 #+end_src
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/kill-all-buffers-except-scratch ()
   "Kill all buffers except for *scratch*."
   (interactive)
@@ -726,7 +726,7 @@ Replace '/home/<username>' prefix with '~' if applicable."
 
 **** Kill Buffers Given Mode
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/kill-buffers-by-mode (&rest modes)
   "Kill all buffers derived from any of MODES.
 
@@ -747,7 +747,7 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
 =indicate-empty-lines= setting, when set to ~t~, highlights empty lines in the
 buffer. Later, we will configure the automatic removal of empty lines.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt indicate-empty-lines t)
 #+end_src
 
@@ -773,7 +773,7 @@ activated, highlights white-spaces in buffers; the package also includes
 
 *N.B.* =fill-column= previously set in [[id:6881fadb-9439-4939-974c-e50265bd8a0a][Buffer Column Width]] section.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package whitespace
   :hook ((prog-mode . whitespace-mode)
          (before-save . whitespace-cleanup)
@@ -805,7 +805,7 @@ represents. Alternatively, =standard-indent= setting sets the number of spaces
 for Emacs commands that do not have a specific indentation width set. For
 consistency, we define and set both variables to =my-indent-width=.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq my-indent-width 4)
 (setq-default tab-width my-indent-width
               standard-indent my-indent-width)
@@ -821,7 +821,7 @@ relevant in programming modes. Setting to ~'complete~ results in ~TAB~ first
 attempting to indent the line (if the line is already properly indented);
 otherwise ~TAB~ will trigger code completion instead (if available).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq-default tab-always-indent 'complete)
 #+end_src
 
@@ -832,7 +832,7 @@ indentation _can_ insert ~\t~ characters. Setting to ~nil~ deactivate the mode, 
 ~\s~ is used; as recommended in the =PEP8= style guide, removing discrepancies that
 may occur between different text editors or IDEs.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq-default indent-tabs-mode nil)
 #+end_src
 
@@ -847,7 +847,7 @@ changes to the window:
 + winner-undo :: Default ~C-c <left>~ to revert window layout
 + winner-redo :: Default ~C-c <right>~ to redo the previously undone change
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (winner-mode 1)
 #+end_src
 
@@ -863,7 +863,7 @@ whose location is modified by the =no-litter= package (see [[id:a0a6ce0f-55d9-41
 
 *N.B.* Recommended by the creator of the =vertico.el= ([[https://github.com/minad/vertico][github/vertico]]).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (savehist-mode 1)
 #+end_src
 
@@ -877,7 +877,7 @@ last known position. Cursor positions saved in =save-place.el= (see
 
 *N.B.* Suggested in [[https://www.jamescherti.com/essential-emacs-packages/][jamescherti.com]] blog-post.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (save-place-mode 1)
 #+end_src
 
@@ -894,7 +894,7 @@ prompts.
 
 *N.B.* Suggested in [[https://www.masteringemacs.org/article/disabling-prompts-emacs][masteringemacs.org]] article.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt use-short-answers t)
 (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
@@ -906,7 +906,7 @@ confirmation before visiting a new file or buffer.
 
 *N.B.* Suggested in [[https://www.masteringemacs.org/article/disabling-prompts-emacs][masteringemacs.org]] article.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt confirm-nonexistent-file-or-buffer nil)
 #+end_src
 
@@ -918,7 +918,7 @@ inputs.
 
 *N.B.* Suggested by the creator of the =vertico.el= package ([[https://github.com/minad/vertico][github/vertico]]).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/crm-indicator (args)
   "Add indicator to completion promp when using 'completing-read-multiple'"
   (cons (format "[CRM%s] %s"
@@ -951,7 +951,7 @@ with a live process attached to it.
 
 *N.B.* Suggested in [[https://www.masteringemacs.org/article/disabling-prompts-emacs][masteringemacs.org]] article.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt kill-buffer-query-functions
         (remq 'process-kill-buffer-query-function
               kill-buffer-query-functions))
@@ -971,7 +971,7 @@ with a live process attached to it.
 activated, highlights (flashes) the line containing the cursor when changing
 current buffers.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package beacon
   :hook (after-init . beacon-mode))
 #+end_src
@@ -990,7 +990,7 @@ is positioned at a delimiter. Several settings should be mentioned:
 *N.B.* The /built-in/ minor-mode =electric-pair-mode= is also activated, which
 automatically inserts a closing delimiter.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package paren
   :custom
   (show-paren-style 'parenthesis "Only highlight ()")
@@ -1009,7 +1009,7 @@ automatically inserts a closing delimiter.
 activated, automatically highlights all visible occurrences of the symbol/thing
 at point.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package highlight-thing
   :demand t
   :hook ((prog-mode . highlight-thing-mode)
@@ -1027,7 +1027,7 @@ at point.
 =global-hl-line-mode= is a /built-in/ minor-mode that, when activated, highlights
 the current line (see related =hl-line-mode=).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-hl-line-mode 1)
 #+end_src
 
@@ -1037,7 +1037,7 @@ The custom function, copied from [[https://www.youtube.com/watch?v=oQ9JE9kRwG8][
 region and is executed before =kill-ring-save=, making it easier to visualize
 what text/region is being copied.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun gopar/pulse-current-region (&rest _)
   "Pulse the current implicit or active region"
   (if mark-active
@@ -1055,7 +1055,7 @@ automatically refreshes the contents of buffers after the visited file changes
 on disk. This ensures buffers are automatically updated after changing =git=
 branches.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-auto-revert-mode)
 #+end_src
 
@@ -1066,7 +1066,7 @@ encoding systems exist, =utf-8= is practically a standard, at least in the West,
 and so it is important that we instruct Emacs to treat files as UTF-8 by
 default. For more information, read [[https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs][MasteringEmacs]].
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs
 (set-default-coding-systems 'utf-8)
 
@@ -1100,7 +1100,7 @@ Frequently used functions include:
 are assigned to a single character (and do not persist in memory). Something to
 explore in the future.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package bookmark
   :custom
   (bookmark-save-flag t "Save bookmarks when Emacs killed")
@@ -1120,7 +1120,7 @@ explore in the future.
 =auto-image-file-mode= is a /built-in/ minor-mode that, when activated,
 automatically displays image files when opened.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (auto-image-file-mode 1)
 #+end_src
 
@@ -1134,7 +1134,7 @@ ensures that the buffers are side by side from each other.
 layout in Emacs. Setting to ~'ediff-setup-windows-plain~ ensures that both =ediff=
 windows are open in the current Emacs frame.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain)
 #+end_src
@@ -1151,7 +1151,7 @@ windows are open in the current Emacs frame.
 
 See ~M-x crux-find-user-init-file~ to open =init.el=.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/find-config-file ()
   "Open 'README.org' in other window."
   (interactive)
@@ -1160,7 +1160,7 @@ See ~M-x crux-find-user-init-file~ to open =init.el=.
 
 *** Evaluate init.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun my/eval-init ()
   "To quickly reload the 'init.el' file."
   (interactive)
@@ -1191,7 +1191,7 @@ between themes, some parts of the old theme remain if the new theme does not
 specify the same faces. It is possible to avoid this issue by disabling the
 current theme before switching.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; https://www.unwoundstack.com/blog/switching-emacs-themes.html
 (define-advice load-theme (:before (&rest _args) theme-dont-propagate)
   (mapc #'disable-theme custom-enabled-themes))
@@ -1204,7 +1204,7 @@ current theme before switching.
 
 =doom-themes= is an Emacs package containing a number of Emacs themes.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Effectively copied from https://github.com/doomemacs/themes
 (use-package doom-themes
   :ensure t
@@ -1219,7 +1219,7 @@ current theme before switching.
 
 These functions make it easier to switch between light- and dark-themes.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun light ()
   (interactive)
   (load-theme 'doom-tomorrow-day t))
@@ -1233,7 +1233,7 @@ These functions make it easier to switch between light- and dark-themes.
 
 Below we defined the theme available at startup.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (dark)
 #+end_src
 
@@ -1256,7 +1256,7 @@ This configuration uses the =Jetbrains Mono= font, which is manually downloaded
 from [[https://www.jetbrains.com/lp/mono/][jetbrains.com]]. The font was installed by following the [[https://www.jetbrains.com/lp/mono/#how-to-install][how-to]] instructions
 verbatim.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; https://github.com/daviwil/dotfiles/blob/guix-home/.emacs.d/modules/dw-core.el#L124
 (set-face-attribute 'default nil
                     :font "JetBrains Mono"
@@ -1281,7 +1281,7 @@ point. For example, setting the height to ~120~ means a 12-point =font-size=. Th
 custom function =set-font-size= enables the user to change the font w.r.t. the
 more common =font-size=.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Modified from https://stackoverflow.com/a/50052751
 (defun font-size (fontsize)
   "Set the font-pt size."
@@ -1302,7 +1302,7 @@ buffers. The use of icons improve readability, for example in the minibuffer
 icons are displayed next to the file name indicating whether the file is an
 =org=, =python=, or =elisp= file.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package nerd-icons
   :config
   ;; Download nerd-icons if directory not found
@@ -1366,13 +1366,13 @@ repo name. Instead, defer to =mood-line=, the lightweight alternative to
 
 *** Display Column Numbers
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (column-number-mode t)
 #+end_src
 
 *** Display Line Numbers
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (line-number-mode t)
 #+end_src
 
@@ -1381,7 +1381,7 @@ repo name. Instead, defer to =mood-line=, the lightweight alternative to
 =anzu= is an Emacs package providing =anzu-mode= that, when activated, displays the
 total number of =isearch= matches (and current match position) in the mode-line.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package anzu
   :hook (emacs-startup . global-anzu-mode)
   :custom
@@ -1435,7 +1435,7 @@ presentation.
 
 ** Provide init-ui.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (provide 'init-ui)
 ;;; init-ui.el ends here
 #+end_src
@@ -1455,7 +1455,7 @@ presentation.
 :ID:       1ef23429-c87a-4921-8dfc-f3169a907451
 :END:
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package org
   :demand t
   :bind (("C-c l" . org-store-link)
@@ -1481,7 +1481,7 @@ easier to navigate large documents. Calling ~org-make-toc-insert~ adds a custom
 ~:TOC:~ property to the current header. The function ~org-make-toc~ updates the =TOC=
 in the current buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package org-make-toc
   :after org
   :hook ((org-mode . org-make-toc-mode)
@@ -1518,7 +1518,7 @@ Themes]]). As such, it is not necessary to display the emphasis markers. The
 minor-mode =org-appear-mode= reveals the markers if the cursor moves in between
 marker pairs.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-hide-emphasis-markers t)
 
 (use-package org-appear
@@ -1539,7 +1539,7 @@ leading stars.
 *N.B.* If ~non-nil~, move cursor to start of any headline and call ~?~ to view list
 of available speed commands.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; ? speed-key opens Speed Keys help.
 (setopt org-use-speed-commands
       (lambda ()
@@ -1581,7 +1581,7 @@ this configuration.
 in =org= buffers, which must be loaded using the function
 ~org-babel-do-load-languages~.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (org-babel-do-load-languages 'org-babel-load-languages
                              '((emacs-lisp . t)
                                (shell . t)))
@@ -1599,7 +1599,7 @@ Due to the shared structure, it is possible to define custom blocks via the
 =org-insert-structure-template= (~C-c C-,~). Here, we define a few block templates
 we anticipate using frequently.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-structure-template-alist
         '(("x" . "example")
           ("q" . "quote")
@@ -1614,7 +1614,7 @@ we anticipate using frequently.
 =org-confirm-babel-evaluate= setting, when set to ~t~, prompts the user to confirm
 whether they intended to evaluate the code block. *Annoying*.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-confirm-babel-evaluate nil)
 #+end_src
 
@@ -1624,7 +1624,7 @@ whether they intended to evaluate the code block. *Annoying*.
 =org-src-preserve-indentation= setting, when set to ~t~, remove leading whitespace
 automatically inserted when exiting the =org-edit-special= buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-src-preserve-indentation t)
 #+end_src
 
@@ -1634,7 +1634,7 @@ automatically inserted when exiting the =org-edit-special= buffer.
 displayed. Setting to ~'current-window~ ensures that the widow always opens in
 the current buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-src-window-setup 'current-window)
 #+end_src
 
@@ -1645,13 +1645,13 @@ before returning to an active source code editing buffer. This prevents
 conflicting changes should the user switch back to the current buffer and make
 changes to the =src-block= of an active =org-edit-special= buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-src-ask-before-returning-to-edit-buffer t)
 #+end_src
 
 *** FIX: Display ANSI Error Colors
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; https://github.com/emacs-jupyter/jupyter/issues/366
 (defun display-ansi-colors ()
   (ansi-color-apply-on-region (point-min) (point-max)))
@@ -1670,7 +1670,7 @@ changes to the =src-block= of an active =org-edit-special= buffer.
 when opening an =org= file. If ~nil~, only the links are displayed in the =org=
 buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-startup-with-inline-images t)
 #+end_src
 
@@ -1681,7 +1681,7 @@ URLs (like websites) are displayed inline. Setting to ~'cache~ caches inline
 images such that re-opening the file does not require re-downloading the
 images.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-display-remote-inline-images 'cache)
 #+end_src
 
@@ -1690,7 +1690,7 @@ images.
 Figures generated in src-blocks are not refreshed automatically. The following
 changes ensure that the shown image is the "latest" version of that figure.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (add-hook 'org-babel-after-execute-hook
           (lambda () (org-display-inline-images nil t)))
 #+end_src
@@ -1726,7 +1726,7 @@ some function like ~concat~ (templates are defined in [[id:f5222055-3b85-42fd-8b
 Templates]]). Therefore, we create the custom variables ~my-agenda-dir~ and
 ~my-emacs-agenda~.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
 (defconst my-emacs-agenda (concat my-agenda-dir "agenda_emacs.org"))
 
@@ -1749,7 +1749,7 @@ names that exist in the previously defined TODO items. Instead, the following
 custom functions collect existing project names in a given file and suggest
 them when filling in the template.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (defun org-capture--get-project-entry-from-file (agenda-file-name)
   "Compile list of project names from org-headers in FILE that
 contain the :project: property"
@@ -1773,7 +1773,7 @@ contain the :project: property"
 *N.B.* To avoid repeating the same file-path, agenda files are defined as
 variables in [[id:deba8136-212c-4e6a-916c-2f05c180b4f5][Define Agenda Files]].
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq org-capture-templates
       '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
          "* TODO %^{Task} %^g
@@ -1796,7 +1796,7 @@ displayed. Setting ~'only-window~ shows the agenda in in full screen. Setting
 =org-agenda-restore-windows-after-quit= to ~t~ restores the window configuration
 after exiting the agenda view.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-agenda-window-setup 'only-window
         org-agenda-restore-windows-after-quit t)
 #+end_src
@@ -1811,7 +1811,7 @@ heading. This improves readability by separating state-change notes in a
 separate (collapsible) area. Setting =org-log-states-order-reversed= to ~nil~ means
 the latest note entry will be located at the bottom of the list.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-log-into-drawer t
         org-log-states-order-reversed nil)
 #+end_src
@@ -1826,7 +1826,7 @@ the latest note entry will be located at the bottom of the list.
 selection of TODO states; calling ~M-x org-todo~ (~C-c C-t~) will open a pop-up
 menu showing the available TODO keywords, each assigned to a specific key.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-use-fast-todo-selection 'auto)
 #+end_src
 
@@ -1836,7 +1836,7 @@ menu showing the available TODO keywords, each assigned to a specific key.
 Similar to [[id:bc0babe0-495f-4c4d-bedc-3e079930e57a][Fast TODO Selection]], setting =org-use-fast-tag-selection= to ~'auto~
 opens a TAG pop-um menu when calling ~M-x org-set-tags-command~ (~C-c C-q~).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-use-fast-tag-selection 'auto)
 #+end_src
 
@@ -1845,7 +1845,7 @@ opens a TAG pop-um menu when calling ~M-x org-set-tags-command~ (~C-c C-q~).
 =org-auto-align-tags= setting, when set to ~t~, keeps tags aligned when modifying
 headlines.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-auto-align-tags t)
 #+end_src
 
@@ -1855,7 +1855,7 @@ headlines.
 =org-agenda-remove-tags= setting, when set to ~t~, removes tags from the headline
 copy in the agenda.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setopt org-agenda-remove-tags t)
 #+end_src
 
@@ -1865,7 +1865,7 @@ copy in the agenda.
 activated, enhances the =agenda-view= via customize-able grouping and filtering
 options (implemented in [[id:dd0e3646-9554-4b81-89cc-e48e2dd485bc][Agenda Custom Commands]]).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package org-super-agenda
   :defer t
   :after org
@@ -1880,7 +1880,7 @@ options (implemented in [[id:dd0e3646-9554-4b81-89cc-e48e2dd485bc][Agenda Custom
 :ID:       dd0e3646-9554-4b81-89cc-e48e2dd485bc
 :END:
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq org-agenda-custom-commands
       '(("e" "Personal Emacs Tasks"
          ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
@@ -1930,7 +1930,7 @@ The package includes several extensions:
 *N.B.* Author recommends activating =savehist-mode= to store previous completion
 candidates (see [[https://github.com/minad/vertico][github/vertico]]).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package vertico
   ;; :init recommended by author
   :init (vertico-mode)
@@ -1958,7 +1958,7 @@ by allowing flexible, non-sequential matching on input patters. For example, if
 we are searching for a buffer named =project-report.txt=, entering ~report txt
 project~ would return the expected file instead of typing out the complete name.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Copied from https://github.com/oantolin/orderless/tree/master
 (use-package orderless
   :ensure t
@@ -1974,7 +1974,7 @@ enhances completion by providing additional annotation and contextual
 information alongside candidates. In the minibuffer, for example, =marginalia=
 will add file size or date modified.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package marginalia
   :init (marginalia-mode 1))
 #+end_src
@@ -1992,7 +1992,7 @@ and selection framework that streamlines various interactive commands. For
 example, calling ~consult-buffer~ will preview the buffer as completion options
 are scrolled over in the minibuffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; Copied from https://github.com/minad/consult
 (use-package consult
   :bind (;; C-c bindings in `mode-specific-map'
@@ -2101,7 +2101,7 @@ are scrolled over in the minibuffer.
 
 ** Provide init-completion.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (provide 'init-completion)
 ;;; init-completion.el ends here
 #+end_src
@@ -2123,7 +2123,7 @@ interface for file and directory management. With =dired=, it is possible to
 navigate directories, view file details, and perform a wide range of file
 operations directly within Emacs.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package dired
   :ensure nil
   :commands dired
@@ -2166,7 +2166,7 @@ operations directly within Emacs.
 + Jumping to files :: Adds commands to quickly jump to files or directories in
   a project
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package dired-x
   :ensure nil
   :after dired
@@ -2201,7 +2201,7 @@ operations directly within Emacs.
 + Backup and auto-save file cleanup :: Includes features to clean up backup
   files and other temporary files more effectively
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package dired-aux
   :ensure nil
   :after dired
@@ -2220,7 +2220,7 @@ _writable_. In other words, it is possible to edit file and directory names as i
 they are regular text. This is advantageous for quickly renaming multiple
 files.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package wdired
   :ensure nil
   :after dired
@@ -2244,7 +2244,7 @@ experience.
 
 ** Provide init-dired.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (provide 'init-dired)
 ;;; init-dired.el ends here
 #+end_src
@@ -2264,7 +2264,7 @@ experience.
 when activated, improves code readability by visually distinguishing pairs of
 delimiters using different colors.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :hook (prog-mode))
 #+end_src
@@ -2286,7 +2286,7 @@ only activate in =prog-mode=.
 + hl-todo-previous :: Jump to previous TODO-keyword
 + hl-toqdo-occur :: Open ibuffer of all occurrences
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package hl-todo
   :hook (prog-mode)
   :custom
@@ -2304,7 +2304,7 @@ region; ~=~ and ~-~ can then be used to expand or contract the selected region.
 *N.B.* The package includes =python-mode-expandsions.el= and other modules that may
 be of interest.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package expand-region
   :commands er/expand-region
   :bind ("C-=" . er/expand-region))
@@ -2316,7 +2316,7 @@ be of interest.
 provides functionality to more quickly navigate, manage, and work with files
 within a repository.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; To provide project management + navigation features
 (use-package projectile
   :init (projectile-mode 1)
@@ -2333,7 +2333,7 @@ within a repository.
 =magit= is an Emacs package that provides a text-based user interface to =git=
 (otherwise referred to as a "git porcelain"). See [[https://magit.vc/][magit.vc]] for documentation.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package magit
   :bind ("C-x g" . magit-status)
   :diminish magit-minor-mode
@@ -2370,7 +2370,7 @@ the =EDITMSG= buffer inside the current Emacs instance and set ~git config
 --global core.editor "emacsclient"~ to use Emacs bindings when editing the
 message. See [[https://magit.vc/manual/with-editor/Using-With_002dEditor-commands.html][magit.vc/manual/with-editor]].
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package with-editor
   :after (vterm magit)
   :commands vterm
@@ -2397,7 +2397,7 @@ deleted since the previous commit.
 *N.B.* The mode does not play nice with =linum-mode=, so we must also install the
 =git-gutter-fringe= package (see [[id:253507fc-cbf8-40a5-a490-c8651a7d44dd][Display Line Numbers in Fringe]]).
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package git-gutter
   :hook ((prog-mode org-mode) . git-gutter-mode)
   :custom
@@ -2418,7 +2418,7 @@ deleted since the previous commit.
 =vterm= is an Emacs package providing a terminal emulator inside Emacs. Based on
 =libvterm=, a C library that enables near-native terminal performance.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package vterm
   :defer t
   :commands vterm
@@ -2442,7 +2442,7 @@ of code. Primarily used as a "dumb" formatter for =emacs-lisp= code.
 
 *N.B.* Less important for =python= as other code formatter packages exist.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))
 #+end_src
@@ -2453,7 +2453,7 @@ of code. Primarily used as a "dumb" formatter for =emacs-lisp= code.
 provides efficient, user-friendly documentation for =emacs-lisp=
 functions, variables, keybindings, and more.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package helpful
   :bind
   (("C-h k" . helpful-kill-buffers)
@@ -2475,14 +2475,14 @@ functions, variables, keybindings, and more.
 
 ** Yaml
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package yaml-mode
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 #+end_src
 
 ** Provide init-dev.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (provide 'init-dev)
 ;;; init-dev.el ends here
 #+end_src
@@ -2501,7 +2501,7 @@ functions, variables, keybindings, and more.
 =avy= is an Emacs package providing efficient navigation by allowing users to
 jump to visible text within the buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package avy
   :bind (("M-j" . avy-goto-char-timer)  ;; orig. 'default-indent-new-line'
          :map isearch-mode-map
@@ -2548,7 +2548,7 @@ coding, we are only interested in checking comments and doc-strings;
 files. To check a comment, we would need to remove =org-block= in
 ~jinx-exclude-faces~ at the expense of checking ALL of the code.
 
-#+begin_src elisp 
+#+begin_src elisp
 (use-package jinx
   :hook (org-mode text-mode prog-mode conf-mode)
   :bind (("C-c j c" . jinx-correct)
@@ -2590,7 +2590,7 @@ more effectively.
 Related notes:
 + [[denote:20241010T181237][How To Use Denote]]
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package denote
   :after org
   :commands (denote denote-open-or-create)
@@ -2616,7 +2616,7 @@ Related notes:
 back-links. Annoyingly, they must be manually updated. Here, we add a hook to
 update dynamic blocks before saving the =denote= buffer.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (add-hook 'before-save-hook (lambda ()
                               (when (denote-file-is-note-p (buffer-file-name))
                                 (org-update-all-dblocks))))
@@ -2637,7 +2637,7 @@ functions:
 + consult-denote-find :: Alternative to ~denote-open-or-create~
 + consult-denote-grep :: Regex to filter files in =denote-directory=
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package consult-denote
   :after (consult denote)
   :commands (consult-denote-find))
@@ -2645,7 +2645,7 @@ functions:
 
 ** Provide init-writing.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (provide 'init-writing)
 
 ;;; init-writing.el ends here
@@ -2670,7 +2670,7 @@ available keybindings (and descriptions) sharing the ~C-x~ prefix.
 *N.B.* After popup window appears, use ~C-h~ to open additional navigation
 options. This is helpful not all keybindings can fit in the popup window.
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package which-key
   :config (which-key-mode)
   :custom
@@ -2702,7 +2702,7 @@ Below, we add a number of useful functions:
   + crux-switch-to-previous-buffer :: Switch to previously opened buffer
   + crux-view-url :: Open new buffer containing contents of URL
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package crux
   :commands (crux-move-beginning-of-line
              crux-kill-whole-line
@@ -2723,7 +2723,7 @@ Below, we add a number of useful functions:
 + [[id:d831e4e4-e9b1-480e-aa1a-a152d9707275][General.el]]
 :END:
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; 'Find-File-At-Point' package adds additional functionality to
 ;; existing keybindings
 (ffap-bindings)
@@ -2748,7 +2748,7 @@ Below, we add a number of useful functions:
 =general= is an Emacs package is a keybinding management library that allows
 users to setup global and local keybindings more easily.
 
-#+BEGIN_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package general
   :custom
   (general-describe-priority-keymaps nil)
@@ -2789,7 +2789,7 @@ users to setup global and local keybindings more easily.
 
 ** Provide init-kbd.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (provide 'init-kbd)
 ;;; init-kbd.el ends here
 #+end_src
