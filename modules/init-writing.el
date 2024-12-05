@@ -57,14 +57,15 @@
 
 (use-package denote
   :after org
-  :commands denote
-  :hook (dired-mode . denote-dired-mode)
+  :commands (denote denote-open-or-create)
+  :hook ((dired-mode . denote-dired-mode)
+         (text-mode . denote-fontify-links-mode-maybe)
   :custom
   (denote-directory (concat my-persist-dir "notes/"))
   (denote-file-type "org")
   (denote-prompts '(title keywords))
   (denote-known-keywords '("emacs" "python" "linux" "ml" "work"))
-  ;; TODO: use separate templates for coding/ect
+  ;; TODO: add separate templates for coding/ect
   (denote-templates nil)
   (denote-org-front-matter (concat "#+TITLE: %1$s\n"
                                    "#+DATE: %2$s\n"
