@@ -59,7 +59,7 @@
   :after org
   :commands (denote denote-open-or-create)
   :hook ((dired-mode . denote-dired-mode)
-         (text-mode . denote-fontify-links-mode-maybe)
+         (text-mode . denote-fontify-links-mode-maybe))
   :custom
   (denote-directory (concat my-persist-dir "notes/"))
   (denote-file-type "org")
