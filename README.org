@@ -2230,6 +2230,18 @@ files.
   (wdired-allow-to-change-permissions t))
 #+end_src
 
+** diredfl
+
+=direfl-mode= adds additional font lock rules to provide a more colorful =dired=
+experience.
+
+#+begin_src emacs-lisp
+(use-package diredfl
+  :after dired-mode
+  :hook (dired-mode . diredfl-mode))
+
+#+end_src
+
 ** Provide init-dired.el
 
 #+begin_src emacs-lisp 

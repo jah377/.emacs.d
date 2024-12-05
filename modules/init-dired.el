@@ -83,5 +83,9 @@
   ;; Change permission using 'SPC'
   (wdired-allow-to-change-permissions t))
 
+(use-package diredfl
+  :after dired-mode
+  :hook (dired-mode . diredfl-mode))
+
 (provide 'init-dired)
 ;;; init-dired.el ends here
