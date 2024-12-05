@@ -1536,15 +1536,13 @@ of available speed commands.
 *** Auto-Tangle
 
 =org-auto-tangle-mode=, when activated, automatically tangles =org=-files on
-save. Automatically tangling can be annoying, so we set ~org-auto-tangle-default
-nil~. Therefore, automatic tangling only occurs if =#+auto_tangle: t= is added to
-the file header.
+save. Custom variable ~org-auto-tangle-default nil~ therefore auto-tangle will
+only happen on buffers with the =#+auto_tangle: t= file keyword.
 
 #+begin_src emacs-lisp
 (use-package org-auto-tangle
-  :after org
-  :hook (org-mode . org-auto-tangle-mode)
-  :custom (org-auto-tangle-default nil))
+  :after org-mode
+  :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
 *** Archive
