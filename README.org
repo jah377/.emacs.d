@@ -2,7 +2,6 @@
 #+DATE: Wednesday, September 25, 2024
 #+PROPERTY: header-args:emacs-lisp :results silent
 #+STARTUP: overview
-#+auto_tangle: t
 
 * Table of Contents
 :PROPERTIES:
@@ -84,6 +83,7 @@ Other resources that I found helpful include:
 * Common Header For Emacs Libraries
 :PROPERTIES:
 :visibility: folded
+:ID:       33dd0e1d-425b-4bb9-8a23-398884c046b8
 :END:
 
 Copied from [[https://github.com/MArpogaus/emacs.d/blob/master/emacs.org#common-header-for-emacs-libraries][github.com/MArpogaus]].
@@ -1546,7 +1546,9 @@ of available speed commands.
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
 #+end_src
-*** Auto-Tangle
+*** COMMENT Auto-Tangle
+
+*COMMENT:* Package overwrites the [[id:33dd0e1d-425b-4bb9-8a23-398884c046b8][common header]] with ~nil~. Drop for now.
 
 =org-auto-tangle-mode=, when activated, automatically tangles =org=-files on
 save. Custom variable ~org-auto-tangle-default nil~ therefore auto-tangle will
