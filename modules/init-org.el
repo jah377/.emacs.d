@@ -45,29 +45,7 @@
   :init (global-org-modern-mode)
   :hook ((org-mode                 . org-modern-mode)
          (org-agenda-finalize-hook . org-modern-agenda))
-  :commands (org-modern-mode org-modern-agenda)
-  :custom (org-modern-block-fringe 2 "org-block boarder width"))
-
-(use-package org-modern-indent
-  :load-path "site-lisp/org-modern-indent/"
-  :after (org org-modern)
-  :hook (org-indent-mode . org-modern-indent-mode)
-  ;; Fridge brackets distracting
-  :custom ((org-modern-indent-begin " ")
-           (org-modern-indent-guide " ")
-           (org-modern-indent-end   " "))
-  :init (ensure-package-cloned "org-modern-indent"
-                                 "jdtsmith/org-modern-indent.git"))
-
-(defun ensure-package-cloned (package-name git-repo)
-  "Ensure a PACKAGE-NAME is cloned into `.emacs.d/site-lisp/` from GIT-REPO.
-PACKAGE-NAME is the directory name of the package.
-GIT-REPO is the git@github.com URL for the repository."
-  (let ((target-dir (expand-file-name package-name "~/.emacs.d/site-lisp/")))
-    (unless (file-directory-p target-dir)
-      (message "Cloning %s from %s..." package-name git-repo)
-      (shell-command
-       (format "git clone git@github.com:%s %s" git-repo target-dir)))))
+  :commands (org-modern-mode org-modern-agenda))
 
 (setopt org-hide-emphasis-markers t)
 
