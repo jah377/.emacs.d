@@ -203,8 +203,14 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
   ;; If cursor on ), show overlay for (
   (show-paren-context-when-offscreen 'overlay)
   :config
-  (show-paren-mode 1)
-  (electric-pair-mode 1))
+  (show-paren-mode 1))
+
+(use-package elec-pair
+  :ensure nil
+  :config (electric-pair-mode 1)
+  :custom
+  ;; Prevent closing pair if POINT at beginning or middle of word
+  (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit))
 
 (use-package highlight-thing
   :demand t
