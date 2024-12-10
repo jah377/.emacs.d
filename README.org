@@ -88,8 +88,8 @@ Other resources that I found helpful include:
 
 Copied from [[https://github.com/MArpogaus/emacs.d/blob/master/emacs.org#common-header-for-emacs-libraries][github.com/MArpogaus]].
 
-*N.B.* According to the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html][Emacs manual]], byte-compiling the init does not startup
-very much, and often leads to problems when you forget to recompile the
+*N.B.* According to the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html][Emacs manual]], byte-compiling the init does not speed-up
+startup very much, and often leads to problems when you forget to recompile the
 file. Also, from my experience, it may lead to bugs that do not happen when not
 using byte-compile.
 
