@@ -1750,12 +1750,14 @@ headers. Additional context is provided via:
 Calling ~M-x org-refile~ (~C-c C-w~) instead of ~C-c C-c~ will "re-file" a =task= item
 under a =project= top-level header.
 
+*** Agenda Files
+
+=org-agenda-files= variable defines the file(s) and/or directory(s) to be used
+for agenda display.
 
 #+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
-(defconst my-emacs-agenda (concat my-agenda-dir "agenda_emacs.org"))
-
-(setopt org-agenda-files (list my-agenda-dir))
+(setopt org-agenda-files (concat my-agenda-dir "agenda.org"))
 #+end_src
 
 *** Agenda Capture Templates
