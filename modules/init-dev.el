@@ -126,5 +126,21 @@
 (use-package yaml-mode
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
+(use-package python
+  :ensure nil
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :custom
+  (python-shell-interprter "ipython")
+  ;; At minimum, must include '--simple-prompt' if using ipython
+  (python-shell-interpreter-args "--simple-prompt --classic")
+  ;; 3rd party py-files may have different indentation; disable if guess fails
+  (python-indent-guess-indent-offest t)
+  (python-indent-guess-indent-offset-verbose nil)
+  ;; Modified pep-257 removes new-line at end of docstring
+  (python-fill-docstring-style 'pep-257-nn)
+  :config
+  (make-variable-buffer-local 'python-shell-virtualenv-root))
+
 (provide 'init-dev)
 ;;; init-dev.el ends here
