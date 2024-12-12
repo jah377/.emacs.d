@@ -1704,35 +1704,52 @@ changes ensure that the shown image is the "latest" version of that figure.
 #+end_src
 
 ** Org-Agenda
-:PROPERTIES:
-:ID:       e62f2c9a-f7fa-4972-afc6-b0dd072d6474
-:END:
 
-/How do you organize related TODO items?/
+*** Approach
 
-One option is to organize related TODOs under a top-level =org-header= per
-project. This would not affect the templates as it is possible to "re-file"
-your note by calling ~M-x org-refile~ (~C-c C-w~) instead of ~C-c C-c~. However, this
-would affect the =agenda-view= -- the project-level header would be included in
-the view, when we really only care about the sub-headers.
+My goal using =org-agenda= is to track the progress of ongoing personal- and
+work-related =projects= and =tasks=. Here is what I mean by that:
 
-Another option is to add a ~:project:~ property in the templates and group
-related items using the =org-super-agenda= package. _For now, lets use this
-option_. *N.B.* This will require custom functions (see [[id:45a1842a-9f6a-4432-a8cf-ff6c8f217a76][Custom Capture Functions]]).
++ Task :: "atomic" TODO item
+  - Example:
+    * Review a merge request
+    * Add X package to my Emacs config
 
-*** Define Agenda Files
-:PROPERTIES:
-:ID:       deba8136-212c-4e6a-916c-2f05c180b4f5
-:END:
++ Project :: large TODO requiring the completion of several =tasks=
+  - Example: Create an ML model
+    * Task #1: Perform EDA
+    * Task #2: Clean Data (guided by EDA)
+    * Task #3: Train model
+    * Task #4: Deploy API
 
-=org-agenda-files= setting defines the files/directories (of files) to be used
-for agenda display.
+For the sake of simplicity, TODO items are organized in a single =agenda.org=
+file; "setting" context flags (discussed later) are used to quickly separate
+tasks belonging to each file. Regardless of the file, top-level headers include
+one-off =tasks= or =projects= containing multiple second-level =task=
+headers. Additional context is provided via:
 
-=Org-capture= templates are used to quickly write and save notes in specified
-=org-files=. However, the file must be provided as a string and not the output of
-some function like ~concat~ (templates are defined in [[id:f5222055-3b85-42fd-8b6f-0f170f75b681][Agenda Capture
-Templates]]). Therefore, we create the custom variables ~my-agenda-dir~ and
-~my-emacs-agenda~.
++ TODO state :: Action state of the item
+  - Example :: ~TODO~, ~ONGOING~, ~HOLD/WAIT~, ~COMPLETE~, ~REVIEW~, ~MERGED~, ~DROPPED~
+
++ Tags :: Provide "setting"-, "action"-, or "subject"-specific context
+  - Setting context :: Item related to work or personal
+    - Prefix :: "@", inspired from [[https://systemcrafters.net/org-mode-productivity/effective-task-tags-by-context/][systemcrafters.com]]
+    - Example :: ~@work~, ~@personal~
+  - Action context :: Item requires an action by me
+    - Prefix :: "!"
+    - Example :: ~!review~, ~!respond~, ~!email~
+  - Subject context :: General nature of item
+    - Prefix :: None
+    - Example :: ~bug~, ~note~, ~emacs~, ~devtools~, ~project~
+
++ Org-Header Property :: Any other details for the item
+  - Example :: ~:git_issue:~, ~:branch:~, ~:repo:~
+
+
+=Org-capture= templates are used to quickly insert =task= and =project= items. *N.B.*
+Calling ~M-x org-refile~ (~C-c C-w~) instead of ~C-c C-c~ will "re-file" a =task= item
+under a =project= top-level header.
+
 
 #+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
