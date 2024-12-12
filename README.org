@@ -1888,6 +1888,29 @@ opens a TAG pop-um menu when calling ~M-x org-set-tags-command~ (~C-c C-q~).
 #+begin_src emacs-lisp
 (setopt org-use-fast-tag-selection 'auto)
 #+end_src
+**** Tag Keywords
+
+=org-tag-alist= variable defines list of TAG keywords. Calling ~M-x org-set-tags-command~ (~C-c
+C-q~) sets the tags for the current visible entry.
+
+#+begin_src emacs-lisp
+(setopt org-tag-alist
+        '(;; Setting Context
+          ("@home" . ?H)
+          ("@personal" . ?W)
+
+          ;; Action Context
+          ("!review" . ?r)
+          ("!respond" . ?R)
+          ("!message" . ?M)
+
+          ;; Subject Context
+          ("bug" . ?b)
+          ("note" . ?n)
+          ("emacs" . ?e)
+          ("tools" . ?t)
+          ("project" . ?p)))
+#+end_src
 
 **** Align Tags
 
