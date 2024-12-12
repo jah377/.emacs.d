@@ -1822,10 +1822,52 @@ after exiting the agenda view.
         org-agenda-restore-windows-after-quit t)
 #+end_src
 
-*** Agenda Log Settings
+*** Agenda TODO Settings
+**** Agenda TODO Keywords
 
-In =org=, it is possible to track TODO state changes on a per-keyword basis by
-adding ~!~ and/or ~@~ to record a timestamp or note, respectively.
+=org-todo-keywords= variable defines list(s) of TODO entry keyword sequences and
+their interpretation. Calling ~M-x org-todo~ (~C-c C-t~) inserts or changes the
+keyword of the =org= header at point.
+
+Special characters assigned to the keyword include:
+
++ alpha :: Fast-state selection of keyword, configured in [[id:4f1ecc02-a588-4162-8f00-6d391e10bd4d][Fast TODO Selection]]
++ @ :: Add note and time to state change
++ ! :: Record only the time of the state change
+
+The logging behavior of notes and timestamps are configured in [[id:c2de3b63-12ca-4c34-921c-0c518665eb40][Agenda TODO
+Logging]].
+
+*N.B.* The ~"|"~ keyword signifies that the subsequent keywords are a terminal
+state. In other words, no further action is necessary.
+
+#+begin_src emacs-lisp
+(setopt org-todo-keywords '((sequence "TODO(t!)"
+                                      "ACTIVE(a!)"
+                                      "VERIFY(v@)"
+                                      "HOLD/WAIT(h@)"
+                                      "|" "DONE(d!)"
+                                      "DELEGATED(o@)"
+                                      "DROPPED(D@)")))
+#+end_src
+
+**** Fast TODO Selection
+:PROPERTIES:
+:ID:       4f1ecc02-a588-4162-8f00-6d391e10bd4d
+:END:
+
+=org-use-fast-todo-selection= setting, when set to ~'auto~, enables the fast
+selection of TODO states. Calling ~M-x org-todo~ (~C-c C-t~) will open a pop-up
+menu showing the available TODO keywords, each assigned to a specific key.
+
+#+begin_src emacs-lisp
+(setopt org-use-fast-todo-selection 'auto)
+#+end_src
+
+**** Agenda TODO Logging
+:PROPERTIES:
+:ID:       c2de3b63-12ca-4c34-921c-0c518665eb40
+:END:
 
 =org-log-into-drawer= setting, when set to ~t~, stores logs in a =drawer= below the
 heading. This improves readability by separating state-change notes in a
@@ -1837,24 +1879,10 @@ the latest note entry will be located at the bottom of the list.
         org-log-states-order-reversed nil)
 #+end_src
 
-*** Agenda TODO Settings
-**** Fast TODO Selection
-:PROPERTIES:
-:ID:       bc0babe0-495f-4c4d-bedc-3e079930e57a
-:END:
-
-=org-use-fast-todo-selection= setting, when set to ~'auto~, enables the fast
-selection of TODO states; calling ~M-x org-todo~ (~C-c C-t~) will open a pop-up
-menu showing the available TODO keywords, each assigned to a specific key.
-
-#+begin_src emacs-lisp
-(setopt org-use-fast-todo-selection 'auto)
-#+end_src
-
 *** Agenda TAG Settings
 **** Fast Tag Selection
 
-Similar to [[id:bc0babe0-495f-4c4d-bedc-3e079930e57a][Fast TODO Selection]], setting =org-use-fast-tag-selection= to ~'auto~
+Similar to [[id:4f1ecc02-a588-4162-8f00-6d391e10bd4d][Fast TODO Selection]], setting =org-use-fast-tag-selection= to ~'auto~
 opens a TAG pop-um menu when calling ~M-x org-set-tags-command~ (~C-c C-q~).
 
 #+begin_src emacs-lisp
