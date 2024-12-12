@@ -1761,51 +1761,45 @@ for agenda display.
 #+end_src
 
 *** Agenda Capture Templates
-:PROPERTIES:
-:ID:       f5222055-3b85-42fd-8b6f-0f170f75b681
-:END:
-
-**** Custom Capture Functions
-:PROPERTIES:
-:ID:       45a1842a-9f6a-4432-a8cf-ff6c8f217a76
-:END:
-
-Capture templates can be made generalizable by including function calls within
-the string template. It is unlikely that I will be able to remember project
-names that exist in the previously defined TODO items. Instead, the following
-custom functions collect existing project names in a given file and suggest
-them when filling in the template.
-
-#+begin_src emacs-lisp
-(defun org-capture--get-project-entry-from-file (agenda-file-name)
-  "Compile list of project names from org-headers in FILE that
-contain the :project: property"
-  (let (project-names)
-    (with-current-buffer (find-file-noselect agenda-file-name)
-      (goto-char (point-min))
-      (while (re-search-forward "^\\*+ " nil t)
-        (when (and (org-entry-get nil "project")
-                   (not (org-entry-is-done-p)))
-          (add-to-list 'project-names (org-entry-get nil "project")))))
-    project-names))
-
-(defun org-capture--select-project-entry (agenda-file-name)
-  "Prompt user to select :project: property from FILE"
-  (let ((projects (org-capture--get-project-entry-from-file agenda-file-name)))
-    (completing-read "Select project:" projects nil nil)))
-#+end_src
-
-**** Templates
-
-*N.B.* To avoid repeating the same file-path, agenda files are defined as
-variables in [[id:deba8136-212c-4e6a-916c-2f05c180b4f5][Define Agenda Files]].
 
 #+begin_src emacs-lisp
 (setq org-capture-templates
-      '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
+      '(("p" "Project Template" entry
          "* TODO %^{Task} %^g
 :PROPERTIES:
-:project: %(org-capture--select-project-entry my-emacs-agenda)
+:git_issue: %^{Git Issue}
+:repo: %^{Repository}
+:branch: %^{Branch}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+
+  %?
+:END:"
+         :empty-lines 1
+         :kill-buffer t)
+
+        ("t" "Task Template" entry
+         "* TODO %^{Task} %^g
+:PROPERTIES:
+:git_issue: #%^{Git Issue}
+:repo: %^{Repository}
+:branch: %^{Branch}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+
+  %?
+:END:"
+         :empty-lines 1
+         :kill-buffer t)
+
+        ("r" "Review Task Template" entry
+         "* TODO %^{Task} %^g
+:PROPERTIES:
+:repo: %^{Repository}
+:branch: %^{Branch}
+:merge-request: !%^{MR Number}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
