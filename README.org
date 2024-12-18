@@ -1840,6 +1840,8 @@ state. In other words, no further action is necessary.
                                       "ACTIVE(a!)"
                                       "VERIFY(v@)"
                                       "HOLD/WAIT(h@)"
+                                      "REVIEW(r@)"
+                                      "RESPOND(R@)"
                                       "|" "DONE(d!)"
                                       "DELEGATED(o@)"
                                       "DROPPED(D@)")))
@@ -1892,11 +1894,6 @@ C-q~) sets the tags for the current visible entry.
         '(;; Setting Context
           ("@home" . ?H)
           ("@personal" . ?W)
-
-          ;; Action Context
-          ("!review" . ?r)
-          ("!respond" . ?R)
-          ("!message" . ?M)
 
           ;; Subject Context
           ("bug" . ?b)
