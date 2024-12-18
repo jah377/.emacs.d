@@ -92,52 +92,106 @@
           (lambda () (org-display-inline-images nil t)))
 
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
-(defconst my-emacs-agenda (concat my-agenda-dir "agenda_emacs.org"))
-
 (setopt org-agenda-files (list my-agenda-dir))
 
-(defun org-capture--get-project-entry-from-file (agenda-file-name)
-  "Compile list of project names from org-headers in FILE that
-contain the :project: property"
-  (let (project-names)
-    (with-current-buffer (find-file-noselect agenda-file-name)
-      (goto-char (point-min))
-      (while (re-search-forward "^\\*+ " nil t)
-        (when (and (org-entry-get nil "project")
-                   (not (org-entry-is-done-p)))
-          (add-to-list 'project-names (org-entry-get nil "project")))))
-    project-names))
+(setopt org-agenda-window-setup 'only-window
+        org-agenda-restore-windows-after-quit t)
 
-(defun org-capture--select-project-entry (agenda-file-name)
-  "Prompt user to select :project: property from FILE"
-  (let ((projects (org-capture--get-project-entry-from-file agenda-file-name)))
-    (completing-read "Select project:" projects nil nil)))
+(setopt org-todo-keywords '((sequence "TODO(t!)"
+                                      "ACTIVE(a!)"
+                                      "VERIFY(v@)"
+                                      "HOLD/WAIT(h@)"
+                                      "REVIEW(r@)"
+                                      "RESPOND(R@)"
+                                      "|" "DONE(d!)"
+                                      "DELEGATED(o@)"
+                                      "DROPPED(D@)")))
 
-(setq org-capture-templates
-      '(("e" "Emacs Config Task" entry (file my-emacs-agenda)
-         "* TODO %^{Task} %^g
+(setopt org-use-fast-todo-selection 'auto)
+
+(setopt org-log-into-drawer t
+        org-log-states-order-reversed nil)
+
+(setopt org-use-fast-tag-selection 'auto)
+
+(setopt org-tag-alist
+        '(;; Setting Context
+          ("@home" . ?H)
+          ("@personal" . ?W)
+
+          ;; Subject Context
+          ("bug" . ?b)
+          ("note" . ?n)
+          ("emacs" . ?e)
+          ("tools" . ?t)
+          ("project" . ?p)))
+
+(setopt org-auto-align-tags t)
+
+;; Must specify file for each template
+(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
+(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+
+(setopt org-capture-templates
+        '(("w" "Work Task Template" entry (file work-agenda-file)
+           "* TODO %^{Task} %(org-set-tags \"@work\")%^G
 :PROPERTIES:
-:project: %(org-capture--select-project-entry my-emacs-agenda)
+:project: %^{Project}
+:git_issue: #%^{Git Issue|None}
+:repo: %^{Repository}
+:branch: %^{Branch}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
 
   %?
 :END:"
-         :empty-lines 1
-         :kill-buffer t)))
+           :empty-lines 1
+           :kill-buffer t)
 
-(setopt org-agenda-window-setup 'only-window
-        org-agenda-restore-windows-after-quit t)
+          ("p" "Personal Task Template" entry (file personal-agenda-file)
+           "* TODO %^{Task} %(org-set-tags \"@personal\")%^G
+:PROPERTIES:
+:project: %^{Git Issue|None}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
 
-(setopt org-log-into-drawer t
-        org-log-states-order-reversed nil)
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)
 
-(setopt org-use-fast-todo-selection 'auto)
+          ("r" "Merge Request Task Template" entry (file work-agenda-file)
+           "* REVIEW %^{Task} %(org-set-tags \"@work\")%^G
+:PROPERTIES:
+:project: %^{Project}
+:repo: %^{Repository}
+:branch: %^{Branch}
+:merge-review: !%^{Git Issue|None}
+:END:
+:LOGBOOK:
+- State \"REVIEW\"       from              %U
 
-(setopt org-use-fast-tag-selection 'auto)
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)
 
-(setopt org-auto-align-tags t)
+          ("r" "Review Task Template" entry (file agenda-file)
+           "* TODO %^{Task} %^g
+:PROPERTIES:
+:repo: %^{Repository}
+:branch: %^{Branch}
+:merge-request: !%^{MR Number}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)))
 
 (setopt org-agenda-remove-tags t)
 
