@@ -1704,47 +1704,41 @@ changes ensure that the shown image is the "latest" version of that figure.
 #+end_src
 
 ** Org-Agenda
-
 *** Approach
 
-My goal using =org-agenda= is to track the progress of ongoing personal- and
-work-related =projects= and =tasks=. Here is what I mean by that:
+I intend to use =org-agenda= to track the progress of ongoing personal- and
+work-related TODO =tasks=. Here, a =task= is a TODO item with an individual
+deliverable such as "Review Merge Request" or "Add Package X to Emacs
+Config". Alternatively, a =project= is an over-arching goal consisting of
+multiple related =tasks=. For example, a =project= may include "Deploy an ML model"
+which requires the sequential completion of "Perform EDA", "Train/Evaluate ML
+Model", and "Build API"; each would require their own merge request.
 
-+ Task :: "atomic" TODO item
-  - Example:
-    * Review a merge request
-    * Add X package to my Emacs config
+For the sake of simplicity, personal- and work-related TODO items are organized
+as top-level =org= headers in =agenda_personal.org= and =agenda_work.org=. These
+agenda files are stored in the ~my-persist-dir~ directory previously defined in
+the [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]] section.
 
-+ Project :: large TODO requiring the completion of several =tasks=
-  - Example: Create an ML model
-    * Task #1: Perform EDA
-    * Task #2: Clean Data (guided by EDA)
-    * Task #3: Train model
-    * Task #4: Deploy API
-
-For the sake of simplicity, TODO items are organized in a single =agenda.org=
-file; "setting" context flags (discussed later) are used to quickly separate
-tasks belonging to each file. Regardless of the file, top-level headers include
-one-off =tasks= or =projects= containing multiple second-level =task=
-headers. Additional context is provided via:
+_Carefully organizing TODO headers seems tedious_. Instead, this configuration
+defines numerous =Org-Agenda= views to parse and group =tasks=. This is made
+possible through the use of:
 
 + TODO state :: Action state of the item
-  - Example :: ~TODO~, ~ONGOING~, ~HOLD/WAIT~, ~COMPLETE~, ~REVIEW~, ~MERGED~, ~DROPPED~
+  - TODO states will be consistent across agenda files
+  - Example :: ~TODO~, ~ONGOING~, ~HOLD/WAIT~, ~COMPLETE~, ~MERGED~, ~DROPPED~
+  - Example :: ~REVIEW~, ~RESPOND~
 
 + Tags :: Provide "setting"-, "action"-, or "subject"-specific context
-  - Setting context :: Item related to work or personal
-    - Prefix :: "@", inspired from [[https://systemcrafters.net/org-mode-productivity/effective-task-tags-by-context/][systemcrafters.com]]
-    - Example :: ~@work~, ~@personal~
-  - Action context :: Item requires an action by me
-    - Prefix :: "!"
-    - Example :: ~!review~, ~!respond~, ~!email~
-  - Subject context :: General nature of item
-    - Prefix :: None
-    - Example :: ~bug~, ~note~, ~emacs~, ~devtools~, ~project~
+  - Context Tag :: Tag identifies work or personal TODOs
+    * Prefix :: "@", inspired from [[https://systemcrafters.net/org-mode-productivity/effective-task-tags-by-context/][systemcrafters.com]]
+    * Example :: ~@work~, ~@personal~
+  - Subject Tag :: Tag (no prefix) indicates the general subject matter
+    * Example :: ~bug~, ~note~, ~emacs~, ~devtools~, ~project~
 
-+ Org-Header Property :: Any other details for the item
-  - Example :: ~:git_issue:~, ~:branch:~, ~:repo:~
-
++ Org-Header Property :: Header properties provide additional context
+  - ~:project:~ + =org-super-agenda= package used to organize =tasks= belonging to a
+    single =project=
+  - Other properties may log ~:git_issue:~, ~:branch:~, or ~:repo:~
 
 =Org-capture= templates are used to quickly insert =task= and =project= items. *N.B.*
 Calling ~M-x org-refile~ (~C-c C-w~) instead of ~C-c C-c~ will "re-file" a =task= item
