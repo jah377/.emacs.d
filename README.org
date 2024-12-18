@@ -1751,57 +1751,7 @@ for agenda display.
 
 #+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
-(setopt org-agenda-files (concat my-agenda-dir "agenda.org"))
-#+end_src
-
-*** Agenda Capture Templates
-
-#+begin_src emacs-lisp
-(setq org-capture-templates
-      '(("p" "Project Template" entry
-         "* TODO %^{Task} %^g
-:PROPERTIES:
-:git_issue: %^{Git Issue}
-:repo: %^{Repository}
-:branch: %^{Branch}
-:END:
-:LOGBOOK:
-- State \"TODO\"       from              %U
-
-  %?
-:END:"
-         :empty-lines 1
-         :kill-buffer t)
-
-        ("t" "Task Template" entry
-         "* TODO %^{Task} %^g
-:PROPERTIES:
-:git_issue: #%^{Git Issue}
-:repo: %^{Repository}
-:branch: %^{Branch}
-:END:
-:LOGBOOK:
-- State \"TODO\"       from              %U
-
-  %?
-:END:"
-         :empty-lines 1
-         :kill-buffer t)
-
-        ("r" "Review Task Template" entry
-         "* TODO %^{Task} %^g
-:PROPERTIES:
-:repo: %^{Repository}
-:branch: %^{Branch}
-:merge-request: !%^{MR Number}
-:END:
-:LOGBOOK:
-- State \"TODO\"       from              %U
-
-  %?
-:END:"
-         :empty-lines 1
-         :kill-buffer t)))
+(setopt org-agenda-files (list my-agenda-dir))
 #+end_src
 
 *** Agenda Window Behavior
@@ -1911,6 +1861,75 @@ headlines.
 
 #+begin_src emacs-lisp
 (setopt org-auto-align-tags t)
+#+end_src
+
+*** Agenda Capture Templates
+
+#+begin_src emacs-lisp
+;; Must specify file for each template
+(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
+(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+
+(setopt org-capture-templates
+        '(("w" "Work Task Template" entry (file work-agenda-file)
+           "* TODO %^{Task} %(org-set-tags \"@work\")%^G
+:PROPERTIES:
+:project: %^{Project}
+:git_issue: #%^{Git Issue|None}
+:repo: %^{Repository}
+:branch: %^{Branch}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)
+
+          ("p" "Personal Task Template" entry (file personal-agenda-file)
+           "* TODO %^{Task} %(org-set-tags \"@personal\")%^G
+:PROPERTIES:
+:project: %^{Git Issue|None}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)
+
+          ("r" "Merge Request Task Template" entry (file work-agenda-file)
+           "* REVIEW %^{Task} %(org-set-tags \"@work\")%^G
+:PROPERTIES:
+:project: %^{Project}
+:repo: %^{Repository}
+:branch: %^{Branch}
+:merge-review: !%^{Git Issue|None}
+:END:
+:LOGBOOK:
+- State \"REVIEW\"       from              %U
+
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)
+
+          ("r" "Review Task Template" entry (file agenda-file)
+           "* TODO %^{Task} %^g
+:PROPERTIES:
+:repo: %^{Repository}
+:branch: %^{Branch}
+:merge-request: !%^{MR Number}
+:END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+
+  %?
+:END:"
+           :empty-lines 1
+           :kill-buffer t)))
 #+end_src
 
 *** Agenda View
