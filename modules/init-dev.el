@@ -130,6 +130,7 @@
   :ensure nil
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
+  :config (make-variable-buffer-local 'python-shell-virtualenv-root)
   :custom
   (python-shell-interprter "ipython")
   ;; At minimum, must include '--simple-prompt' if using ipython
@@ -138,9 +139,7 @@
   (python-indent-guess-indent-offest t)
   (python-indent-guess-indent-offset-verbose nil)
   ;; Modified pep-257 removes new-line at end of docstring
-  (python-fill-docstring-style 'pep-257-nn)
-  :config
-  (make-variable-buffer-local 'python-shell-virtualenv-root))
+  (python-fill-docstring-style 'pep-257-nn))
 
 (provide 'init-dev)
 ;;; init-dev.el ends here
