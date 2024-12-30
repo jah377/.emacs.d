@@ -1706,10 +1706,10 @@ changes ensure that the shown image is the "latest" version of that figure.
 ** Org-Agenda
 *** Background
 
-=Org-agenda= is a tool in =org=, acting as a dashboard for viewing, managing, and
-organizing tasks, appointments, and/or projects. =Org-agenda= files (~.org~) are
-the source from which the agenda extracts information, and are specified by
-defining ~org-agenda-files~.
+=Org-agenda= is a tool in =org= for viewing, managing, and organizing tasks,
+appointments, and/or projects. =Org-agenda= files (~.org~) are the source from
+which the agenda extracts information, and are specified by defining
+~org-agenda-files~.
 
 Within an =org-agenda= file, header levels are used to structure content
 hierarchically. The hierarchy makes it easy to break tasks into manageable
@@ -1740,8 +1740,8 @@ filed as second-level headers.
 
 For the sake of simplicity, I delineate TODO items as either related to
 "personal" or "work" and store them accordingly in =agenda_personal.org= and
-=agenda_work.org=. These agenda files are stored in the ~my-persist-dir~ directory
-previously defined in the [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]] section.
+=agenda_work.org=. These agenda files are stored in the variable ~my-persist-dir~
+directory previously defined in the [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]] section.
 
 _Carefully organizing TODO headers seems tedious_. Instead, this configuration
 defines numerous =org-agenda= "views" to parse and group =tasks= and/or
@@ -1785,9 +1785,10 @@ for agenda display.
 *** Agenda Window Behavior
 
 =org-agenda-window-setup= setting specifies how the agenda buffer should be
-displayed. Setting ~'only-window~ shows the agenda in in full screen. Setting
-=org-agenda-restore-windows-after-quit= to ~t~ restores the window configuration
-after exiting the agenda view.
+displayed. Setting ~'only-window~ shows the agenda in in full screen.
+
+Setting =org-agenda-restore-windows-after-quit= to ~t~ restores the window
+configuration after exiting the agenda view.
 
 #+begin_src emacs-lisp
 (setopt org-agenda-window-setup 'only-window
