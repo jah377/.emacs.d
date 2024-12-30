@@ -1774,11 +1774,6 @@ for agenda display.
 
 #+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
-
-;; Constants used by org-capture templates
-(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
-(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
-
 (setopt org-agenda-files (list my-agenda-dir))
 #+end_src
 
@@ -1902,8 +1897,13 @@ items.
 (setopt org-tags-exclude-from-inheritance '("project"))
 #+end_src
 
-
 *** Agenda Capture Templates
+
+#+begin_src emacs-lisp
+;; Constants used by org-capture templates
+(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
+(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+#+end_src
 
 #+begin_src emacs-lisp
 (setopt org-capture-templates
@@ -1915,19 +1915,6 @@ items.
 :branch: %^{Branch}
 :git_issue: #%^{Git Issue|None}
 :merge_request: !%^{MR|None}
-:END:
-:LOGBOOK:
-- State \"TODO\"       from              %U
-
-  %?
-:END:"
-           :empty-lines 1
-           :kill-buffer t)
-
-          ("p" "Personal Task Template" entry (file personal-agenda-file)
-           "* TODO %^{Task} %^G
-:PROPERTIES:
-:project: %^{Git Issue|None}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
@@ -1953,12 +1940,10 @@ items.
            :empty-lines 1
            :kill-buffer t)
 
-          ("r" "Review Task Template" entry (file agenda-file)
-           "* TODO %^{Task} %^g
+          ("p" "Personal Task Template" entry (file personal-agenda-file)
+           "* TODO %^{Task} %^G
 :PROPERTIES:
-:repo: %^{Repository}
-:branch: %^{Branch}
-:merge-request: !%^{MR Number}
+:project: %^{None}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U

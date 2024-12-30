@@ -60,6 +60,10 @@
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
 
+(use-package org-auto-tangle
+  :after org-mode
+  :hook (org-mode . org-auto-tangle-mode))
+
 (org-babel-do-load-languages 'org-babel-load-languages
                              '((emacs-lisp . t)
                                (shell . t)))
@@ -92,11 +96,6 @@
           (lambda () (org-display-inline-images nil t)))
 
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
-
-;; Constants used by org-capture templates
-(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
-(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
-
 (setopt org-agenda-files (list my-agenda-dir))
 
 (setopt org-agenda-window-setup 'only-window
@@ -131,6 +130,10 @@
 
 (setopt org-tags-exclude-from-inheritance '("project"))
 
+;; Constants used by org-capture templates
+(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
+(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+
 (setopt org-capture-templates
         '(("w" "Work Task Template" entry (file work-agenda-file)
            "* TODO %^{Task} %^G
@@ -140,19 +143,6 @@
 :branch: %^{Branch}
 :git_issue: #%^{Git Issue|None}
 :merge_request: !%^{MR|None}
-:END:
-:LOGBOOK:
-- State \"TODO\"       from              %U
-
-  %?
-:END:"
-           :empty-lines 1
-           :kill-buffer t)
-
-          ("p" "Personal Task Template" entry (file personal-agenda-file)
-           "* TODO %^{Task} %^G
-:PROPERTIES:
-:project: %^{Git Issue|None}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
@@ -178,12 +168,10 @@
            :empty-lines 1
            :kill-buffer t)
 
-          ("r" "Review Task Template" entry (file agenda-file)
-           "* TODO %^{Task} %^g
+          ("p" "Personal Task Template" entry (file personal-agenda-file)
+           "* TODO %^{Task} %^G
 :PROPERTIES:
-:repo: %^{Repository}
-:branch: %^{Branch}
-:merge-request: !%^{MR Number}
+:project: %^{None}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
