@@ -92,6 +92,11 @@
           (lambda () (org-display-inline-images nil t)))
 
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
+
+;; Constants used by org-capture templates
+(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
+(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+
 (setopt org-agenda-files (list my-agenda-dir))
 
 (setopt org-agenda-window-setup 'only-window
@@ -102,7 +107,8 @@
                                       "VERIFY(v@)"
                                       "HOLD/WAIT(h@)"
                                       "REVIEW(r@)"
-                                      "RESPOND(R@)"
+                                      "COMMENT(c@)"
+                                      "MESSAGE(m@)"
                                       "|" "DONE(d!)"
                                       "DELEGATED(o@)"
                                       "DROPPED(D@)")))
@@ -115,12 +121,7 @@
 (setopt org-use-fast-tag-selection 'auto)
 
 (setopt org-tag-alist
-        '(;; Setting Context
-          ("@home" . ?H)
-          ("@personal" . ?W)
-
-          ;; Subject Context
-          ("bug" . ?b)
+        '(("bug" . ?b)
           ("note" . ?n)
           ("emacs" . ?e)
           ("tools" . ?t)
@@ -128,18 +129,17 @@
 
 (setopt org-auto-align-tags t)
 
-;; Must specify file for each template
-(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
-(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+(setopt org-tags-exclude-from-inheritance '("project"))
 
 (setopt org-capture-templates
         '(("w" "Work Task Template" entry (file work-agenda-file)
-           "* TODO %^{Task} %(org-set-tags \"@work\")%^G
+           "* TODO %^{Task} %^G
 :PROPERTIES:
 :project: %^{Project}
-:git_issue: #%^{Git Issue|None}
 :repo: %^{Repository}
 :branch: %^{Branch}
+:git_issue: #%^{Git Issue|None}
+:merge_request: !%^{MR|None}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
@@ -150,7 +150,7 @@
            :kill-buffer t)
 
           ("p" "Personal Task Template" entry (file personal-agenda-file)
-           "* TODO %^{Task} %(org-set-tags \"@personal\")%^G
+           "* TODO %^{Task} %^G
 :PROPERTIES:
 :project: %^{Git Issue|None}
 :END:
@@ -163,7 +163,7 @@
            :kill-buffer t)
 
           ("r" "Merge Request Task Template" entry (file work-agenda-file)
-           "* REVIEW %^{Task} %(org-set-tags \"@work\")%^G
+           "* REVIEW %^{Task} %^G
 :PROPERTIES:
 :project: %^{Project}
 :repo: %^{Repository}

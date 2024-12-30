@@ -1704,35 +1704,58 @@ changes ensure that the shown image is the "latest" version of that figure.
 #+end_src
 
 ** Org-Agenda
+*** Background
+
+=Org-agenda= is a tool in =org=, acting as a dashboard for viewing, managing, and
+organizing tasks, appointments, and/or projects. =Org-agenda= files (~.org~) are
+the source from which the agenda extracts information, and are specified by
+defining ~org-agenda-files~.
+
+Within an =org-agenda= file, header levels are used to structure content
+hierarchically. The hierarchy makes it easy to break tasks into manageable
+parts, with lower levels inheriting context from higher ones. For example a
+TODO item under a project heading naturally belongs to that project.
+
+Related, it is possible to define =org-capture= templates to standardize the
+definition of -- and quickly insert -- TODO items.
+
 *** Approach
+:PROPERTIES:
+:ID:       d8b34f34-e59a-4ac7-8184-58bbe224c9b9
+:END:
 
 I intend to use =org-agenda= to track the progress of ongoing personal- and
-work-related TODO =tasks=. Here, a =task= is a TODO item with an individual
-deliverable such as "Review Merge Request" or "Add Package X to Emacs
-Config". Alternatively, a =project= is an over-arching goal consisting of
-multiple related =tasks=. For example, a =project= may include "Deploy an ML model"
-which requires the sequential completion of "Perform EDA", "Train/Evaluate ML
-Model", and "Build API"; each would require their own merge request.
+work-related TODO =tasks= or =projects=.
 
-For the sake of simplicity, personal- and work-related TODO items are organized
-as top-level =org= headers in =agenda_personal.org= and =agenda_work.org=. These
-agenda files are stored in the ~my-persist-dir~ directory previously defined in
-the [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]] section.
+Here, a =task= is a TODO item with an individual deliverable such as "Review
+Merge Request" or "Add Package X to Emacs Config". A =task= like "Review Merge
+Request" may require multiple steps, like reviewing individual files.
+
+Alternatively, a =project= is a goal that requires the completion of multiple
+deliverables (i.e. =tasks=). For example, a =project= may include "Deploy an ML
+model" which requires the sequential completion of "Perform EDA",
+"Train/Evaluate ML Model", and "Build API"; each would require their own merge
+request. A =project= is defined as a top-level header and related =tasks= will be
+filed as second-level headers.
+
+For the sake of simplicity, I delineate TODO items as either related to
+"personal" or "work" and store them accordingly in =agenda_personal.org= and
+=agenda_work.org=. These agenda files are stored in the ~my-persist-dir~ directory
+previously defined in the [[id:a0a6ce0f-55d9-415f-a70c-48716e9d8c61][Tidy Emacs Directory]] section.
 
 _Carefully organizing TODO headers seems tedious_. Instead, this configuration
-defines numerous =Org-Agenda= views to parse and group =tasks=. This is made
-possible through the use of:
+defines numerous =org-agenda= "views" to parse and group =tasks= and/or
+=projects=. This is made possible through the configuration and use of:
 
-+ TODO state :: Action state of the item
++ TODO state :: Defines "action" state of the item
   - TODO states will be consistent across agenda files
-  - Example :: ~TODO~, ~ONGOING~, ~HOLD/WAIT~, ~COMPLETE~, ~MERGED~, ~DROPPED~
-  - Example :: ~REVIEW~, ~RESPOND~
+  - Example :: ~TODO~, ~ACTIVE~, ~HOLD/WAIT~, ~COMPLETE~, ~MERGED~, ~DROPPED~
+  - Example :: ~REVIEW~, ~COMMENT~, ~MESSAGE~
 
-+ Tags :: Provide "setting"-, "action"-, or "subject"-specific context
-  - Context Tag :: Tag identifies work or personal TODOs
-    * Prefix :: "@", inspired from [[https://systemcrafters.net/org-mode-productivity/effective-task-tags-by-context/][systemcrafters.com]]
-    * Example :: ~@work~, ~@personal~
-  - Subject Tag :: Tag (no prefix) indicates the general subject matter
++ Tags :: Define "subject"-specific context to task
+  - File Tag :: Tag defined in ~org-agenda-files~
+    * Example :: ~:personal:~ and ~:work:~
+  - Subject Tag :: Tag defined generally in config
     * Example :: ~bug~, ~note~, ~emacs~, ~devtools~, ~project~
 
 + Org-Header Property :: Header properties provide additional context
@@ -1751,6 +1774,11 @@ for agenda display.
 
 #+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
+
+;; Constants used by org-capture templates
+(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
+(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+
 (setopt org-agenda-files (list my-agenda-dir))
 #+end_src
 
@@ -1791,7 +1819,8 @@ state. In other words, no further action is necessary.
                                       "VERIFY(v@)"
                                       "HOLD/WAIT(h@)"
                                       "REVIEW(r@)"
-                                      "RESPOND(R@)"
+                                      "COMMENT(c@)"
+                                      "MESSAGE(m@)"
                                       "|" "DONE(d!)"
                                       "DELEGATED(o@)"
                                       "DROPPED(D@)")))
@@ -1842,12 +1871,7 @@ org-set-tags-command~ (~C-c C-q~) sets the tags for the current visible entry.
 
 #+begin_src emacs-lisp
 (setopt org-tag-alist
-        '(;; Setting Context
-          ("@home" . ?H)
-          ("@personal" . ?W)
-
-          ;; Subject Context
-          ("bug" . ?b)
+        '(("bug" . ?b)
           ("note" . ?n)
           ("emacs" . ?e)
           ("tools" . ?t)
@@ -1863,21 +1887,33 @@ headlines.
 (setopt org-auto-align-tags t)
 #+end_src
 
+**** Exclude Tag Inheritance
+
+By default, =org-use-tag-inheritance= is set to ~t~. Therefore, second-level =task=
+items will inherit tags assigned to the top-level =project= header. Mentioned in
+[[id:d8b34f34-e59a-4ac7-8184-58bbe224c9b9][Approach]], a =project= TODO is defined as a top-level header and related =tasks=
+will be filed as second-level headers. I intend to use the ~:project:~ tag to
+define =project= TODO. Adding ~:project:~ to =org-tags-exclude-from-inheritance=
+setting provides a way to delineate between =project= TODO and related =task=
+items.
+
+#+begin_src emacs-lisp
+(setopt org-tags-exclude-from-inheritance '("project"))
+#+end_src
+
+
 *** Agenda Capture Templates
 
 #+begin_src emacs-lisp
-;; Must specify file for each template
-(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
-(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
-
 (setopt org-capture-templates
         '(("w" "Work Task Template" entry (file work-agenda-file)
-           "* TODO %^{Task} %(org-set-tags \"@work\")%^G
+           "* TODO %^{Task} %^G
 :PROPERTIES:
 :project: %^{Project}
-:git_issue: #%^{Git Issue|None}
 :repo: %^{Repository}
 :branch: %^{Branch}
+:git_issue: #%^{Git Issue|None}
+:merge_request: !%^{MR|None}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
@@ -1888,7 +1924,7 @@ headlines.
            :kill-buffer t)
 
           ("p" "Personal Task Template" entry (file personal-agenda-file)
-           "* TODO %^{Task} %(org-set-tags \"@personal\")%^G
+           "* TODO %^{Task} %^G
 :PROPERTIES:
 :project: %^{Git Issue|None}
 :END:
@@ -1901,7 +1937,7 @@ headlines.
            :kill-buffer t)
 
           ("r" "Merge Request Task Template" entry (file work-agenda-file)
-           "* REVIEW %^{Task} %(org-set-tags \"@work\")%^G
+           "* REVIEW %^{Task} %^G
 :PROPERTIES:
 :project: %^{Project}
 :repo: %^{Repository}
