@@ -1,5 +1,5 @@
 ;;; init-dired.el --- Emacs configuration file  -*- lexical-binding: t; no-byte-compile: t -*-
-;; Copyright (C) 2024-2024 Jonathan A. Harris
+;; Copyright (C) 2024-2025 Jonathan A. Harris
 
 ;; Author: Jonathan A. Harris, MSc.
 ;; Keywords: configuration
