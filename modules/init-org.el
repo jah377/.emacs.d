@@ -131,14 +131,25 @@
 (setopt org-tags-exclude-from-inheritance '("project"))
 
 ;; Constants used by org-capture templates
-(defconst work-agenda-file (concat my-agenda-dir "agenda_work.org"))
-(defconst personal-agenda-file (concat my-agenda-dir "agenda_personal.org"))
+(defconst my-agenda-file-work (concat my-agenda-dir "agenda_work.org"))
+(defconst my-agenda-file-personal (concat my-agenda-dir "agenda_personal.org"))
 
 (setopt org-capture-templates
-        '(("w" "Work Task Template" entry (file work-agenda-file)
+        '(("w" "WORK Templates")
+          ("wp" "Work Project" entry (file my-agenda-file-work)
+           "* %^{Project} [/] %(org-set-tags \"project\")
+:PROPERTIES:
+:project: %^{project-name}
+:END:
+
+%?
+"
+           :empty-lines 1
+           :kill-buffer t)
+
+          ("wt" "Work Todo" entry (file my-agenda-file-work)
            "* TODO %^{Task} %^G
 :PROPERTIES:
-:project: %^{Project}
 :repo: %^{Repository}
 :branch: %^{Branch}
 :git_issue: #%^{Git Issue|None}
@@ -146,40 +157,50 @@
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
-
   %?
 :END:"
            :empty-lines 1
-           :kill-buffer t)
+           :jump-to-captured t)
 
-          ("r" "Merge Request Task Template" entry (file work-agenda-file)
-           "* REVIEW %^{Task} %^G
+          ("wr" "Work Review" entry (file my-agenda-file-work)
+           "* REVIEW %^{Task} %(org-set-tags \"review\")%^G
 :PROPERTIES:
-:project: %^{Project}
 :repo: %^{Repository}
 :branch: %^{Branch}
-:merge-review: !%^{Git Issue|None}
+:merge_request: !%^{MR|None}
+:requester: %^{Requester}
 :END:
 :LOGBOOK:
 - State \"REVIEW\"       from              %U
-
   %?
 :END:"
+           :empty-lines 1
+           :jump-to-capture t)
+
+          ("p" "PERSONAL Templates")
+          ("pp" "Personal Product" entry (file my-agenda-file-personal)
+           "* %^{Project} [/] %(org-set-tags \"project\")
+:PROPERTIES:
+:project: %^{project-name}
+:END:
+
+%?
+"
            :empty-lines 1
            :kill-buffer t)
 
-          ("p" "Personal Task Template" entry (file personal-agenda-file)
+          ("pt" "Personal Todo" entry (file my-agenda-file-personal)
            "* TODO %^{Task} %^G
 :PROPERTIES:
-:project: %^{None}
+:repo: %^{Repository}
+:branch: %^{Branch}
 :END:
 :LOGBOOK:
 - State \"TODO\"       from              %U
-
   %?
 :END:"
            :empty-lines 1
-           :kill-buffer t)))
+           :jump-to-captured t)))
 
 (setopt org-agenda-remove-tags t)
 
