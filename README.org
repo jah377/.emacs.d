@@ -1850,6 +1850,26 @@ the latest note entry will be located at the bottom of the list.
         org-log-states-order-reversed nil)
 #+end_src
 
+**** Hierarchical TODO Statistics
+
+As outlined in [[id:d8b34f34-e59a-4ac7-8184-58bbe224c9b9][Approach]], project-related =tasks= are organized in top-level
+=project= headers. It is possible to display the fraction or percentage of
+completed project-related tasks by adding ~[/]~ or ~[%]~ in the top-level
+header. *N.B.* I include this in the =org-capture-templates=; see [[id:7fbf08ac-d4c9-4605-9f44-94570c2a7273][Agenda Capture
+Templates]].
+
+The following is copied from [[https://orgmode.org/manual/Breaking-Down-Tasks.html][orgmode.org]] to automatically change a =project= TODO
+entry to DONE when all children =tasks= are completed.
+
+#+begin_src emacs-lisp
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all sub-entries are done, to TODO otherwise."
+  (let (org-log-done org-todo-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook 'org-after-todo-statistics-hook #'org-summary-todo)
+#+end_src
+
 *** Agenda TAG Settings
 **** Fast Tag Selection
 
@@ -1871,6 +1891,7 @@ org-set-tags-command~ (~C-c C-q~) sets the tags for the current visible entry.
           ("note" . ?n)
           ("emacs" . ?e)
           ("tools" . ?t)
+          ("reviews" . ?r)
           ("project" . ?p)))
 #+end_src
 
@@ -1895,9 +1916,13 @@ items.
 
 #+begin_src emacs-lisp
 (setopt org-tags-exclude-from-inheritance '("project"))
+(setopt org-use-property-inheritance '("project"))
 #+end_src
 
 *** Agenda Capture Templates
+:PROPERTIES:
+:ID:       7fbf08ac-d4c9-4605-9f44-94570c2a7273
+:END:
 
 #+begin_src emacs-lisp
 ;; Constants used by org-capture templates
@@ -1909,13 +1934,14 @@ items.
 (setopt org-capture-templates
         '(("w" "WORK Templates")
           ("wp" "Work Project" entry (file my-agenda-file-work)
-           "* %^{Project} [/] %(org-set-tags \"project\")
+           "* TODO %^{Project} [/] %(org-set-tags \"project\")
 :PROPERTIES:
 :project: %^{project-name}
 :END:
-
-%?
-"
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
            :empty-lines 1
            :kill-buffer t)
 
@@ -1951,13 +1977,14 @@ items.
 
           ("p" "PERSONAL Templates")
           ("pp" "Personal Product" entry (file my-agenda-file-personal)
-           "* %^{Project} [/] %(org-set-tags \"project\")
+           "* TODO %^{Project} [/] %(org-set-tags \"project\")
 :PROPERTIES:
 :project: %^{project-name}
 :END:
-
-%?
-"
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
            :empty-lines 1
            :kill-buffer t)
 
@@ -2008,11 +2035,15 @@ options (implemented in [[id:dd0e3646-9554-4b81-89cc-e48e2dd485bc][Agenda Custom
 
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
-      '(("e" "Personal Emacs Tasks"
-         ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
-                       (org-super-agenda-groups '((:discard (:not (:tag ("personal" "emacs"))))
-                                                  (:discard (:tag "work"))
-                                                  (:auto-property "project")))))))))
+      '(("w" "MLP: Project Planning"
+         ((alltodo "" ((org-agenda-overriding-header "Work Projects")
+                       (org-super-agenda-groups
+                        '((:discard (:not (:tag ("work"))))
+                          (:auto-parent t)))))))
+        ("r" "MLP: Merge Request Review"
+         ((alltodo "" ((org-agenda-overriding-header "MLP: Active MRs")
+                       (org-super-agenda-groups
+                        '((:discard (:not (:tag "work" "review")))))))))))
 #+end_src
 
 ** Provide init-org.el

@@ -117,6 +117,13 @@
 (setopt org-log-into-drawer t
         org-log-states-order-reversed nil)
 
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all sub-entries are done, to TODO otherwise."
+  (let (org-log-done org-todo-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook 'org-after-todo-statistics-hook #'org-summary-todo)
+
 (setopt org-use-fast-tag-selection 'auto)
 
 (setopt org-tag-alist
@@ -124,11 +131,13 @@
           ("note" . ?n)
           ("emacs" . ?e)
           ("tools" . ?t)
+          ("reviews" . ?r)
           ("project" . ?p)))
 
 (setopt org-auto-align-tags t)
 
 (setopt org-tags-exclude-from-inheritance '("project"))
+(setopt org-use-property-inheritance '("project"))
 
 ;; Constants used by org-capture templates
 (defconst my-agenda-file-work (concat my-agenda-dir "agenda_work.org"))
@@ -137,13 +146,14 @@
 (setopt org-capture-templates
         '(("w" "WORK Templates")
           ("wp" "Work Project" entry (file my-agenda-file-work)
-           "* %^{Project} [/] %(org-set-tags \"project\")
+           "* TODO %^{Project} [/] %(org-set-tags \"project\")
 :PROPERTIES:
 :project: %^{project-name}
 :END:
-
-%?
-"
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
            :empty-lines 1
            :kill-buffer t)
 
@@ -179,13 +189,14 @@
 
           ("p" "PERSONAL Templates")
           ("pp" "Personal Product" entry (file my-agenda-file-personal)
-           "* %^{Project} [/] %(org-set-tags \"project\")
+           "* TODO %^{Project} [/] %(org-set-tags \"project\")
 :PROPERTIES:
 :project: %^{project-name}
 :END:
-
-%?
-"
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
            :empty-lines 1
            :kill-buffer t)
 
@@ -213,11 +224,15 @@
   (set-face-attribute 'org-super-agenda-header nil :weight 'bold))
 
 (setq org-agenda-custom-commands
-      '(("e" "Personal Emacs Tasks"
-         ((alltodo "" ((org-agenda-overriding-header "Emacs TODOs")
-                       (org-super-agenda-groups '((:discard (:not (:tag ("personal" "emacs"))))
-                                                  (:discard (:tag "work"))
-                                                  (:auto-property "project")))))))))
+      '(("w" "MLP: Project Planning"
+         ((alltodo "" ((org-agenda-overriding-header "Work Projects")
+                       (org-super-agenda-groups
+                        '((:discard (:not (:tag ("work"))))
+                          (:auto-parent t)))))))
+        ("r" "MLP: Merge Request Review"
+         ((alltodo "" ((org-agenda-overriding-header "MLP: Active MRs")
+                       (org-super-agenda-groups
+                        '((:discard (:not (:tag "work" "review")))))))))))
 
 (provide 'init-org)
 ;;; init-org.el ends here
