@@ -1818,6 +1818,7 @@ state. In other words, no further action is necessary.
                                       "COMMENT(c@)"
                                       "MESSAGE(m@)"
                                       "|" "DONE(d!)"
+                                      "MERGED(M!)"
                                       "DELEGATED(o@)"
                                       "DROPPED(D@)")))
 #+end_src

@@ -109,6 +109,7 @@
                                       "COMMENT(c@)"
                                       "MESSAGE(m@)"
                                       "|" "DONE(d!)"
+                                      "MERGED(M!)"
                                       "DELEGATED(o@)"
                                       "DROPPED(D@)")))
 
