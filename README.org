@@ -2611,6 +2611,29 @@ deleted since the previous commit.
     :config (global-git-gutter-mode)))
 #+end_src
 
+** DevDocs
+
+=devdocs-browser= is an Emacs package that provides an interface to [[https://devdocs.io/][DevDocs.io]], a
+popular documentation aggregator for programming languages and
+libraries. Documents must be installed, which are done programmatically and
+stored in ~devdocs-browser-data-directory~.
+
+#+begin_src emacs-lisp
+(use-package devdocs-browser
+  :bind ("C-h D" . devdocs-browser-open-in)
+  :custom
+  (devdocs-browser-data-directory (concat my-persist-dir "no-littering/devdocs"))
+  :config
+  ;; Programmatically install documentation
+  (dolist (doc '("python~3.11"
+                 "pytorch~2"
+                 "pandas~2"
+                 "matplotlib~3.8"
+                 "numpy~2.0"
+                 "scikit_learn"))
+    (devdocs-browser-install-doc doc)))
+#+end_src
+
 ** Virtual Terminal
 
 =vterm= is an Emacs package providing a terminal emulator inside Emacs. Based on

@@ -90,6 +90,20 @@
     :commands git-gutter-mode
     :config (global-git-gutter-mode)))
 
+(use-package devdocs-browser
+  :bind ("C-h D" . devdocs-browser-open-in)
+  :custom
+  (devdocs-browser-data-directory (concat my-persist-dir "no-littering/devdocs"))
+  :config
+  ;; Programmatically install documentation
+  (dolist (doc '("python~3.11"
+                 "pytorch~2"
+                 "pandas~2"
+                 "matplotlib~3.8"
+                 "numpy~2.0"
+                 "scikit_learn"))
+    (devdocs-browser-install-doc doc)))
+
 (use-package vterm
   :defer t
   :commands vterm
