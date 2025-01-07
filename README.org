@@ -36,6 +36,9 @@ are generated from this file by calling ~org-babel-tangle~ (~C-c C-v t~) and sto
 in the =/modules= sub-directory. As such, changes should be made in this
 document, not in the individual =.el= files.
 
+*N.B.* I will use ~setopt~, introduced in Emacs 29.1, in preference to ~setq~ to
+type-check and run custom setter.
+
 * Resources
 :PROPERTIES:
 :visibility: folded
