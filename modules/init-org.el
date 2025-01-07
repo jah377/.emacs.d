@@ -98,6 +98,10 @@
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
 (setopt org-agenda-files (list my-agenda-dir))
 
+;; Constants used by org-capture templates
+(defconst my-agenda-file-work (concat my-agenda-dir "agenda_work.org"))
+(defconst my-agenda-file-personal (concat my-agenda-dir "agenda_personal.org"))
+
 (setopt org-agenda-window-setup 'only-window
         org-agenda-restore-windows-after-quit t)
 
@@ -140,9 +144,7 @@
 (setopt org-tags-exclude-from-inheritance '("project"))
 (setopt org-use-property-inheritance '("project"))
 
-;; Constants used by org-capture templates
-(defconst my-agenda-file-work (concat my-agenda-dir "agenda_work.org"))
-(defconst my-agenda-file-personal (concat my-agenda-dir "agenda_personal.org"))
+
 
 (setopt org-capture-templates
         '(("w" "WORK Templates")
@@ -228,12 +230,20 @@
       '(("w" "MLP: Project Planning"
          ((alltodo "" ((org-agenda-overriding-header "Work Projects")
                        (org-super-agenda-groups
+                        ;; 'my-agenda-file-work' has "work" filetag
                         '((:discard (:not (:tag ("work"))))
-                          (:auto-parent t)))))))
+                          (:auto-parent t)
+                          (:discard (:tag "project"))))))))
         ("r" "MLP: Merge Request Review"
          ((alltodo "" ((org-agenda-overriding-header "MLP: Active MRs")
                        (org-super-agenda-groups
-                        '((:discard (:not (:tag "work" "review")))))))))))
+                        '((:discard (:not (:tag "work" "review")))))))))
+        ("p" "Personal"
+         ((alltodo "" ((org-agenda-overriding-header "Personal Projects")
+                       (org-super-agenda-groups
+                        '((:discard (:not (:tag "personal")))
+                          (:auto-parent t)
+                          (:discard (:tag "project"))))))))))
 
 (provide 'init-org)
 ;;; init-org.el ends here

@@ -1768,6 +1768,9 @@ Calling ~M-x org-refile~ (~C-c C-w~) instead of ~C-c C-c~ will "re-file" a =task
 under a =project= top-level header.
 
 *** Agenda Files
+:PROPERTIES:
+:ID:       4482073c-1c7e-4457-b196-cd38e1471f05
+:END:
 
 =org-agenda-files= variable defines the file(s) and/or directory(s) to be used
 for agenda display.
@@ -1775,6 +1778,16 @@ for agenda display.
 #+begin_src emacs-lisp
 (defconst my-agenda-dir (concat my-persist-dir "agendas/"))
 (setopt org-agenda-files (list my-agenda-dir))
+#+end_src
+
+Here, we create shorthand variable names for specific agenda files, which
+simplifies [[id:7fbf08ac-d4c9-4605-9f44-94570c2a7273][Agenda Capture Templates]] where we must specify the destination file
+of the TODO template.
+
+#+begin_src emacs-lisp
+;; Constants used by org-capture templates
+(defconst my-agenda-file-work (concat my-agenda-dir "agenda_work.org"))
+(defconst my-agenda-file-personal (concat my-agenda-dir "agenda_personal.org"))
 #+end_src
 
 *** Agenda Window Behavior
@@ -1906,6 +1919,9 @@ headlines.
 #+end_src
 
 **** Exclude Tag Inheritance
+:PROPERTIES:
+:ID:       d2dad69f-1b9c-4f05-bfb7-a88a99d498dc
+:END:
 
 By default, =org-use-tag-inheritance= is set to ~t~. Therefore, second-level =task=
 items will inherit tags assigned to the top-level =project= header. Mentioned in
@@ -1926,9 +1942,7 @@ items.
 :END:
 
 #+begin_src emacs-lisp
-;; Constants used by org-capture templates
-(defconst my-agenda-file-work (concat my-agenda-dir "agenda_work.org"))
-(defconst my-agenda-file-personal (concat my-agenda-dir "agenda_personal.org"))
+
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2034,17 +2048,43 @@ options (implemented in [[id:dd0e3646-9554-4b81-89cc-e48e2dd485bc][Agenda Custom
 :ID:       dd0e3646-9554-4b81-89cc-e48e2dd485bc
 :END:
 
+=org-agenda-custom-commands= setting specifies different "views" of our TODO
+items.
+
++ :discard :: Used to isolate tasks displayed in agenda view
+  - [[id:4482073c-1c7e-4457-b196-cd38e1471f05][Agenda Files]] contain at least one ~:filetag~ which is useful for isolating
+    work- or personal-specific tasks
+
++ :auto-parent :: Set to ~t~ groups tasks under a parent header in agenda view
+  - Non-project related tasks are grouped under "Other Items" header
+
++ :discard (:tag "project") :: To drop Project TODO header by excluding tasks
+  with ~:project:~ header
+  - While project-related tasks are grouped under a parent header, the Project
+    header in the agenda files are considered as a separate TODO -- which is
+    displayed under "Other Items" header. *Annoying*.
+  - ~:project:~ tag not inherited by project-related tasks (see [[id:d2dad69f-1b9c-4f05-bfb7-a88a99d498dc][Exclude Tag Inheritance]])
+
+
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
       '(("w" "MLP: Project Planning"
          ((alltodo "" ((org-agenda-overriding-header "Work Projects")
                        (org-super-agenda-groups
+                        ;; 'my-agenda-file-work' has "work" filetag
                         '((:discard (:not (:tag ("work"))))
-                          (:auto-parent t)))))))
+                          (:auto-parent t)
+                          (:discard (:tag "project"))))))))
         ("r" "MLP: Merge Request Review"
          ((alltodo "" ((org-agenda-overriding-header "MLP: Active MRs")
                        (org-super-agenda-groups
-                        '((:discard (:not (:tag "work" "review")))))))))))
+                        '((:discard (:not (:tag "work" "review")))))))))
+        ("p" "Personal"
+         ((alltodo "" ((org-agenda-overriding-header "Personal Projects")
+                       (org-super-agenda-groups
+                        '((:discard (:not (:tag "personal")))
+                          (:auto-parent t)
+                          (:discard (:tag "project"))))))))))
 #+end_src
 
 ** Provide init-org.el
