@@ -120,22 +120,15 @@
   :hook (emacs-lisp-mode))
 
 (use-package helpful
+  :custom
+  (helpful-max-buffers 1)
   :bind
-  (("C-h k" . helpful-kill-buffers)
-    ("C-h j" . helpful-at-point)
-    ("C-h f" . helpful-callable)
-    ("C-h F" . helpful-function)
-    ("C-h v" . helpful-variable)
-    ("C-h k" . helpful-key)
-    ("C-h c" . helpful-command)
-    ("C-h m" . helpful-mode)
-    ("C-h M" . describe-macro))
-  :config
-  ;; Must define here to ensure underlying function defined in
-  ;; 'init-emacs' is loaded before 'helpful'.
-  (defun my/helpful-kill-all-buffers ()
-    (interactive)
-    (my/kill-buffers-by-mode 'help-mode 'helpful-mode)))
+  (("C-h k" . helpful-key)
+   ("C-h f" . helpful-function)
+   ("C-h c" . helpful-callable)
+   ("C-h p" . helpful-at-point)
+   ("C-h v" . helpful-variable)
+   ("C-h m" . helpful-macro)))
 
 (use-package yaml-mode
   :mode ("\\.yml\\'" "\\.yaml\\'"))
