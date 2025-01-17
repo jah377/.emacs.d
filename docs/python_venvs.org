@@ -124,3 +124,15 @@ uv venv ~/.virtualenvs/tools
 # Example: jupyter required to make kernels
 uv pip install jupyter
 #+end_src
+
+** Create Jupyter Kernels
+
+We are interested creating =Jupyter kernels= (see [[id:4d2b331f-7ced-46b2-a764-db4ff2b79688][Jupyter Kernels]]). It is
+possible to create a =kernel= from a =venv= by doing the following:
+
+#+begin_src sh
+workon example_venv
+
+# Create kernel from 'example_venv'
+python3 -m ipykernel install --user --name example_venv
+#+end_src
