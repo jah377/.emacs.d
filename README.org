@@ -2698,18 +2698,23 @@ functions, variables, keybindings, and more.
 #+end_src
 
 ** Python
-*** Python.el
+*** Basics
+
+=python.el= is a /built-in/ Emacs package providing =python-mode= for editing python
+files. The major-mode provides some fontification as well as syntax
+highlighting, indentation, and movement functions.
+
+*N.B.* The package also provides =inferior-python-mode= which runs a Python
+interpreter (python shell) as a sub-process of Emacs. The =inferior python
+process= does not contain fontification and cannot display images. This
+configuration will instead rely on =Jupyter Kernels= (see [[id:4d2b331f-7ced-46b2-a764-db4ff2b79688][Jupyter REPLS]]).
 
 #+begin_src emacs-lisp
 (use-package python
   :ensure nil
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :config (make-variable-buffer-local 'python-shell-virtualenv-root)
   :custom
-  (python-shell-interprter "ipython")
-  ;; At minimum, must include '--simple-prompt' if using ipython
-  (python-shell-interpreter-args "--simple-prompt --classic")
   ;; 3rd party py-files may have different indentation; disable if guess fails
   (python-indent-guess-indent-offest t)
   (python-indent-guess-indent-offset-verbose nil)
