@@ -83,3 +83,24 @@ use [[https://github.com/astral-sh/uv][uv]], an extremely fast alternative writt
 curl -LsSf https://astral.sh/uv/install.sh | sh
 #+end_src
 
+** Create 'tool' VENV
+
+Many python packages provide applications that can be used as tools. Creating a
+separate =tool= environment is a practical strategy for managing development
+tools. Advantages include:
+
++ Isolate Dependencies :: Dependencies of linters like =flake8=, formatters like
+  =black= and language servers like =pyright= will not conflict with
+  project-specific dependencies.
+
++ Global Pollution :: Tools do not need to be installed globally in
+  system-level python
+
+#+begin_src sh
+# Create venv using 'uv'
+# Note: ~/.virtualenvs created by 'virtualenvwrapper'
+uv venv ~/.virtualenvs/tools
+
+# Example: jupyter required to make kernels
+uv pip install jupyter
+#+end_src
