@@ -137,16 +137,29 @@
   :ensure nil
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :config (make-variable-buffer-local 'python-shell-virtualenv-root)
   :custom
-  (python-shell-interprter "ipython")
-  ;; At minimum, must include '--simple-prompt' if using ipython
-  (python-shell-interpreter-args "--simple-prompt --classic")
   ;; 3rd party py-files may have different indentation; disable if guess fails
   (python-indent-guess-indent-offest t)
   (python-indent-guess-indent-offset-verbose nil)
   ;; Modified pep-257 removes new-line at end of docstring
   (python-fill-docstring-style 'pep-257-nn))
+
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize)
+  (add-to-list 'exec-path (expand-file-name "~/.virtualenvs/tools/bin")))
+
+(use-package jupyter
+  :demand t
+  :after (all org python ob)
+  :custom
+  (org-babel-default-header-args:jupyter-python
+   '((:session . "py")
+     (:kernel . "python3")
+     (:comments . "link")
+     (:async . "yes")))
+  :config
+  (require 'ob-jupyter))
 
 (provide 'init-dev)
 ;;; init-dev.el ends here
