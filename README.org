@@ -2722,7 +2722,27 @@ configuration will instead rely on =Jupyter Kernels= (see [[id:4d2b331f-7ced-46b
   (python-fill-docstring-style 'pep-257-nn))
 #+end_src
 
-*** Jupyter Kernels
+*** Virtual Environments
+**** Add Executable Path
+
+The =exec-path-from-shell= package is a tool to ensure that Emacs correctly
+inherits environment variables from your shell, particularly on systems like
+macOS where Emacs launched from a GUI often does not inherit the user's shell
+environment.
+
+Here, we add our =tools= =venv= containing python applications. It is necessary to
+add this path to ~exec-path~ as the applications will serve as the back-end for
+various Emacs packages that provide, for instance, code formatting or LSP
+functionality.
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize)
+  (add-to-list 'exec-path (expand-file-name "~/.virtualenvs/tools/bin")))
+#+end_src
+
+**** Jupyter Kernels
 :PROPERTIES:
 :ID:       4d2b331f-7ced-46b2-a764-db4ff2b79688
 :END:
