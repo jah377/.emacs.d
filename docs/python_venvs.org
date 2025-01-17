@@ -71,3 +71,15 @@ workon example_venv
 # Remove venv
 rmvirtualenv example_venv
 #+end_src
+
+** Python Package Manager
+
+In python, =pip= is the default package manager used to install, manage, and
+remove python libraries and dependencies. However, it is slow. Instead, we will
+use [[https://github.com/astral-sh/uv][uv]], an extremely fast alternative written in =Rust=.
+
+#+begin_src sh
+# By default, installed to '/home/jon/.local/bin'
+curl -LsSf https://astral.sh/uv/install.sh | sh
+#+end_src
+
