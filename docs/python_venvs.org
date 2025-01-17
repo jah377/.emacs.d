@@ -34,3 +34,40 @@ source <venv-path>/example_venv/bin/activate
 rm -r <venv-path>/example_venv
 #+end_src
 
+* Preliminaries
+** Virtual Environment Manager
+
+=virtualenvwrapper= is an extension that makes creating, deleting, and managing
+=venvs= easier. The package centralizes virtual environments in
+~$WORKON_HOME=$HOME/.virtualenvs~ and provides user-friendly CLI commands for
+managing and switching between =venvs=.
+
+To install on Arch Linux:
+
+#+begin_src sh
+# To intsall on Arch Linux:
+yay python-virtualenvwrapper
+#+end_src
+
+To access the CLI commands every time, the following must be added to =.bashrc=:
+
+#+begin_src sh
+source /usr/bin/virtualenvwrapper.sh
+source /usr/bin/virtualenvwrapper_lazy.sh
+#+end_src
+
+Now, working on =venvs= is much easier:
+
+#+begin_src sh
+# Create venv; default location = ~/.virtualenvs
+mkvirtualenv example_venv
+
+# Activate venv
+workon example_venv
+
+# Load packages
+...
+
+# Remove venv
+rmvirtualenv example_venv
+#+end_src
