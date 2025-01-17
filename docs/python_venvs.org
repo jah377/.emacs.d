@@ -9,6 +9,9 @@ organizing =python= virtual environments (=venv=).
 
 * Background
 ** Creating a Virtual Environment
+:PROPERTIES:
+:ID:       bfb0a056-b50f-47e4-a229-0fbba6e19b54
+:END:
 
 Working with =venv= requires three steps: (1) installing =virtualenv=, (2) creating
 the =venv=, and (3) activating it. *N.B.* This assumes =pip= is installed.
@@ -81,6 +84,23 @@ use [[https://github.com/astral-sh/uv][uv]], an extremely fast alternative writt
 #+begin_src sh
 # By default, installed to '/home/jon/.local/bin'
 curl -LsSf https://astral.sh/uv/install.sh | sh
+#+end_src
+
+In [[id:bfb0a056-b50f-47e4-a229-0fbba6e19b54][Creating a Virtual Environment]], we created a =venv= using =pip= (slow). Here, we
+create a =venv= using =uv= (fast).
+
+#+begin_src sh
+# Create 'example_venv'; specifying python version not necessary
+uv venv ~/.virtualenvs/example_venv --python 3.12
+
+# Activate using virtualenvwrapper.sh
+workon example_venv
+
+# Install packages
+uv pip install pandas numpy matplotlib
+
+# Remove venv
+rmvirtualenv example_venv
 #+end_src
 
 ** Create 'tool' VENV
