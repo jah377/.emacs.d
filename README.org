@@ -2726,14 +2726,12 @@ configuration will instead rely on =Jupyter Kernels= (see [[id:4d2b331f-7ced-46b
 **** Add Executable Path
 
 The =exec-path-from-shell= package is a tool to ensure that Emacs correctly
-inherits environment variables from your shell, particularly on systems like
-macOS where Emacs launched from a GUI often does not inherit the user's shell
-environment.
-
-Here, we add our =tools= =venv= containing python applications. It is necessary to
-add this path to ~exec-path~ as the applications will serve as the back-end for
-various Emacs packages that provide, for instance, code formatting or LSP
-functionality.
+inherits environment variables such as ~$PATH~ (bash convention) from your
+shell. This is particularly relevant as we wish to make Emacs, and =eglot=, aware
+of our =tool= virtual environment containing python applications. It is necessary
+to add the =venv= path to ~exec-path~ as the applications will serve as the
+back-end for various Emacs packages that provide, for instance, code formatting
+or LSP functionality.
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
