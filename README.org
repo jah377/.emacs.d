@@ -2300,6 +2300,16 @@ are scrolled over in the minibuffer.
   )
 #+end_src
 
+** Yasnippet
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :bind ("C-M-y" . yas-expand)
+  :config (yas-global-mode 1)
+  :custom
+  (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
+#+end_src
+
 ** Provide init-completion.el
 
 #+begin_src emacs-lisp
