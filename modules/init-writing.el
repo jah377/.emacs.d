@@ -81,6 +81,14 @@
   :after (consult denote)
   :commands (consult-denote-find))
 
+(use-package auctex
+  :mode "\\.tex\\'"
+  :custom
+  ;; See https://elpa.gnu.org/packages/doc/auctex.html#Quick-Start
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+  (TeX-master nil))
+
 (provide 'init-writing)
 
 ;;; init-writing.el ends here

@@ -2880,6 +2880,31 @@ functions:
   :commands (consult-denote-find))
 #+end_src
 
+** Latex
+*** auctex
+
+=auctex= is an advanced editing environment for =LaTeX= and other =TeX=-related
+formats in Emacs. Functionality provided includes syntax highlighting, command
+completion, document navigation, error parsing, and preview functionality. *N.B.*
+Prerequisites include:
+
++ texlive-full :: Collection of tools, programs, and libraries for =TeX= files
++ pdflatex :: =LaTex= engine that produces PDF files from ~.tex~ source files
+
+Useful commands include:
++ M-x LaTeX-section :: ~C-c C-s~ to insert a template for a =LaTeX= section
++ M-x TeX-error-overview :: To see formatted list of compiler errors/warnings
+
+#+begin_src emacs-lisp
+(use-package auctex
+  :mode "\\.tex\\'"
+  :custom
+  ;; See https://elpa.gnu.org/packages/doc/auctex.html#Quick-Start
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+  (TeX-master nil))
+#+end_src
+
 ** Provide init-writing.el
 
 #+begin_src emacs-lisp
