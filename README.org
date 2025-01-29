@@ -1945,10 +1945,6 @@ items.
 :END:
 
 #+begin_src emacs-lisp
-
-#+end_src
-
-#+begin_src emacs-lisp
 (setopt org-capture-templates
         '(("w" "WORK Templates")
           ("wp" "Work Project" entry (file my-agenda-file-work)
@@ -1979,7 +1975,7 @@ items.
            :jump-to-captured t)
 
           ("wr" "Work Review" entry (file my-agenda-file-work)
-           "* REVIEW %^{Task} %(org-set-tags \"review\")%^G
+           "* REVIEW %^{Task} (org-set-tags \"review\")
 :PROPERTIES:
 :repo: %^{Repository}
 :branch: %^{Branch}
