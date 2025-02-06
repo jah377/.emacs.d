@@ -2305,7 +2305,11 @@ are scrolled over in the minibuffer.
   )
 #+end_src
 
-** Yasnippet
+** TODO Yasnippet
+:LOGBOOK:
+- State "TODO"       from              [2025-02-06 Thu 15:25]
+  Cannot get =git-commit-mode= snippets to expand
+:END:
 
 =yasnippets= is a 3rd party Emacs package that provides a powerful snippet
 template system. Snippets are stored in =~/.emacs.d/snippets/= and can be
