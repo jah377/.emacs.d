@@ -2307,6 +2307,17 @@ are scrolled over in the minibuffer.
 
 ** Yasnippet
 
+=yasnippets= is a 3rd party Emacs package that provides a powerful snippet
+template system. Snippets are stored in =~/.emacs.d/snippets/= and can be
+inserted by typing the snippet ~key:~ and then calling ~M-x yas-expand~.
+
+The =consult-yasnippet= Emacs package expands [[id:8b393fcc-9d43-4afb-b249-9a72bc6089ea][Consult]] and provides consult-read
+interface for snippets. Calling ~M-x consult-yasnippet~ will display all snippets
+(and their ~key:~) available for the current mode.
+
+*N.B* [[https://github.com/AndreaCrotti/yasnippet-snippets/tree/master][yasnippet-snippets]] contains a comprehensive list of snippets. Most are
+irrelevant so the package is not currently included in the configuration.
+
 #+begin_src emacs-lisp
 (use-package yasnippet
   :bind ("C-M-y" . yas-expand)
