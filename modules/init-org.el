@@ -158,7 +158,7 @@
            :empty-lines 1
            :kill-buffer t)
 
-          ("wt" "Work Todo" entry (file my-agenda-file-work)
+          ("wt" "Work Todo (repo)" entry (file my-agenda-file-work)
            "* TODO %^{Task} %^G
 :PROPERTIES:
 :repo: %^{Repository}
@@ -166,6 +166,15 @@
 :git_issue: #%^{Git Issue|None}
 :merge_request: !%^{MR|None}
 :END:
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
+           :empty-lines 1
+           :jump-to-captured t)
+
+("wT" "Work Todo (no repo)" entry (file my-agenda-file-work)
+           "* TODO %^{Task} %^G
 :LOGBOOK:
 - State \"TODO\"       from              %U
   %?
