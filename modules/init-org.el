@@ -144,8 +144,6 @@
 (setopt org-tags-exclude-from-inheritance '("project"))
 (setopt org-use-property-inheritance '("project"))
 
-
-
 (setopt org-capture-templates
         '(("w" "WORK Templates")
           ("wp" "Work Project" entry (file my-agenda-file-work)
@@ -176,7 +174,7 @@
            :jump-to-captured t)
 
           ("wr" "Work Review" entry (file my-agenda-file-work)
-           "* REVIEW %^{Task} %(org-set-tags \"review\")%^G
+           "* REVIEW %^{Task} (org-set-tags \"review\")
 :PROPERTIES:
 :repo: %^{Repository}
 :branch: %^{Branch}
