@@ -1,6 +1,6 @@
 # _*_ mode: snippet -*-
 # name: minimum org-file header
-# key: title
+# key: <h
 # --
 #+TITLE: ${0:`(read-string "Title of org-file: ")`}
 #+DATE: `(format-time-string "%A, %B %e, %Y")`
