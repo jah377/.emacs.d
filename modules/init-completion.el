@@ -156,5 +156,9 @@
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
 
+(use-package consult-yasnippet
+  :after (consult yasnippet)
+  :bind ("C-M-Y" . consult-yasnippet))
+
 (provide 'init-completion)
 ;;; init-completion.el ends here
