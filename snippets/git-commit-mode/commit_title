@@ -2,4 +2,4 @@
 # name: commit message header
 # key: commit
 # --
-[{$1}] ${2:$$(yas-choose-value '("Add" "Drop" "Fix" "Bump" "Start" "Refactor" "Optimise" "Document"))} $0
+${1:$$(yas-choose-value '("Add" "Drop" "Fix" "Bump" "Start" "Refactor" "Optimise" "Document"))} $0
