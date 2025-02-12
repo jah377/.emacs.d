@@ -2694,6 +2694,45 @@ stored in ~devdocs-browser-data-directory~.
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
 #+end_src
 
+** Code-Cells
+
+=code-cells= is an Emacs package that provides the ability to efficiently
+navigate, edit and execute code split into cells according to certain magic
+comments (i.e. regex pattern, ~code-cells-boundary-regexp~).
+
+#+begin_src emacs-lisp
+(use-package code-cells
+  :hook (python-mode emacs-lisp-mode)
+  :bind (("C-c C-c" . code-cells-eval)
+         ("M-p" . code-cells-backward-cell)
+         ("M-n" . code-cells-forward-cell)
+         ("M-D" . code-cells-kill)
+         ("M-W" . code-cells-copy)
+         ("M-I" . jh/code-cells-insert))
+  :custom
+  (code-cells-eval-region-commands
+   '((emacs-lisp-mode . eval-region)
+     (lisp-interaction-mode . eval-region)
+     (python-base-mode . jh/jupyter-eval-region-maybe)))
+  :config
+  (defun jh/jupyter-eval-region-maybe ()
+    "Call 'jupyter-eval-region' if available, otherwise use shell."
+    (if jupyter-current-client
+        'jupyter-eval-region
+      'python-shell-send-region))
+
+  (defun jh/code-cells-insert ()
+    (interactive)
+    (insert (substring code-cells-boundary-regexp 1))
+    (newline 2))
+
+  ;; Regex specifying cell boundary is language-specific
+  (dolist (pair '((emacs-lisp-mode . "^; %%")
+                  (python-mode . "^# %%")))
+    (add-hook (intern (concat (symbol-name (car pair)) "-hook"))
+              (lambda () (setq-local code-cells-boundary-regexp (cdr pair))))))
+#+end_src
+
 ** Lisp
 *** Automatic Indentation
 

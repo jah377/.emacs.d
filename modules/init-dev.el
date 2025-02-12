@@ -120,6 +120,37 @@
   (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
 
+(use-package code-cells
+  :hook (python-mode emacs-lisp-mode)
+  :bind (("C-c C-c" . code-cells-eval)
+         ("M-p" . code-cells-backward-cell)
+         ("M-n" . code-cells-forward-cell)
+         ("M-D" . code-cells-kill)
+         ("M-W" . code-cells-copy)
+         ("M-I" . jh/code-cells-insert))
+  :custom
+  (code-cells-eval-region-commands
+   '((emacs-lisp-mode . eval-region)
+     (lisp-interaction-mode . eval-region)
+     (python-base-mode . jh/jupyter-eval-region-maybe)))
+  :config
+  (defun jh/jupyter-eval-region-maybe ()
+    "Call 'jupyter-eval-region' if available, otherwise use shell."
+    (if jupyter-current-client
+        'jupyter-eval-region
+      'python-shell-send-region))
+
+  (defun jh/code-cells-insert ()
+    (interactive)
+    (insert (substring code-cells-boundary-regexp 1))
+    (newline 2))
+
+  ;; Regex specifying cell boundary is language-specific
+  (dolist (pair '((emacs-lisp-mode . "^; %%")
+                  (python-mode . "^# %%")))
+    (add-hook (intern (concat (symbol-name (car pair)) "-hook"))
+              (lambda () (setq-local code-cells-boundary-regexp (cdr pair))))))
+
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))
 
