@@ -152,7 +152,7 @@
   (defun jh/code-cells-set-locals (regexp)
     (lambda ()
         (setq-local code-cells-boundary-regexp regexp
-                    outline-regexp regexp))))
+                    outline-regexp regexp)))
 
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (setq-local code-cells-boundary-regexp "^; %%"
