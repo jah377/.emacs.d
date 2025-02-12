@@ -121,13 +121,15 @@
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
 
 (use-package code-cells
-  :hook (python-mode emacs-lisp-mode)
+  :hook ((python-mode emacs-lisp-mode)
+         (prog-mode . outline-minor-mode))
   :bind (("C-c C-c" . code-cells-eval)
          ("M-p" . code-cells-backward-cell)
          ("M-n" . code-cells-forward-cell)
          ("M-D" . code-cells-kill)
          ("M-W" . code-cells-copy)
-         ("M-I" . jh/code-cells-insert))
+         ("M-I" . jh/code-cells-insert)
+         ("C-<tab>" . outline-cycle))
   :custom
   (code-cells-eval-region-commands
    '((emacs-lisp-mode . eval-region)
@@ -142,14 +144,22 @@
 
   (defun jh/code-cells-insert ()
     (interactive)
+    (when (not (bolp))
+      (newline 2))
     (insert (substring code-cells-boundary-regexp 1))
     (newline 2))
 
-  ;; Regex specifying cell boundary is language-specific
-  (dolist (pair '((emacs-lisp-mode . "^; %%")
-                  (python-mode . "^# %%")))
-    (add-hook (intern (concat (symbol-name (car pair)) "-hook"))
-              (lambda () (setq-local code-cells-boundary-regexp (cdr pair))))))
+  (defun jh/code-cells-set-locals (regexp)
+    (lambda ()
+        (setq-local code-cells-boundary-regexp regexp
+                    outline-regexp regexp))))
+
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (setq-local code-cells-boundary-regexp "^; %%"
+                                                outline-regexp "^; %%")))
+  (add-hook 'python-mode-hook (lambda ()
+                                (setq-local code-cells-boundary-regexp "^# %%"
+                                            outline-regexp "^# %%"))))
 
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))
