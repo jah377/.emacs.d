@@ -2333,7 +2333,6 @@ irrelevant so the package is not currently included in the configuration.
   :bind ("C-M-y" . consult-yasnippet))
 #+end_src
 
-
 ** Provide init-completion.el
 
 #+begin_src emacs-lisp
