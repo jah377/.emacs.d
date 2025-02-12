@@ -151,14 +151,13 @@
   )
 
 (use-package yasnippet
-  :bind ("C-M-y" . yas-expand)
   :config (yas-global-mode 1)
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
 
 (use-package consult-yasnippet
   :after (consult yasnippet)
-  :bind ("C-M-Y" . consult-yasnippet))
+  :bind ("C-M-y" . consult-yasnippet))
 
 (provide 'init-completion)
 ;;; init-completion.el ends here
