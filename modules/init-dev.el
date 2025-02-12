@@ -41,6 +41,7 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status)
+  :after nerd-icons
   :diminish magit-minor-mode
   :hook (git-commit-mode . (lambda () (setq fill-column 72)))
   :mode ("/\\.gitmodules\\'" . conf-mode)
@@ -53,6 +54,9 @@
 
   ;; Open status buffer in same buffer
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+
+  ;; Enable file icons in 'magit-status'
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
   ;; Must define here to ensure underlying function defined in
   ;; 'init-emacs' is loaded before 'magit'.

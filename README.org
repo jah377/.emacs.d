@@ -2324,15 +2324,15 @@ irrelevant so the package is not currently included in the configuration.
 
 #+begin_src emacs-lisp
 (use-package yasnippet
-  :bind ("C-M-y" . yas-expand)
   :config (yas-global-mode 1)
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
 
 (use-package consult-yasnippet
   :after (consult yasnippet)
-  :bind ("C-M-Y" . consult-yasnippet))
+  :bind ("C-M-y" . consult-yasnippet))
 #+end_src
+
 
 ** Provide init-completion.el
 
@@ -2571,6 +2571,7 @@ within a repository.
 #+begin_src emacs-lisp
 (use-package magit
   :bind ("C-x g" . magit-status)
+  :after nerd-icons
   :diminish magit-minor-mode
   :hook (git-commit-mode . (lambda () (setq fill-column 72)))
   :mode ("/\\.gitmodules\\'" . conf-mode)
@@ -2583,6 +2584,9 @@ within a repository.
 
   ;; Open status buffer in same buffer
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+
+  ;; Enable file icons in 'magit-status'
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
   ;; Must define here to ensure underlying function defined in
   ;; 'init-emacs' is loaded before 'magit'.
