@@ -2722,6 +2722,8 @@ comments (i.e. regex pattern, ~code-cells-boundary-regexp~).
 
   (defun jh/code-cells-insert ()
     (interactive)
+    (when (not (bolp))
+      (newline 2))
     (insert (substring code-cells-boundary-regexp 1))
     (newline 2))
 
