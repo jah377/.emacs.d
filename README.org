@@ -2982,7 +2982,8 @@ Useful commands include:
   ;; See https://elpa.gnu.org/packages/doc/auctex.html#Quick-Start
   (TeX-auto-save t)
   (TeX-parse-self t)
-  (TeX-master nil))
+  (TeX-master nil)
+  (TeX-PDF-mode t))
 #+end_src
 
 ** Provide init-writing.el
