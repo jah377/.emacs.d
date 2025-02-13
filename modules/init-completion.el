@@ -150,5 +150,14 @@
   ;; (setopt consult-project-function (lambda (_) (projectile-project-root))))
   )
 
+(use-package yasnippet
+  :config (yas-global-mode 1)
+  :custom
+  (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
+
+(use-package consult-yasnippet
+  :after (consult yasnippet)
+  :bind ("C-M-y" . consult-yasnippet))
+
 (provide 'init-completion)
 ;;; init-completion.el ends here

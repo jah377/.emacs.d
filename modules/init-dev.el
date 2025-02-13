@@ -41,6 +41,7 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status)
+  :after nerd-icons
   :diminish magit-minor-mode
   :hook (git-commit-mode . (lambda () (setq fill-column 72)))
   :mode ("/\\.gitmodules\\'" . conf-mode)
@@ -53,6 +54,9 @@
 
   ;; Open status buffer in same buffer
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+
+  ;; Enable file icons in 'magit-status'
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
   ;; Must define here to ensure underlying function defined in
   ;; 'init-emacs' is loaded before 'magit'.
@@ -115,6 +119,43 @@
   (interactive)
   (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
+
+(use-package code-cells
+  :hook ((python-mode emacs-lisp-mode)
+         (prog-mode . outline-minor-mode))
+  :bind (("C-c C-c" . code-cells-eval)
+         ("M-p" . code-cells-backward-cell)
+         ("M-n" . code-cells-forward-cell)
+         ("M-D" . code-cells-kill)
+         ("M-W" . code-cells-copy)
+         ("M-I" . jh/code-cells-insert)
+         ("C-<tab>" . outline-cycle))
+  :custom
+  (code-cells-eval-region-commands
+   '((emacs-lisp-mode . eval-region)
+     (lisp-interaction-mode . eval-region)
+     (python-base-mode . jh/jupyter-eval-region-maybe)))
+  :config
+  (defun jh/jupyter-eval-region-maybe ()
+    "Call 'jupyter-eval-region' if available, otherwise use shell."
+    (if jupyter-current-client
+        'jupyter-eval-region
+      'python-shell-send-region))
+
+  (defun jh/code-cells-insert ()
+    (interactive)
+    (when (not (bolp))
+      (newline 2))
+    (insert (substring code-cells-boundary-regexp 1))
+    (newline 2))
+
+  ;; TODO: Reduce redundant code; previously tried 'dolist'
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (setq-local code-cells-boundary-regexp "^;;; ++++++++++"
+                                                outline-regexp "^;;; ++++++++++")))
+  (add-hook 'python-mode-hook (lambda ()
+                                (setq-local code-cells-boundary-regexp "^### ++++++++++"
+                                            outline-regexp "^### ++++++++++"))))
 
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))

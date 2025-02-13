@@ -1555,6 +1555,7 @@ of available speed commands.
         (and (looking-at org-outline-regexp)
              (looking-back "^\**"))))
 #+end_src
+
 *** COMMENT Auto-Tangle
 
 *COMMENT:* Package overwrites the [[id:33dd0e1d-425b-4bb9-8a23-398884c046b8][common header]] with ~nil~. Drop for now.
@@ -1945,10 +1946,6 @@ items.
 :END:
 
 #+begin_src emacs-lisp
-
-#+end_src
-
-#+begin_src emacs-lisp
 (setopt org-capture-templates
         '(("w" "WORK Templates")
           ("wp" "Work Project" entry (file my-agenda-file-work)
@@ -1963,7 +1960,7 @@ items.
            :empty-lines 1
            :kill-buffer t)
 
-          ("wt" "Work Todo" entry (file my-agenda-file-work)
+          ("wt" "Work Todo (repo)" entry (file my-agenda-file-work)
            "* TODO %^{Task} %^G
 :PROPERTIES:
 :repo: %^{Repository}
@@ -1978,8 +1975,17 @@ items.
            :empty-lines 1
            :jump-to-captured t)
 
+("wT" "Work Todo (no repo)" entry (file my-agenda-file-work)
+           "* TODO %^{Task} %^G
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
+           :empty-lines 1
+           :jump-to-captured t)
+
           ("wr" "Work Review" entry (file my-agenda-file-work)
-           "* REVIEW %^{Task} %(org-set-tags \"review\")%^G
+           "* REVIEW %^{Task} (org-set-tags \"review\")
 :PROPERTIES:
 :repo: %^{Repository}
 :branch: %^{Branch}
@@ -2300,6 +2306,30 @@ are scrolled over in the minibuffer.
   )
 #+end_src
 
+** Yasnippet
+
+=yasnippets= is a 3rd party Emacs package that provides a powerful snippet
+template system. Snippets are stored in =~/.emacs.d/snippets/= and can be
+inserted by typing the snippet ~key:~ and then calling ~M-x yas-expand~.
+
+The =consult-yasnippet= Emacs package expands [[id:8b393fcc-9d43-4afb-b249-9a72bc6089ea][Consult]] and provides consult-read
+interface for snippets. Calling ~M-x consult-yasnippet~ will display all snippets
+(and their ~key:~) available for the current mode.
+
+*N.B* [[https://github.com/AndreaCrotti/yasnippet-snippets/tree/master][yasnippet-snippets]] contains a comprehensive list of snippets. Most are
+irrelevant so the package is not currently included in the configuration.
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :config (yas-global-mode 1)
+  :custom
+  (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
+
+(use-package consult-yasnippet
+  :after (consult yasnippet)
+  :bind ("C-M-y" . consult-yasnippet))
+#+end_src
+
 ** Provide init-completion.el
 
 #+begin_src emacs-lisp
@@ -2537,6 +2567,7 @@ within a repository.
 #+begin_src emacs-lisp
 (use-package magit
   :bind ("C-x g" . magit-status)
+  :after nerd-icons
   :diminish magit-minor-mode
   :hook (git-commit-mode . (lambda () (setq fill-column 72)))
   :mode ("/\\.gitmodules\\'" . conf-mode)
@@ -2549,6 +2580,9 @@ within a repository.
 
   ;; Open status buffer in same buffer
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+
+  ;; Enable file icons in 'magit-status'
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
   ;; Must define here to ensure underlying function defined in
   ;; 'init-emacs' is loaded before 'magit'.
@@ -2654,6 +2688,51 @@ stored in ~devdocs-browser-data-directory~.
   (interactive)
   (let ((vterm-buffer-name (read-string "Enter new vterm buffer name: ")))
     (vterm (generate-new-buffer-name (concat "*" vterm-buffer-name "*"))))))
+#+end_src
+
+** Code-Cells
+
+=code-cells= is an Emacs package that provides the ability to efficiently
+navigate, edit and execute code split into cells according to certain magic
+comments (i.e. regex pattern, ~code-cells-boundary-regexp~).
+
+#+begin_src emacs-lisp
+(use-package code-cells
+  :hook ((python-mode emacs-lisp-mode)
+         (prog-mode . outline-minor-mode))
+  :bind (("C-c C-c" . code-cells-eval)
+         ("M-p" . code-cells-backward-cell)
+         ("M-n" . code-cells-forward-cell)
+         ("M-D" . code-cells-kill)
+         ("M-W" . code-cells-copy)
+         ("M-I" . jh/code-cells-insert)
+         ("C-<tab>" . outline-cycle))
+  :custom
+  (code-cells-eval-region-commands
+   '((emacs-lisp-mode . eval-region)
+     (lisp-interaction-mode . eval-region)
+     (python-base-mode . jh/jupyter-eval-region-maybe)))
+  :config
+  (defun jh/jupyter-eval-region-maybe ()
+    "Call 'jupyter-eval-region' if available, otherwise use shell."
+    (if jupyter-current-client
+        'jupyter-eval-region
+      'python-shell-send-region))
+
+  (defun jh/code-cells-insert ()
+    (interactive)
+    (when (not (bolp))
+      (newline 2))
+    (insert (substring code-cells-boundary-regexp 1))
+    (newline 2))
+
+  ;; TODO: Reduce redundant code; previously tried 'dolist'
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (setq-local code-cells-boundary-regexp "^;;; ++++++++++"
+                                                outline-regexp "^;;; ++++++++++")))
+  (add-hook 'python-mode-hook (lambda ()
+                                (setq-local code-cells-boundary-regexp "^### ++++++++++"
+                                            outline-regexp "^### ++++++++++"))))
 #+end_src
 
 ** Lisp

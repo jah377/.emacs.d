@@ -1,0 +1,6 @@
+# _*_ mode: snippet -*-
+# name: pd.option_context
+# key: pdfw
+# --
+with pd.option_context("display.width",1000):
+     print($0)
