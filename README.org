@@ -2977,6 +2977,7 @@ Useful commands include:
 #+begin_src emacs-lisp
 (use-package auctex
   :mode "\\.tex\\'"
+  :hook (LaTex-mode . jinx-mode)
   :custom
   ;; See https://elpa.gnu.org/packages/doc/auctex.html#Quick-Start
   (TeX-auto-save t)
