@@ -2967,23 +2967,37 @@ formats in Emacs. Functionality provided includes syntax highlighting, command
 completion, document navigation, error parsing, and preview functionality. *N.B.*
 Prerequisites include:
 
-+ texlive-full :: Collection of tools, programs, and libraries for =TeX= files
++ texlive-most :: Collection of tools, programs, and libraries for =TeX= files
 + pdflatex :: =LaTex= engine that produces PDF files from ~.tex~ source files
++ ghostscript :: For operation of =preview-latex= in both =DVI=- and =PDF=-mode
++ mupdf :: lightweight PDF viewer (useful for previewing)
+
+According to the [[https://elpa.gnu.org/packages/doc/auctex.html][documentation]], the following settings are recommended in order
+to get support for many of the LaTeX packages commonly used in documents:
++ TeX-auto-save t :: Enable parse on save
++ TeX-parse-self t :: Enable parse on load
++ TeX-master nil :: Make =auctex= aware of multi-file document structure
 
 Useful commands include:
++ M-x tex-compile :: Compile =.tex= buffer and view in PDF
 + M-x LaTeX-section :: ~C-c C-s~ to insert a template for a =LaTeX= section
 + M-x TeX-error-overview :: To see formatted list of compiler errors/warnings
 
 #+begin_src emacs-lisp
 (use-package auctex
   :mode "\\.tex\\'"
-  :hook (LaTex-mode . jinx-mode)
+  :hook ((tex-mode . jinx-mode)
+         (tex-mode . (lambda ()
+                       (setq-local TeX-PDF-mode 1))))
   :custom
-  ;; See https://elpa.gnu.org/packages/doc/auctex.html#Quick-Start
   (TeX-auto-save t)
   (TeX-parse-self t)
-  (TeX-master nil)
-  (TeX-PDF-mode t))
+
+  ;; Manually specify using 'pdf-tools' to view PDF files
+  (TeX-view-program-selection '((output-pdf "PDF Tools")))
+  :config
+  (setq-default TeX-master nil))
+#+end_src
 #+end_src
 
 ** Provide init-writing.el

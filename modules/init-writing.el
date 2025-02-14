@@ -83,11 +83,18 @@
 
 (use-package auctex
   :mode "\\.tex\\'"
+  :hook ((tex-mode . jinx-mode)
+         (tex-mode . (lambda ()
+                       (setq-local TeX-PDF-mode 1))))
   :custom
-  ;; See https://elpa.gnu.org/packages/doc/auctex.html#Quick-Start
   (TeX-auto-save t)
   (TeX-parse-self t)
-  (TeX-master nil))
+
+  ;; Manually specify using 'pdf-tools' to view PDF files
+  (TeX-view-program-selection '((output-pdf "PDF Tools")))
+  :config
+  (setq-default TeX-master nil))
+
 
 (provide 'init-writing)
 
