@@ -95,6 +95,9 @@
   :config
   (setq-default TeX-master nil))
 
+(use-package pdf-tools
+  :after (auctex)
+  :config (pdf-tools-install))
 
 (provide 'init-writing)
 

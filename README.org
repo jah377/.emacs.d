@@ -2998,6 +2998,17 @@ Useful commands include:
   :config
   (setq-default TeX-master nil))
 #+end_src
+
+*** pdf-tools
+
+=pdf-tools= is an Emacs package extension that enhances PDF viewing and
+interaction within Emacs. Instead of using an external view like =Zathura=, it
+enables viewing and interacting within PDFs inside an Emacs buffer.
+
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :after (auctex)
+  :config (pdf-tools-install))
 #+end_src
 
 ** Provide init-writing.el
