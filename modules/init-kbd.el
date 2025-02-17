@@ -65,25 +65,36 @@
 ;; :ignore t to define sub-section headers
 (my-leader-def
 
- "i" '(my/eval-init :which-key "eval-init")
+  "i" '(my/eval-init :which-key "eval-init")
 
- ;; BUFFERS
- "b"  '(:ignore t                        :which-key "buffer")
- "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
- "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
- "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
- "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
- "bc" '(my/find-config-file              :which-key "jump-to-config")
- "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
- "bf" '(ffap-other-window                :which-key "find-file-other-window")
+  ;; BUFFERS
+  "b"  '(:ignore t                        :which-key "buffer")
+  "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
+  "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
+  "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
+  "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
+  "bc" '(my/find-config-file              :which-key "jump-to-config")
+  "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
+  "bf" '(ffap-other-window                :which-key "find-file-other-window")
 
- ;; KILL BUFFERS
- "k"  '(:ignore t                          :which-key "killing")
- "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
- "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
- "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
- "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
- "kd" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
+  ;; KILL BUFFERS
+  "k"  '(:ignore t                          :which-key "killing")
+  "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
+  "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
+  "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
+  "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
+  "kd" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
+
+(my-leader-def
+  :keymaps '(python-mode-map)
+  "p"   '(:ignore t         :which-key "python")
+  "pd"  '(:ignore t         :whick-key "docstring")
+  "pdn" '(numpydoc-generate :which-key "numpy-docstr")
+  "pds" '(sphinx-doc        :which-key "sphinx-docstr")
+  "pdf" '((lambda ()
+            (interactive)
+            (numpydoc--fill-last-insertion))
+          :which-key "numpydoc-fill-paragraph"))
 
 (provide 'init-kbd)
 ;;; init-kbd.el ends here

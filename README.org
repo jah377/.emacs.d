@@ -2849,18 +2849,16 @@ kernel as a =REPL=.
 function definitions. Alternatively, =sphinx-doc= makes it easier to insert
 [[https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html][Sphinx]] style doc-strings.
 
+*N.B.* Keybindings for ~numpydoc-generate~ and ~sphinx-doc~ assigned in [[id:d831e4e4-e9b1-480e-aa1a-a152d9707275][General.el]].
+
 #+begin_src emacs-lisp
 (use-package numpydoc
   :custom
   ;; Redefine so '*args' and '**kwargs' /not/ ignored
-  (numpydoc-ignored-params '("" "self" "cls" "*" "/"))
-  :bind(:map python-mode-map
-             ("C-c M-d" . numpydoc-generate)))
+  (numpydoc-ignored-params '("" "self" "cls" "*" "/")))
 
 (use-package sphinx-doc
-  :hook (python-mode . sphinx-doc-mode)
-  :bind(:map python-mode-map
-             ("C-c M-D" . sphinx-doc)))
+  :hook (python-mode . sphinx-doc-mode))
 #+end_src
 
 =python-docstring= is an Emacs package providing =python-docstring-mode= for
@@ -3213,25 +3211,36 @@ users to setup global and local keybindings more easily.
 ;; :ignore t to define sub-section headers
 (my-leader-def
 
- "i" '(my/eval-init :which-key "eval-init")
+  "i" '(my/eval-init :which-key "eval-init")
 
- ;; BUFFERS
- "b"  '(:ignore t                        :which-key "buffer")
- "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
- "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
- "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
- "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
- "bc" '(my/find-config-file              :which-key "jump-to-config")
- "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
- "bf" '(ffap-other-window                :which-key "find-file-other-window")
+  ;; BUFFERS
+  "b"  '(:ignore t                        :which-key "buffer")
+  "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
+  "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
+  "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
+  "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
+  "bc" '(my/find-config-file              :which-key "jump-to-config")
+  "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
+  "bf" '(ffap-other-window                :which-key "find-file-other-window")
 
- ;; KILL BUFFERS
- "k"  '(:ignore t                          :which-key "killing")
- "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
- "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
- "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
- "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
- "kd" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
+  ;; KILL BUFFERS
+  "k"  '(:ignore t                          :which-key "killing")
+  "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
+  "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
+  "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
+  "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
+  "kd" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
+
+(my-leader-def
+  :keymaps '(python-mode-map)
+  "p"   '(:ignore t         :which-key "python")
+  "pd"  '(:ignore t         :whick-key "docstring")
+  "pdn" '(numpydoc-generate :which-key "numpy-docstr")
+  "pds" '(sphinx-doc        :which-key "sphinx-docstr")
+  "pdf" '((lambda ()
+            (interactive)
+            (numpydoc--fill-last-insertion))
+          :which-key "numpydoc-fill-paragraph"))
 #+end_src
 
 ** Provide init-kbd.el

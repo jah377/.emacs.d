@@ -205,14 +205,10 @@
 (use-package numpydoc
   :custom
   ;; Redefine so '*args' and '**kwargs' /not/ ignored
-  (numpydoc-ignored-params '("" "self" "cls" "*" "/"))
-  :bind(:map python-mode-map
-             ("C-c M-d" . numpydoc-generate)))
+  (numpydoc-ignored-params '("" "self" "cls" "*" "/")))
 
 (use-package sphinx-doc
-  :hook (python-mode . sphinx-doc-mode)
-  :bind(:map python-mode-map
-             ("C-c M-D" . sphinx-doc)))
+  :hook (python-mode . sphinx-doc-mode))
 
 (use-package python-docstring
   :hook (python-mode . python-docstring-mode)
