@@ -151,11 +151,9 @@
 
   ;; TODO: Reduce redundant code; previously tried 'dolist'
   (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                    (setq-local code-cells-boundary-regexp "^;;; ++++++++++"
-                                                outline-regexp "^;;; ++++++++++")))
+                                    (setq-local code-cells-boundary-regexp "^;;; %%")))
   (add-hook 'python-mode-hook (lambda ()
-                                (setq-local code-cells-boundary-regexp "^### ++++++++++"
-                                            outline-regexp "^### ++++++++++"))))
+                                (setq-local code-cells-boundary-regexp "^### %%"))))
 
 (use-package aggressive-indent
   :hook (emacs-lisp-mode))

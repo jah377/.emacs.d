@@ -2728,11 +2728,10 @@ comments (i.e. regex pattern, ~code-cells-boundary-regexp~).
 
   ;; TODO: Reduce redundant code; previously tried 'dolist'
   (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                    (setq-local code-cells-boundary-regexp "^;;; ++++++++++"
-                                                outline-regexp "^;;; ++++++++++")))
+                                    (setq-local code-cells-boundary-regexp "^;;; %%")))
   (add-hook 'python-mode-hook (lambda ()
-                                (setq-local code-cells-boundary-regexp "^### ++++++++++"
-                                            outline-regexp "^### ++++++++++"))))
+                                (setq-local code-cells-boundary-regexp "^### %%"))))
+
 #+end_src
 
 ** Lisp
