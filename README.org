@@ -2767,8 +2767,8 @@ kernel as a =REPL=.
 *** Doc-strings
 
 =numpydoc= is an Emacs package to easily insert [[https://numpydoc.readthedocs.io/en/latest/format.html][NumPy]] style doc-strings in Python
-function definitions. Alternatively, =sphinx-doc= makes it easier to insert [[https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html][Sphinx]]
-style doc-strings. *N.B.* Prefer numpy-style doc-strings but
+function definitions. Alternatively, =sphinx-doc= makes it easier to insert
+[[https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html][Sphinx]] style doc-strings.
 
 #+begin_src emacs-lisp
 (use-package numpydoc
@@ -2776,10 +2776,12 @@ style doc-strings. *N.B.* Prefer numpy-style doc-strings but
   ;; Redefine so '*args' and '**kwargs' /not/ ignored
   (numpydoc-ignored-params '("" "self" "cls" "*" "/"))
   :bind(:map python-mode-map
-             ("C-c C-d" . numpydoc-generate)))
+             ("C-c M-d" . numpydoc-generate)))
 
 (use-package sphinx-doc
-  :hook (python-mode . sphinx-doc-mode))
+  :hook (python-mode . sphinx-doc-mode)
+  :bind(:map python-mode-map
+             ("C-c M-D" . sphinx-doc)))
 #+end_src
 
 =python-docstring= is an Emacs package providing =python-docstring-mode= for
@@ -2787,13 +2789,11 @@ intelligently highlighting Python doc-strings. The package includes
 ~python-docstring-fill~ that overrides ~fill-paragraph~. *N.B.* Only works with
 =epytext= and =sphinx= formats, which conflicts with =numpydoc=.
 
-reformatting (~python-docstring-fill~) and highlighting Python
-doc-strings. Text reformatted to =epytext= and =sphinx= formats, which conflicts
-with =numpydoc=.
-
 #+begin_src emacs-lisp
 (use-package python-docstring
-  :hook (python-mode . python-docstring-mode))
+  :hook (python-mode . python-docstring-mode)
+  :bind (:map python-mode-map
+             ("M-q" . python-docstring-fill)))
 #+end_src
 
 ** Provide init-dev.el

@@ -161,5 +161,22 @@
   :config
   (require 'ob-jupyter))
 
+(use-package numpydoc
+  :custom
+  ;; Redefine so '*args' and '**kwargs' /not/ ignored
+  (numpydoc-ignored-params '("" "self" "cls" "*" "/"))
+  :bind(:map python-mode-map
+             ("C-c M-d" . numpydoc-generate)))
+
+(use-package sphinx-doc
+  :hook (python-mode . sphinx-doc-mode)
+  :bind(:map python-mode-map
+             ("C-c M-D" . sphinx-doc)))
+
+(use-package python-docstring
+  :hook (python-mode . python-docstring-mode)
+  :bind (:map python-mode-map
+             ("M-q" . python-docstring-fill)))
+
 (provide 'init-dev)
 ;;; init-dev.el ends here
