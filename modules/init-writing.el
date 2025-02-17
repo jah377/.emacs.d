@@ -81,6 +81,24 @@
   :after (consult denote)
   :commands (consult-denote-find))
 
+(use-package auctex
+  :mode "\\.tex\\'"
+  :hook ((tex-mode . jinx-mode)
+         (tex-mode . (lambda ()
+                       (setq-local TeX-PDF-mode 1))))
+  :custom
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+
+  ;; Manually specify using 'pdf-tools' to view PDF files
+  (TeX-view-program-selection '((output-pdf "PDF Tools")))
+  :config
+  (setq-default TeX-master nil))
+
+(use-package pdf-tools
+  :after (auctex)
+  :config (pdf-tools-install))
+
 (provide 'init-writing)
 
 ;;; init-writing.el ends here

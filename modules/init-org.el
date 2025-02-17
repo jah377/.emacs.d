@@ -144,8 +144,6 @@
 (setopt org-tags-exclude-from-inheritance '("project"))
 (setopt org-use-property-inheritance '("project"))
 
-
-
 (setopt org-capture-templates
         '(("w" "WORK Templates")
           ("wp" "Work Project" entry (file my-agenda-file-work)
@@ -160,7 +158,7 @@
            :empty-lines 1
            :kill-buffer t)
 
-          ("wt" "Work Todo" entry (file my-agenda-file-work)
+          ("wt" "Work Todo (repo)" entry (file my-agenda-file-work)
            "* TODO %^{Task} %^G
 :PROPERTIES:
 :repo: %^{Repository}
@@ -175,8 +173,17 @@
            :empty-lines 1
            :jump-to-captured t)
 
+("wT" "Work Todo (no repo)" entry (file my-agenda-file-work)
+           "* TODO %^{Task} %^G
+:LOGBOOK:
+- State \"TODO\"       from              %U
+  %?
+:END:"
+           :empty-lines 1
+           :jump-to-captured t)
+
           ("wr" "Work Review" entry (file my-agenda-file-work)
-           "* REVIEW %^{Task} %(org-set-tags \"review\")%^G
+           "* REVIEW %^{Task} (org-set-tags \"review\")
 :PROPERTIES:
 :repo: %^{Repository}
 :branch: %^{Branch}

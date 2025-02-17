@@ -1,0 +1,5 @@
+# _*_ mode: snippet -*-
+# name: reference MR comment
+# key: comment
+# --
+Commit changes in response to MR comment: $0
