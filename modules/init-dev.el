@@ -123,13 +123,14 @@
 (use-package code-cells
   :hook ((python-mode emacs-lisp-mode)
          (prog-mode . outline-minor-mode))
-  :bind (("C-c C-c" . code-cells-eval)
-         ("M-p" . code-cells-backward-cell)
-         ("M-n" . code-cells-forward-cell)
-         ("M-D" . code-cells-kill)
-         ("M-W" . code-cells-copy)
-         ("M-I" . jh/code-cells-insert)
-         ("C-<tab>" . outline-cycle))
+  :bind (:map code-cells-mode-map
+              ("C-c C-c" . code-cells-eval)
+              ("M-p" . code-cells-backward-cell)
+              ("M-n" . code-cells-forward-cell)
+              ("M-D" . code-cells-kill)
+              ("M-W" . code-cells-copy)
+              ("M-I" . jh/code-cells-insert)
+              ("C-<tab>" . outline-cycle))
   :custom
   (code-cells-eval-region-commands
    '((emacs-lisp-mode . eval-region)
