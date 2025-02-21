@@ -2700,13 +2700,14 @@ comments (i.e. regex pattern, ~code-cells-boundary-regexp~).
 (use-package code-cells
   :hook ((python-mode emacs-lisp-mode)
          (prog-mode . outline-minor-mode))
-  :bind (("C-c C-c" . code-cells-eval)
-         ("M-p" . code-cells-backward-cell)
-         ("M-n" . code-cells-forward-cell)
-         ("M-D" . code-cells-kill)
-         ("M-W" . code-cells-copy)
-         ("M-I" . jh/code-cells-insert)
-         ("C-<tab>" . outline-cycle))
+  :bind (:map code-cells-mode-map
+              ("C-c C-c" . code-cells-eval)
+              ("M-p" . code-cells-backward-cell)
+              ("M-n" . code-cells-forward-cell)
+              ("M-D" . code-cells-kill)
+              ("M-W" . code-cells-copy)
+              ("M-I" . jh/code-cells-insert)
+              ("C-<tab>" . outline-cycle))
   :custom
   (code-cells-eval-region-commands
    '((emacs-lisp-mode . eval-region)
@@ -2731,7 +2732,6 @@ comments (i.e. regex pattern, ~code-cells-boundary-regexp~).
                                     (setq-local code-cells-boundary-regexp "^;;; %%")))
   (add-hook 'python-mode-hook (lambda ()
                                 (setq-local code-cells-boundary-regexp "^### %%"))))
-
 #+end_src
 
 ** Lisp
@@ -3226,9 +3226,7 @@ users to setup global and local keybindings more easily.
   "k"  '(:ignore t                          :which-key "killing")
   "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
   "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
-  "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
-  "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
-  "kd" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
+  "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs"))
 
 (my-leader-def
   :keymaps '(python-mode-map)
