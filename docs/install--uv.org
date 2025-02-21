@@ -1,0 +1,171 @@
+#+TITLE: Installing + Setting Up UV
+#+DATE: Friday, February 21, 2025
+#+STARTUP: overview
+
+* Introduction
+
+
+[[https://github.com/astral-sh/uv][uv]], is a =python= package manager used to install, manage, and remove python
+libraries and dependencies. It is written in =rust= and therefore is must faster
+than =pip=.
+
+*Resources:*
++ Vishnu Sivan :: [[https://codemaker2016.medium.com/introducing-uv-next-gen-python-package-manager-b78ad39c95d7][Introducing uv: Next-Gen Python Package Manager]]
+
+* How to Install UV
+
+#+begin_src sh
+# To install on Arch Linux:
+curl -LsSf https://astral.sh/uv/install.sh | sh
+#+end_src
+
+* Setting Up UV
+
+Must add the following lines to the shell configuration file (=~/.bashrc=):
+
+#+begin_src sh
+# On Arch, 'uv' installed to '/home/jon/.local/bin'
+export PATH="$HOME/.local/bin:$PATH"
+#+end_src
+
+* Helpful Terminal Commands
+** Install Package
+
+#+begin_src sh :eval no
+# Install a package
+uv pip install numpy
+
+# Install from requirements.txt
+uv pip install -r requirements.txt
+
+# Install from pyproject.toml
+uv pip install
+#+end_src
+
+** Manage Virtual Environment
+
+#+begin_src sh :eval no
+# Create venv
+uv venv myenv
+
+# Activate venv
+source myenv/bin/activate
+
+# Run command inside venv
+uv venv run python script.py
+#+end_src
+
+** List Installed Packages
+
+#+begin_src sh
+# No venv activated; system-level python
+uv pip list
+#+end_src
+
+#+RESULTS:
+| Package                   |          Version |
+| ------------------------- | ---------------- |
+| annotated-types           |            0.7.0 |
+| anytree                   |           2.12.1 |
+| appdirs                   |            1.4.4 |
+| attrs                     |      23.2.1.dev0 |
+| autocommand               |            2.2.2 |
+| beautifulsoup4            |           4.12.3 |
+| blinker                   |            1.8.2 |
+| brlapi                    |            0.8.6 |
+| btrfsutil                 |             6.12 |
+| certifi                   |        2024.8.30 |
+| cffi                      |           1.17.1 |
+| chardet                   |            5.2.0 |
+| charset-normalizer        |            3.4.0 |
+| click                     |            8.1.7 |
+| cryptography              |           43.0.3 |
+| cython                    |           3.0.11 |
+| dbus-python               |            1.3.2 |
+| decorator                 |            5.1.1 |
+| distlib                   |            0.3.9 |
+| distro                    |            1.9.0 |
+| fastjsonschema            |           2.20.0 |
+| filelock                  |           3.16.1 |
+| flask                     |            2.3.3 |
+| flask-cors                |            5.0.0 |
+| idna                      |              3.1 |
+| inflect                   |            7.4.0 |
+| installer                 |            0.7.0 |
+| itsdangerous              |            2.1.2 |
+| jaraco-collections        |            5.0.1 |
+| jaraco-context            |            5.3.0 |
+| jaraco-functools          |            4.0.2 |
+| jaraco-text               |            4.0.0 |
+| jinja2                    |            3.1.4 |
+| jsonschema                |           4.23.0 |
+| jsonschema-specifications |        2023.12.1 |
+| lensfun                   |            0.3.4 |
+| louis                     |           3.32.0 |
+| lxml                      |            5.3.0 |
+| mako                      |       1.3.6.dev0 |
+| markdown                  |              3.7 |
+| markupsafe                |            2.1.5 |
+| meson                     |            1.6.0 |
+| more-itertools            |           10.3.0 |
+| netsnmp-python            |            1.0a1 |
+| ordered-set               |            4.1.0 |
+| orjson                    |          3.10.11 |
+| packaging                 |             24.2 |
+| pip                       |           24.3.1 |
+| platformdirs              |            4.3.6 |
+| ply                       |             3.11 |
+| protobuf                  |           5.28.3 |
+| psutil                    |            6.1.0 |
+| psutils                   |            3.3.7 |
+| puremagic                 |             1.28 |
+| pwquality                 |            1.4.5 |
+| pycairo                   |           1.27.0 |
+| pycparser                 |             2.22 |
+| pydantic                  |            2.9.2 |
+| pydantic-core             |           2.23.4 |
+| pygments                  |           2.18.0 |
+| pygobject                 |           3.50.0 |
+| pypdf                     |            5.1.0 |
+| pyqt6                     |            6.8.0 |
+| pyqt6-sip                 |           13.9.1 |
+| pyqt6-webengine           |            6.8.0 |
+| pysocks                   |            1.7.1 |
+| pyxdg                     |             0.28 |
+| referencing               |           0.35.1 |
+| reflector                 | 2023.6.28.0.36.1 |
+| requests                  |           2.32.3 |
+| rpds-py                   |           0.19.0 |
+| send2trash                |            1.8.3 |
+| setproctitle              |            1.3.3 |
+| setuptools                |           75.2.0 |
+| six                       |           1.16.0 |
+| soupsieve                 |              2.6 |
+| stevedore                 |            5.2.0 |
+| tbb                       |              0.2 |
+| tomli                     |            2.0.1 |
+| tqdm                      |           4.67.1 |
+| trove-classifiers         |    2024.10.21.16 |
+| typeguard                 |            4.3.0 |
+| typing-extensions         |           4.12.2 |
+| urllib3                   |          1.26.20 |
+| validate-pyproject        |             0.22 |
+| virtualenv                |          20.27.1 |
+| virtualenv-clone          |            0.5.7 |
+| virtualenvwrapper         |            6.1.0 |
+| waitress                  |            3.0.0 |
+| werkzeug                  |            3.0.4 |
+| wheel                     |           0.45.0 |
+
+** List Package Details
+
+#+begin_src sh
+uv pip show virtualenvwrapper
+#+end_src
+
+#+RESULTS:
+| Name:        | virtualenvwrapper                 |             |                  |
+| Version:     | 6.1.0                             |             |                  |
+| Location:    | /usr/lib/python3.12/site-packages |             |                  |
+| Requires:    | stevedore,                        | virtualenv, | virtualenv-clone |
+| Required-by: |                                   |             |                  |
