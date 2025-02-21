@@ -1,0 +1,57 @@
+#+TITLE: Install + Setup virtualenvwrapper
+#+DATE: Friday, February 21, 2025
+#+STARTUP: overview
+
+* Introduction
+
+[[https://virtualenvwrapper.readthedocs.io/en/latest/][virtualenvwrapper]] is a =python= tool that provides a set of convenient =bash= shell
+commands to manage virtual environments (=venvs=). It simplifies working with
+multiple =venvs= by organizing them in a central location, see ~WORKON_HOME~
+variable assignment. The package builds on =virtualenv= but streamlines the
+process by eliminating the need to navigate to different directories and
+manually activate environments.
+
+*Resources:*
++ dev.to :: [[https://dev.to/zeyu2001/managing-python-virtual-environments-with-virtualenvwrapper-502c][Managing Python venvs with virtualenvwrapper]]
+
+* How to Install virtualenvwrapper
+
+To use, =virtualenvwrapper= must be installed in the system-level =python=.
+
+#+begin_src sh :eval no
+# To install on Arch Linux:
+yay python-virtualenvwrapper
+#+end_src
+
+* Setting Up virtualenvwrapper
+
+Must add the following lines to the shell configuration file (=~/.bashrc=,
+=.zshrc=, or =.profile=):
+
+#+begin_src sh :eval no
+# export WORKON_HOME=$HOME/.virtualenvs # default
+# export VIRTUALNEVWRAPPER_PYTHON=$(which python) # default
+
+source $(which virtualenvwrapper.sh)
+#+end_src
+
+*N.B.* Don't forget to reload the shell with ~source ~~/.bashrc~. To confirm, call
+~echo $VIRTUALENVWRAPPER_PYTHON~.
+
+* Helpful Terminal Commands
+
+*N.B.* Creating a =venv= using =uv= also possible (see [[id:0602ba32-ba3b-46b9-b80b-2e1862c4a3d6][Manage Virtual Environment]]).
+
+#+begin_src sh :eval no
+# Create new venv
+mkvirtualenv myenv
+
+# Activate a venv
+workon venv
+
+# Deactivate current venv
+deactivate
+
+# Remove a venv
+rmvirtualenv myenv
+#+end_src

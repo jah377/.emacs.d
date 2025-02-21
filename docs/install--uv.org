@@ -43,6 +43,9 @@ uv pip install
 #+end_src
 
 ** Manage Virtual Environment
+:PROPERTIES:
+:ID:       0602ba32-ba3b-46b9-b80b-2e1862c4a3d6
+:END:
 
 #+begin_src sh :eval no
 # Create venv
