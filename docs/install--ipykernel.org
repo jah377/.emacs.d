@@ -1,0 +1,67 @@
+#+TITLE: Installing + Setting Up Jupyter Kernels
+#+DATE: Friday, February 21, 2025
+#+STARTUP: overview
+
+* Introduction
+
+A =jupyter kernel= is a computational engine built on top of a =venv= (see
+[[file:install--virtualenvwrapper.org][install--virtualenvwrapper.org]]) that provides "read-eval-print loop" (=REPL=) for
+interactive code execution in notebooks like =.ipynb= or =.org=. The kernel uses a
+messaging protocol to communicate between the front-end =REPL= or notebook and
+the back-end language kernel.
+
+The =ipykernel= python package is effectively the communication bridge between
+the front-end and the =python= interpreter.
+
+* Related Files
+
++ [[file:install--uv.org][install--uv.org]] :: To create =venv= and install =python= packages
++ [[file:install--virtualenvwrapper.org][install--virtualenvwrapper.org]] :: Convenient =bash= commands for working with =venvs=
+
+* How to Install ipykernel
+
+=ipykernel= must be installed at the system-level to manipulate or inspect
+kernels more broadly (see [[id:c858a94e-9c61-453b-b50a-83b6b3142e25][Helpful Terminal Commands]]):
+
+#+begin_src sh :eval no
+# Arch linux:
+yay ipykernel
+#+end_src
+
+A =jupyter kernel= is created from existing =venv= using the following:
+
+#+begin_src sh :eval no
+# Activate venv
+workon myenv
+
+# venv must include 'ipykernel' package
+uv pip install ipykernel
+
+# --user flag installs the kernel for the current user
+python3 -m ipykernel install --user --name myenv
+#+end_src
+
+*N.B.* Creating the kernel does not make it instantly available to Emacs. Must
+refresh the list of kernels by calling ~M-: (jupyter-available-kernelspecs t)~.
+
+* Helpful Terminal Commands
+:PROPERTIES:
+:ID:       c858a94e-9c61-453b-b50a-83b6b3142e25
+:END:
+
+** List Available Kernels
+
+#+begin_src sh
+jupyter-kernelspec list
+#+end_src
+
+#+RESULTS:
+| Available   | kernels:                                         |
+| example-env | /home/jon/.local/share/jupyter/kernels/example-env |
+| python3     | /home/jon/.local/share/jupyter/kernels/python3     |
+
+** Remove Kernel
+
+#+begin_src sh :eval no
+jupyter-kernelspec remove myenv
+#+end_src
