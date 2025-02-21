@@ -1,0 +1,83 @@
+#+TITLE: Installing + Setting Up Python
+#+DATE: Friday, February 21, 2025
+#+STARTUP: overview
+
+* How to Install Python
+
+To install a specific version of =python=:
+
+#+begin_src sh :eval no
+ # Arch Linux
+yay -S python311
+#+end_src
+
+* Helpful Terminal Commands
+** Check Which Python Version is Used
+
+#+begin_src sh
+# system-level python version
+python --version
+#+end_src
+
+#+RESULTS:
+: Python 3.12.7
+** Find Where Python is Installed
+
+#+begin_src sh
+# system-level python
+ls -l $(which python3)
+#+end_src
+
+#+RESULTS:
+: lrwxrwxrwx 1 root root 10 Oct  1 13:15 /usr/bin/python3 -> python3.12
+
+#+begin_src sh
+# All versions of python
+ls /usr/bin/python3*
+#+end_src
+
+#+RESULTS:
+| /usr/bin/python3           |
+| /usr/bin/python3.11        |
+| /usr/bin/python3.11-config |
+| /usr/bin/python3.12        |
+| /usr/bin/python3.12-config |
+| /usr/bin/python3-config    |
+
+** Find Path of Active Python Executable
+
+#+begin_src sh
+# System-level python
+python3 -c "import sys; print(sys.executable)"
+#+end_src
+
+#+RESULTS:
+: /usr/bin/python3
+
+** Find Path of Python Interpreter
+
+#+begin_src sh
+python3 -c "import sys; print('\n'.join(sys.path))"
+python3.11 -c "import sys; print('\n'.join(sys.path))"
+#+end_src
+
+#+RESULTS:
+|                                   |
+| /usr/lib/python312.zip            |
+| /usr/lib/python3.12               |
+| /usr/lib/python3.12/lib-dynload   |
+| /usr/lib/python3.12/site-packages |
+|                                   |
+| /usr/lib/python311.zip            |
+| /usr/lib/python3.11               |
+| /usr/lib/python3.11/lib-dynload   |
+| /usr/lib/python3.11/site-packages |
+
+** TODO Change the System-Level Python Version
+
++ What determines which =python= version is the "system-level" =python=?
+
++ If multiple versions are installed, how to switch the "system-level" python?
+
++ Default system-wide =python= version is determined by the =symlink= at
+  =/usr/bin/python3=. Is it as easy as changing the =symlink=?
