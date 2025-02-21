@@ -82,7 +82,6 @@
   "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
   "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
   "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs")
-  "kh" '(my/helpfull-kill-all-buffers       :which-key "kill-helpful-buffs")
   "kd" '(my/dired-kill-all-buffers          :which-key "kill-dired-buffs"))
 
 (my-leader-def
