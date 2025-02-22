@@ -186,8 +186,7 @@
 
 (use-package exec-path-from-shell
   :config
-  (exec-path-from-shell-initialize)
-  (add-to-list 'exec-path (expand-file-name "~/.virtualenvs/tools/bin")))
+  (exec-path-from-shell-initialize))
 
 (use-package jupyter
   :demand t

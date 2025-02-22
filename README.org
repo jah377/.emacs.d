@@ -2814,8 +2814,7 @@ or LSP functionality.
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
   :config
-  (exec-path-from-shell-initialize)
-  (add-to-list 'exec-path (expand-file-name "~/.virtualenvs/tools/bin")))
+  (exec-path-from-shell-initialize))
 #+end_src
 
 **** Jupyter Kernels
