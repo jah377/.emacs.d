@@ -62,26 +62,20 @@
     :keymaps 'global
     :prefix "M-m"))
 
-;; :ignore t to define sub-section headers
 (my-leader-def
-
-  "i" '(my/eval-init :which-key "eval-init")
-
-  ;; BUFFERS
-  "b"  '(:ignore t                        :which-key "buffer")
+  "b"  '(:ignore t                        :which-key "buffers")
   "bn" '(my/kill-buffer-name              :which-key "copy-buff-name")
   "bp" '(my/kill-relative-buffer-path     :which-key "copy-buff-path")
-  "bl" '(my/kill-buffer-orgmode-file-link :which-key "create-buff-orgmode-link")
-  "bi" '(crux-find-user-init-file         :which-key "jump-to-init")
-  "bc" '(my/find-config-file              :which-key "jump-to-config")
-  "bm" '(my/jump-to-minibuffer            :which-key "jump-to-minibuff")
-  "bf" '(ffap-other-window                :which-key "find-file-other-window")
+  "bl" '(my/kill-buffer-orgmode-file-link :which-key "copy-orglink")
+  "bk" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
+  "bk" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers"))
 
-  ;; KILL BUFFERS
-  "k"  '(:ignore t                          :which-key "killing")
-  "ka" '(my/kill-all-buffers-except-scratch :which-key "kill-buffers-except-scratch")
-  "ke" '(crux-kill-other-buffers            :which-key "crux-kill-other-buffers")
-  "km" '(my/magit-kill-all-buffers          :which-key "kill-magit-buffs"))
+(my-leader-def
+  "f"  '(:ignore t                :which-key "file")
+  "fi" '(crux-find-user-init-file :which-key "jump-to-init")
+  "fc" '(my/find-config-file      :which-key "jump-to-config")
+  "ff" '(ffap-other-window        :which-key "find-file-other-window")
+  "fp" '(projectile-find-file-other-window :which-key "find-proj-file-other-window"))
 
 (my-leader-def
   :keymaps '(python-mode-map)
