@@ -420,7 +420,7 @@ like bookmarks should we re-clone this repo. Alternatively, it is possible to
 store these files in a directory that is backed up to the "cloud" like
 =keybase=. This was achieved by creating a simulink to
 =/run/user/1001/keybase/...=; we assign that directory to ~my-persist-dir~ which is
-referenced in the [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]] and [[id:e62f2c9a-f7fa-4972-afc6-b0dd072d6474][Org-Agenda]] sub-sections.
+referenced in the [[id:7fed44cb-7196-48f4-9708-b6012d1c6c5d][Denote]] and [[id:17a0becd-af6d-47b9-8979-296bbdfa0f36][Org-Agenda]] sub-sections.
 
 #+begin_src emacs-lisp
 ;; Directory to be backed up in the cloud
@@ -1720,6 +1720,9 @@ changes ensure that the shown image is the "latest" version of that figure.
 #+end_src
 
 ** Org-Agenda
+:PROPERTIES:
+:ID:       17a0becd-af6d-47b9-8979-296bbdfa0f36
+:END:
 *** Background
 
 =Org-agenda= is a tool in =org= for viewing, managing, and organizing tasks,
