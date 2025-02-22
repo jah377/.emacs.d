@@ -2841,6 +2841,16 @@ kernel as a =REPL=.
   (require 'ob-jupyter))
 #+end_src
 
+The custom =jupyter-kernel-extras= package provides utilities for quickly
+creating and removing =Jupyter Kernels= by calling ~jke-create-kernel~ and
+~jke-delete-kernel~.
+
+#+begin_src emacs-lisp
+(use-package jupyter-kernel-extras
+  :commands (jke-create-kernel jke-delete-kernel)
+  :load-path "lisp")
+#+end_src
+
 *** Doc-strings
 
 =numpydoc= is an Emacs package to easily insert [[https://numpydoc.readthedocs.io/en/latest/format.html][NumPy]] style doc-strings in Python

@@ -200,6 +200,10 @@
   :config
   (require 'ob-jupyter))
 
+(use-package jupyter-kernel-extras
+  :commands (jke-create-kernel jke-delete-kernel)
+  :load-path "lisp")
+
 (use-package numpydoc
   :custom
   ;; Redefine so '*args' and '**kwargs' /not/ ignored
