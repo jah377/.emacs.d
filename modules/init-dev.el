@@ -110,6 +110,7 @@
 
 (use-package vterm
   :defer t
+  :bind (vterm vterm-mode vterm-other-window)
   :commands vterm
   ;; Requires compilation, which may not work without installing dependencies
   :init (setopt vterm-always-compile-module t)
