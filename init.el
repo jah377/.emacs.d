@@ -53,6 +53,12 @@
         use-package-compute-statistics t
         use-package-verbose t)
 
+(let ((default-directory (expand-file-name "lisp" user-emacs-directory)))
+  (unless (file-directory-p default-directory)
+    (make-directory default-directory t))
+  (add-to-list 'load-path default-directory)
+  (normal-top-level-add-subdirs-to-load-path))
+
 ;; Directory to be backed up in the cloud
 (defconst my-persist-dir "/home/jon/.kb_persistent_emacs/")
 

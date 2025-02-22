@@ -388,6 +388,18 @@ optimize the configuration and management of Emacs packages.
         use-package-verbose t)
 #+end_src
 
+*** Set Load-Path For Custom Packages
+
+Custom packages stored in =~/.emacs.d/lisp=.
+
+#+begin_src emacs-lisp
+(let ((default-directory (expand-file-name "lisp" user-emacs-directory)))
+  (unless (file-directory-p default-directory)
+    (make-directory default-directory t))
+  (add-to-list 'load-path default-directory)
+  (normal-top-level-add-subdirs-to-load-path))
+#+end_src
+
 ** Tidy Emacs Directory
 :PROPERTIES:
 :ID:       a0a6ce0f-55d9-415f-a70c-48716e9d8c61
