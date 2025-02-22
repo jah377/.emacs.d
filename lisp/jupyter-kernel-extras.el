@@ -88,9 +88,14 @@ string, e.g. \"3.11.4\"."
    (list (completing-read
           "Select kernel: "
           (mapcar 'jupyter-kernelspec-name (jupyter-available-kernelspecs t)))))
+
+  (message "Removing kernel: %s" kernel)
   (call-process "jupyter-kernelspec" nil nil nil "remove" kernel "-y")
-  (delete-directory (format "%s/%s" jke-venv-dir kernel) t)
-  (message "Kernel deleted: %s" kernel)
+
+  (let ((venv-path (format "%s/%s" jke-venv-dir kernel)))
+    (message "Deleting venv dir: %s" venv-path)
+    (delete-directory venv-path t))
+
   (jupyter-available-kernelspecs t))
 
 ;;;###autoload
@@ -175,13 +180,14 @@ naming the kernel and the virtual environment."
     ;; Install ipykernel
     (insert (propertize "\nInstalling ipykernel to venv\n"
                         'face 'success))
-    (jke--call-process "uv""pip" "install" "-p" virtualenv-dir "ipykernel" "-q")
+    (jke--call-process "uv"
+                       "pip" "install" "-p" virtualenv-dir "ipykernel" "-q")
 
     ;; Create the jupyter kernel
     (insert (propertize "\nConnecting venv to jupyter kernel\n"
                         'face 'success))
     (jke--call-process venv-python-command
-                                  "-m" "ipykernel" "install" "--user" "--name" venv-name)
+                       "-m" "ipykernel" "install" "--user" "--name" venv-name)
     (insert (propertize "\nFinished!\n" 'face 'success))
 
     ;; Refresh kernel list
