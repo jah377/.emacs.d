@@ -25,7 +25,7 @@ kernels more broadly (see [[id:c858a94e-9c61-453b-b50a-83b6b3142e25][Helpful Ter
 
 #+begin_src sh :eval no
 # Arch linux:
-yay ipykernel
+yay python-ipykernel
 #+end_src
 
 A =jupyter kernel= is created from existing =venv= using the following:
