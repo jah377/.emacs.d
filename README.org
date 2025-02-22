@@ -3249,6 +3249,7 @@ users to setup global and local keybindings more easily.
 
 #+begin_src emacs-lisp
 (use-package general
+  :ensure t
   :custom
   (general-describe-priority-keymaps nil)
   (general-describe-keymap-sort-function 'general-sort-by-car)

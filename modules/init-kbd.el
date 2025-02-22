@@ -49,6 +49,7 @@
 (global-set-key (kbd "C-x M-k") 'kill-current-buffer)
 
 (use-package general
+  :ensure t
   :custom
   (general-describe-priority-keymaps nil)
   (general-describe-keymap-sort-function 'general-sort-by-car)
