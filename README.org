@@ -2111,6 +2111,34 @@ items.
                           (:discard (:tag "project"))))))))))
 #+end_src
 
+** Org-Block-Extras
+
+The custom =org-block-extras= package provides additional functionality mirror
+features found in =Jupyter Notebooks= such as the ability to quickly insert an
+=org-block= possessing similar properties as the previous/next.
+
+#+begin_src emacs-lisp
+(use-package org-block-extras
+  :after (org)
+  :commands (org-previous-block
+             org-next-block
+             obe-insert-prev-block
+             obe-insert-next-block)
+  :load-path "lisp"
+  :bind (:map org-mode-map
+              ("M-p" . org-previous-block)
+              ("M-n" . org-next-block)
+              ("M-P" . obe-insert-prev-block)
+              ("M-N" . obe-insert-next-block)
+              ("M-D" . obe-kill-block)
+              ("M-W" . obe-copy-block)
+              ("C-c M-p" . obe-execute-above)
+              ("C-c M-n" . obe-execute-below))
+  :hook (before-save . (lambda ()
+                         (when (eq major-mode 'org-mode)
+                           (obe-remove-empty-results)))))
+#+end_src
+
 ** Provide init-org.el
 
 #+begin_src emacs-lisp

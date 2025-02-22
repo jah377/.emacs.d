@@ -252,5 +252,25 @@
                           (:auto-parent t)
                           (:discard (:tag "project"))))))))))
 
+(use-package org-block-extras
+  :after (org)
+  :commands (org-previous-block
+             org-next-block
+             obe-insert-prev-block
+             obe-insert-next-block)
+  :load-path "lisp"
+  :bind (:map org-mode-map
+              ("M-p" . org-previous-block)
+              ("M-n" . org-next-block)
+              ("M-P" . obe-insert-prev-block)
+              ("M-N" . obe-insert-next-block)
+              ("M-D" . obe-kill-block)
+              ("M-W" . obe-copy-block)
+              ("C-c M-p" . obe-execute-above)
+              ("C-c M-n" . obe-execute-below))
+  :hook (before-save . (lambda ()
+                         (when (eq major-mode 'org-mode)
+                           (obe-remove-empty-results)))))
+
 (provide 'init-org)
 ;;; init-org.el ends here
