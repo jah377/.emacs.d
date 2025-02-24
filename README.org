@@ -633,6 +633,7 @@ longer than ~9_999~ lines.
 
 #+begin_src emacs-lisp
 (use-package display-line-numbers
+  :defer t
   :hook ((prog-mode conf-mode text-mode)
          (org-mode . (lambda () (display-line-numbers-mode 0))))
   :custom
@@ -994,6 +995,7 @@ current buffers.
 
 #+begin_src emacs-lisp
 (use-package beacon
+  :defer t
   :hook (after-init . beacon-mode))
 #+end_src
 
@@ -1013,6 +1015,7 @@ automatically inserts a closing delimiter.
 
 #+begin_src emacs-lisp
 (use-package paren
+  :defer t
   :custom
   (show-paren-style 'parenthesis "Only highlight ()")
   (show-paren-when-point-inside-paren t)
@@ -1023,7 +1026,7 @@ automatically inserts a closing delimiter.
   (show-paren-mode 1))
 
 (use-package elec-pair
-  :ensure nil
+  :defer t
   :config (electric-pair-mode 1)
   :custom
   ;; Prevent closing pair if POINT at beginning or middle of word
@@ -1411,6 +1414,7 @@ total number of =isearch= matches (and current match position) in the mode-line.
 
 #+begin_src emacs-lisp
 (use-package anzu
+  :defer t
   :hook (emacs-startup . global-anzu-mode)
   :custom
   (anzu-search-threshold 1000 "Limit n words searched to reduce lag")
@@ -1485,7 +1489,7 @@ presentation.
 
 #+begin_src emacs-lisp
 (use-package org
-  :mode "\\.org\\"
+  :defer t
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
          ("C-c c" . org-capture))
@@ -2189,6 +2193,7 @@ candidates (see [[https://github.com/minad/vertico][github/vertico]]).
 
 #+begin_src emacs-lisp
 (use-package vertico
+  :defer t
   ;; :init recommended by author
   :init (vertico-mode)
   :custom
@@ -2232,6 +2237,7 @@ will add file size or date modified.
 
 #+begin_src emacs-lisp
 (use-package marginalia
+  :defer t
   :init (marginalia-mode 1))
 #+end_src
 
@@ -2370,6 +2376,7 @@ irrelevant so the package is not currently included in the configuration.
 
 #+begin_src emacs-lisp
 (use-package yasnippet
+  :defer t
   :config (yas-global-mode 1)
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
@@ -2863,6 +2870,7 @@ or LSP functionality.
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
+  :defer t
   :config
   (exec-path-from-shell-initialize))
 #+end_src
@@ -3003,6 +3011,7 @@ files. To check a comment, we would need to remove =org-block= in
 
 #+begin_src elisp
 (use-package jinx
+  :defer t
   :hook (org-mode text-mode prog-mode conf-mode)
   :bind (("C-c j c" . jinx-correct)
          ("C-c j a" . jinx-correct-all)
@@ -3045,6 +3054,7 @@ Related notes:
 
 #+begin_src emacs-lisp
 (use-package denote
+  :defer t
   :after org
   :commands (denote denote-open-or-create)
   :hook ((dired-mode . denote-dired-mode)
@@ -3177,6 +3187,7 @@ options. This is helpful not all keybindings can fit in the popup window.
 
 #+begin_src emacs-lisp
 (use-package which-key
+  :defer t
   :config (which-key-mode)
   :custom
   (which-key-show-early-on-C-h t     "Trigger which-key manually")

@@ -74,6 +74,7 @@ The DWIM behaviour of this command is as follows:
         mouse-wheel-progressive-speed nil)
 
 (use-package display-line-numbers
+  :defer t
   :hook ((prog-mode conf-mode text-mode)
          (org-mode . (lambda () (display-line-numbers-mode 0))))
   :custom
@@ -192,9 +193,11 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
               kill-buffer-query-functions))
 
 (use-package beacon
+  :defer t
   :hook (after-init . beacon-mode))
 
 (use-package paren
+  :defer t
   :custom
   (show-paren-style 'parenthesis "Only highlight ()")
   (show-paren-when-point-inside-paren t)
@@ -205,7 +208,7 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
   (show-paren-mode 1))
 
 (use-package elec-pair
-  :ensure nil
+  :defer t
   :config (electric-pair-mode 1)
   :custom
   ;; Prevent closing pair if POINT at beginning or middle of word

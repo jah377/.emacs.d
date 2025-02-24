@@ -17,6 +17,7 @@
 ;;; Code:
 
 (use-package vertico
+  :defer t
   ;; :init recommended by author
   :init (vertico-mode)
   :custom
@@ -42,6 +43,7 @@
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package marginalia
+  :defer t
   :init (marginalia-mode 1))
 
 ;; Copied from https://github.com/minad/consult
@@ -150,6 +152,7 @@
   )
 
 (use-package yasnippet
+  :defer t
   :config (yas-global-mode 1)
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))

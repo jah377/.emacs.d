@@ -124,6 +124,7 @@
 (line-number-mode t)
 
 (use-package anzu
+  :defer t
   :hook (emacs-startup . global-anzu-mode)
   :custom
   (anzu-search-threshold 1000 "Limit n words searched to reduce lag")

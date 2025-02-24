@@ -17,6 +17,7 @@
 ;;; Code:
 
 (use-package which-key
+  :defer t
   :config (which-key-mode)
   :custom
   (which-key-show-early-on-C-h t     "Trigger which-key manually")

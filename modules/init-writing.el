@@ -28,6 +28,7 @@
   (avy-lead-face ((t (:background "#000000" :foreground "#33A4FF" :weight bold)))))
 
 (use-package jinx
+  :defer t
   :hook (org-mode text-mode prog-mode conf-mode)
   :bind (("C-c j c" . jinx-correct)
          ("C-c j a" . jinx-correct-all)
@@ -56,6 +57,7 @@
                '(jinx grid (vertico-grid-annotate . 20))))
 
 (use-package denote
+  :defer t
   :after org
   :commands (denote denote-open-or-create)
   :hook ((dired-mode . denote-dired-mode)
