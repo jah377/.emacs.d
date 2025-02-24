@@ -32,12 +32,11 @@
 
 ;; To provide project management + navigation features
 (use-package projectile
+  :bind-keymap ("C-c p" . projectile-command-map)
   :init (projectile-mode 1)
   :custom
   ;; Cache to prevent slow 'projectile-find-file' on larger projects
-  (projectile-enable-caching t)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map)))
+  (projectile-enable-caching t))
 
 (use-package magit
   :bind ("C-x g" . magit-status)
