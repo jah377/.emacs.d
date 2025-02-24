@@ -1228,7 +1228,6 @@ current theme before switching.
 #+begin_src emacs-lisp
 ;; Effectively copied from https://github.com/doomemacs/themes
 (use-package doom-themes
-  :ensure t
   :config
   (setopt doom-themes-enable-bold t
           doom-themes-enable-italic t)
@@ -2211,7 +2210,6 @@ project~ would return the expected file instead of typing out the complete name.
 #+begin_src emacs-lisp
 ;; Copied from https://github.com/oantolin/orderless/tree/master
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
@@ -3249,7 +3247,6 @@ users to setup global and local keybindings more easily.
 
 #+begin_src emacs-lisp
 (use-package general
-  :ensure t
   :custom
   (general-describe-priority-keymaps nil)
   (general-describe-keymap-sort-function 'general-sort-by-car)

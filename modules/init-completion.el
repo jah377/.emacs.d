@@ -37,7 +37,6 @@
 
 ;; Copied from https://github.com/oantolin/orderless/tree/master
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
