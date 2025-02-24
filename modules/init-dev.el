@@ -190,7 +190,7 @@
 
 (use-package jupyter
   :demand t
-  :after (all org python ob)
+  :after (:all org python ob)
   :custom
   (org-babel-default-header-args:jupyter-python
    '((:session . "py")
