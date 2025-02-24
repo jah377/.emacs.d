@@ -27,7 +27,7 @@
 ;;; Code:
 
 (require 'jupyter)
-
+(require 'vterm)
 
 ;;; %% Custom Settings
 
