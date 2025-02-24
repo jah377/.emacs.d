@@ -68,6 +68,8 @@
 (font-size 10)
 
 (use-package nerd-icons
+  :after (:any projectile magit dired)
+  :commands (find-file)
   :config
   ;; Download nerd-icons if directory not found
   (unless (car (file-expand-wildcards
