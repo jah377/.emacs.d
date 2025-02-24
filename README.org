@@ -633,7 +633,6 @@ longer than ~9_999~ lines.
 
 #+begin_src emacs-lisp
 (use-package display-line-numbers
-  :after org-mode
   :hook ((prog-mode conf-mode text-mode)
          (org-mode . (lambda () (display-line-numbers-mode 0))))
   :custom

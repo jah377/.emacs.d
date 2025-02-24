@@ -74,7 +74,6 @@ The DWIM behaviour of this command is as follows:
         mouse-wheel-progressive-speed nil)
 
 (use-package display-line-numbers
-  :after org-mode
   :hook ((prog-mode conf-mode text-mode)
          (org-mode . (lambda () (display-line-numbers-mode 0))))
   :custom
