@@ -1038,7 +1038,6 @@ at point.
 
 #+begin_src emacs-lisp
 (use-package highlight-thing
-  :demand t
   :hook ((prog-mode . highlight-thing-mode)
          (org-mode . highlight-thing-mode))
   :custom

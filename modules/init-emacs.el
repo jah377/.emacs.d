@@ -212,7 +212,6 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
   (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit))
 
 (use-package highlight-thing
-  :demand t
   :hook ((prog-mode . highlight-thing-mode)
          (org-mode . highlight-thing-mode))
   :custom
