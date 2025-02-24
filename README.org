@@ -1233,6 +1233,7 @@ current theme before switching.
 #+begin_src emacs-lisp
 ;; Effectively copied from https://github.com/doomemacs/themes
 (use-package doom-themes
+  :demand t
   :config
   (setopt doom-themes-enable-bold t
           doom-themes-enable-italic t)

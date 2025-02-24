@@ -22,6 +22,7 @@
 
 ;; Effectively copied from https://github.com/doomemacs/themes
 (use-package doom-themes
+  :demand t
   :config
   (setopt doom-themes-enable-bold t
           doom-themes-enable-italic t)
