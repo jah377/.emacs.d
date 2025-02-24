@@ -1536,7 +1536,7 @@ disables the fringe area of the block and "bracket" provided by =org-modern= (se
 
 #+begin_src emacs-lisp
 (use-package org-modern
-  :after org
+  :after (org)
   :init (global-org-modern-mode)
   :hook ((org-mode                 . org-modern-mode)
          (org-agenda-finalize-hook . org-modern-agenda))
@@ -1554,7 +1554,7 @@ marker pairs.
 (setopt org-hide-emphasis-markers t)
 
 (use-package org-appear
-  :after org
+  :after (org)
   :hook (org-mode . org-appear-mode)
   :custom (org-appear-inside-latex t))
 #+end_src

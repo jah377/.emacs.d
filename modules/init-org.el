@@ -41,7 +41,7 @@
                        (add-hook 'before-save-hook #'org-make-toc nil t)))))
 
 (use-package org-modern
-  :after org
+  :after (org)
   :init (global-org-modern-mode)
   :hook ((org-mode                 . org-modern-mode)
          (org-agenda-finalize-hook . org-modern-agenda))
@@ -50,7 +50,7 @@
 (setopt org-hide-emphasis-markers t)
 
 (use-package org-appear
-  :after org
+  :after (org)
   :hook (org-mode . org-appear-mode)
   :custom (org-appear-inside-latex t))
 
