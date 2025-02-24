@@ -206,11 +206,13 @@
   :load-path "lisp")
 
 (use-package numpydoc
+  :commands (numpydoc-generate)
   :custom
   ;; Redefine so '*args' and '**kwargs' /not/ ignored
   (numpydoc-ignored-params '("" "self" "cls" "*" "/")))
 
 (use-package sphinx-doc
+  :commands (sphinx-doc)
   :hook (python-mode . sphinx-doc-mode))
 
 (use-package python-docstring

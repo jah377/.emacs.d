@@ -2910,11 +2910,13 @@ function definitions. Alternatively, =sphinx-doc= makes it easier to insert
 
 #+begin_src emacs-lisp
 (use-package numpydoc
+  :commands (numpydoc-generate)
   :custom
   ;; Redefine so '*args' and '**kwargs' /not/ ignored
   (numpydoc-ignored-params '("" "self" "cls" "*" "/")))
 
 (use-package sphinx-doc
+  :commands (sphinx-doc)
   :hook (python-mode . sphinx-doc-mode))
 #+end_src
 
