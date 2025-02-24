@@ -44,13 +44,16 @@
 ;; MANDITORY: Emacs must be aware of available packages before installing
 (package-initialize)
 
-;; Ensures backwards compatability ('use-package' added in Emacs29)
+;; Ensures backwards compatability; 'use-package' added in Emacs29
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
+;; Automatically install package if package not already installed
 (require 'use-package-ensure)
-(setopt use-package-always-ensure t
-        use-package-compute-statistics t
+(setopt use-package-always-ensure t)
+
+;; Track load times and return loading/installation output messages
+(setopt use-package-compute-statistics t
         use-package-verbose t)
 
 (let ((default-directory (expand-file-name "lisp" user-emacs-directory)))

@@ -360,31 +360,38 @@ prioritize them for efficient package installation/updates.
 :ID:       a4fb8525-6004-4685-b4cc-297699db426e
 :END:
 
-~use-package~ is an Emacs macro (added in Emacs29) designed to simplify and
+=use-package= is an Emacs macro (added in Emacs29) designed to simplify and
 optimize the configuration and management of Emacs packages.
 
-+ use-package-ensure :: External package provides =use-package-always-ensure=
-  setting, describe below.
+It is possible to minimize startup time by selectively loading packages _when
+needed_. The macro provides several ways to /defer/ package loading times (~:demand
+t~ loads the package immediately):
 
-+ use-package-always-ensure :: Automatically installs any package specified in
-  a =use-package= declaration if not already installed. No longer need to add
-  ~:ensure t~ each time, making the configuration cleaner and less error-prone.
++ :hook :: Loaded after hook invoked for the first time
++ :bind, :bind-keymap :: Loaded after keybinding used for first time
++ :commands :: Loaded after specified command is used
++ :mode :: Loaded after file with specific extension is opened
++ :after :: Loaded after other specific packages are loaded
++ :defer t :: Defer loading until after startup
 
-+ use-package-compute-statistics :: ~t~ in order to track package load
-  times. Setting necessary for [[id:1269b427-94e9-4df5-98bf-c83a31db096d][Profile Emacs Startup]]
+If ~use-package-compute-statistics t~, calling ~M-x use-package-report~ will
+display whether the package is:
 
-+ use-package-verbose :: ~t~ to return output messages during the loading and
-  installation of packages. This is helpful for debugging and tracking the
-  loading process.
++ Configured :: ~:config~ has been processed (ie. loaded)
++ Initialized :: ~:init~ has been processed (but not loaded)
++ Declared :: Not loaded or initialized
 
 #+begin_src emacs-lisp
-;; Ensures backwards compatability ('use-package' added in Emacs29)
+;; Ensures backwards compatability; 'use-package' added in Emacs29
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
+;; Automatically install package if package not already installed
 (require 'use-package-ensure)
-(setopt use-package-always-ensure t
-        use-package-compute-statistics t
+(setopt use-package-always-ensure t)
+
+;; Track load times and return loading/installation output messages
+(setopt use-package-compute-statistics t
         use-package-verbose t)
 #+end_src
 
