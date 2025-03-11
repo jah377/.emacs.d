@@ -2887,6 +2887,9 @@ The custom =jupyter-kernel-extras= package provides utilities for quickly
 creating and removing =Jupyter Kernels= by calling ~jke-create-kernel~ and
 ~jke-delete-kernel~.
 
+*N.B.* By default, =venvs= are created in =~/.virtualenvs= as outlined in
+[[file:docs/install--virtualenvwrapper.org][install--virtualenvwrapper.org]].
+
 #+begin_src emacs-lisp
 (use-package jupyter-kernel-extras
   :commands (jke-create-kernel jke-delete-kernel)
