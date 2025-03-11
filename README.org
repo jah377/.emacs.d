@@ -2221,7 +2221,6 @@ will add file size or date modified.
 
 #+begin_src emacs-lisp
 (use-package marginalia
-  :defer t
   :init (marginalia-mode 1))
 #+end_src
 
