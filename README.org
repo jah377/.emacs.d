@@ -2685,7 +2685,6 @@ deleted since the previous commit.
          ("C-x G" . git-gutter:popup-hunk))
   :config
   (use-package git-gutter-fringe
-    :commands git-gutter-mode
     :config (global-git-gutter-mode)))
 #+end_src
 

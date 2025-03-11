@@ -90,7 +90,6 @@
          ("C-x G" . git-gutter:popup-hunk))
   :config
   (use-package git-gutter-fringe
-    :commands git-gutter-mode
     :config (global-git-gutter-mode)))
 
 (use-package devdocs-browser
