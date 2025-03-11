@@ -185,7 +185,9 @@
 (use-package exec-path-from-shell
   :defer t
   :config
-  (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)
+  ;; Environment containing LSP packages
+  (add-to-list 'exec-path (expand-file-name "~/.virtualenvs/tools/bin")))
 
 (use-package jupyter
   :demand t
