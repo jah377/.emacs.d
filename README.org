@@ -2365,7 +2365,9 @@ irrelevant so the package is not currently included in the configuration.
 
 (use-package consult-yasnippet
   :after (consult yasnippet)
-  :bind ("C-M-y" . consult-yasnippet))
+  :bind ("C-M-y" . consult-yasnippet)
+  :config
+  (global-unset-key (kbd "C-M-y")))
 #+end_src
 
 ** Provide init-completion.el

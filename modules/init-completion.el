@@ -157,7 +157,9 @@
 
 (use-package consult-yasnippet
   :after (consult yasnippet)
-  :bind ("C-M-y" . consult-yasnippet))
+  :bind ("C-M-y" . consult-yasnippet)
+  :config
+  (global-unset-key (kbd "C-M-y")))
 
 (provide 'init-completion)
 ;;; init-completion.el ends here
