@@ -152,7 +152,6 @@
   )
 
 (use-package yasnippet
-  :defer t
   :config (yas-global-mode 1)
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))

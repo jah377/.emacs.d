@@ -2362,7 +2362,6 @@ irrelevant so the package is not currently included in the configuration.
 
 #+begin_src emacs-lisp
 (use-package yasnippet
-  :defer t
   :config (yas-global-mode 1)
   :custom
   (yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))))
