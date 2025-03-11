@@ -2928,6 +2928,31 @@ intelligently highlighting Python doc-strings. The package includes
              ("M-q" . python-docstring-fill)))
 #+end_src
 
+** Eglot
+
+An =Integrated Development Environment= (=IDE=) is a software application that
+helps programmers develop software code efficiently. In addition to editing
+text, =IDEs= support software development by providing the following
+functionality:
+
++ Code completion :: suggest function, variable, and keywords as you type
++ Hover info :: Display documentation when hovering over a symbol
++ Go to definition :: Jump to definition of function, class, or variable
++ Find references :: List all locations where a symbol is used
++ Linting :: Real-time detection of programmatic or stylistic errors
++ Code formatting :: Automatically reformat code to follow a style guide
++ Refactoring :: Supports renaming variables and functions
+
+A =Language Server= is a separate process that provides language-specific
+features described above. The =Language Server Protocol= (=LSP=) is an open
+standard developed by Microsoft that enables =DEs= to communicate with =language
+servers= in a _standardized_ way.
+
+The =eglot= package is a /built-in/ Emacs client for =LSPs=. It allows Emacs to
+communicate with multiple language servers in order to provide =IDE=
+support. Below, is a language-agnostic configuration of =eglot=. Later, we will
+make customizations for different languages.
+
 ** Provide init-dev.el
 
 #+begin_src emacs-lisp
