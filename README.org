@@ -2953,6 +2953,10 @@ communicate with multiple language servers in order to provide =IDE=
 support. Below, is a language-agnostic configuration of =eglot=. Later, we will
 make customizations for different languages.
 
+#+begin_src emacs-lisp
+(use-package eglot
+  :hook (python-mode . eglot-ensure))
+#+end_src
 ** Provide init-dev.el
 
 #+begin_src emacs-lisp
