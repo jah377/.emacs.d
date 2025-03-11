@@ -2841,6 +2841,9 @@ configuration will instead rely on =Jupyter Kernels= (see [[id:4d2b331f-7ced-46b
 
 *** Virtual Environments
 **** Add Executable Path
+:PROPERTIES:
+:ID:       89eb61b8-8bed-42cf-aa24-ce3e514f4665
+:END:
 
 The =exec-path-from-shell= package is a tool to ensure that Emacs correctly
 inherits environment variables such as ~$PATH~ (bash convention) from your
@@ -2950,13 +2953,48 @@ servers= in a _standardized_ way.
 
 The =eglot= package is a /built-in/ Emacs client for =LSPs=. It allows Emacs to
 communicate with multiple language servers in order to provide =IDE=
-support. Below, is a language-agnostic configuration of =eglot=. Later, we will
-make customizations for different languages.
+support. Below, is a language-agnostic configuration of =eglot=. However, =eglot=
+requires a language server to be installed which will be discussed in
+subsequent sections.
 
 #+begin_src emacs-lisp
 (use-package eglot
   :hook (python-mode . eglot-ensure))
 #+end_src
+
+*** Eglot: Python
+
+This configuration employs a number of python packages to achieve a suite of
+=IDE= features in python buffers:
+
++ [[https://github.com/DetachHead/basedpyright][basedpyrght]] :: Microsoft released a proprietary =Pylance= to replace the
+  previous =Pyright= language server. =basedpyright= is an open-source attempt to
+  bridge the gap between =Pyright= and =Pylance=. The language server provides the
+  following features:
+
+  - Code Completion :: Offers suggestions for functions, variables, and keywords
+  - Hover information :: Displays documentation when hovering over symbols
+  - Go to definition :: Jump to definition of functions, classes, or variables
+  - Find references :: Lists all locations where a symbol is used
+  - Inlay hints :: Display parameter names and type information
+  - Semantic tokens :: Syntax highlighting based on code semantics
+
+Python-specific LSP packages are installed in =~/.virutalenvs/tools/bin= (see [[id:89eb61b8-8bed-42cf-aa24-ce3e514f4665][Add
+Executable Path]]). The following is used to ensure that the necessary packages
+are installed.
+
+#+begin_src emacs-lisp
+(defun python-pylsp-plugin-check (pkgs)
+  "Check list of PKGS have been installed."
+  (let* ((command "uv pip freeze -p ~/.virtualenvs/tools/bin/python | awk -F\"==\" '{print $1}'")
+         (installed-pkgs (cdr (split-string (shell-command-to-string command) "\n" 't))))
+    (dolist (pkg pkgs)
+      (unless (member pkg installed-pkgs)
+        (warn "%s not found in the 'tools' environment!" pkg)))))
+
+(python-pylsp-plugin-check '("basedpyright"))
+#+end_src
+
 ** Provide init-dev.el
 
 #+begin_src emacs-lisp
