@@ -1579,20 +1579,6 @@ of available speed commands.
              (looking-back "^\**"))))
 #+end_src
 
-*** COMMENT Auto-Tangle
-
-*COMMENT:* Package overwrites the [[id:33dd0e1d-425b-4bb9-8a23-398884c046b8][common header]] with ~nil~. Drop for now.
-
-=org-auto-tangle-mode=, when activated, automatically tangles =org=-files on
-save. Custom variable ~org-auto-tangle-default nil~ therefore auto-tangle will
-only happen on buffers with the =#+auto_tangle: t= file keyword.
-
-#+begin_src emacs-lisp
-(use-package org-auto-tangle
-  :after org-mode
-  :hook (org-mode . org-auto-tangle-mode))
-#+end_src
-
 *** Archive
 
 These are previous settings that I am not sure whether I want to include in
