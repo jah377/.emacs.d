@@ -108,8 +108,7 @@
 
 (use-package vterm
   :defer t
-  :bind (vterm vterm-mode vterm-other-window)
-  :commands vterm
+  :commands (vterm vterm-mode vterm-other-window)
   ;; Requires compilation, which may not work without installing dependencies
   :init (setopt vterm-always-compile-module t)
   :config
