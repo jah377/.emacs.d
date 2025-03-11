@@ -3167,7 +3167,6 @@ options. This is helpful not all keybindings can fit in the popup window.
 
 #+begin_src emacs-lisp
 (use-package which-key
-  :defer t
   :config (which-key-mode)
   :custom
   (which-key-show-early-on-C-h t     "Trigger which-key manually")
