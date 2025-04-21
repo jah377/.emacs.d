@@ -84,8 +84,9 @@
   :commands (consult-denote-find))
 
 (use-package auctex
-  :mode "\\.tex\\'"
+  :mode ("\\.tex\\'" . latex-mode)
   :hook ((tex-mode . jinx-mode)
+         ;; Always generate PDF, not DVI file
          (tex-mode . (lambda ()
                        (setq-local TeX-PDF-mode 1))))
   :custom
