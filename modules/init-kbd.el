@@ -78,6 +78,11 @@
   "fp" '(projectile-find-file-other-window :which-key "find-proj-file-other-window"))
 
 (my-leader-def
+  "i"  '(:ignore t :which-key "images")
+  "ic" '(jh/copy-screenshot-to-persist-fig-dir :which-key "copy-screenshot")
+  "io" '(jh/insert-inline-image-with-caption   :which-key "insert-screenshot"))
+
+(my-leader-def
   :keymaps '(python-mode-map)
   "p"   '(:ignore t         :which-key "python")
   "pd"  '(:ignore t         :whick-key "docstring")

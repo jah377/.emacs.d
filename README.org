@@ -3338,6 +3338,15 @@ users to setup global and local keybindings more easily.
   "fp" '(projectile-find-file-other-window :which-key "find-proj-file-other-window"))
 #+end_src
 
+*** General: Images
+
+#+begin_src emacs-lisp
+(my-leader-def
+  "i"  '(:ignore t :which-key "images")
+  "ic" '(jh/copy-screenshot-to-persist-fig-dir :which-key "copy-screenshot")
+  "io" '(jh/insert-inline-image-with-caption   :which-key "insert-screenshot"))
+#+end_src
+
 *** General: Python
 
 
