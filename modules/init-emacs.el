@@ -262,5 +262,47 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
   (interactive)
   (load-file user-init-file))
 
+(defconst my-persist-fig-dir (expand-file-name "figures/" my-persist-dir))
+
+(unless (file-directory-p my-persist-fig-dir)
+  (make-directory figures-dir t)
+  (message "Created directory: %s" my-persist-fig-dir))
+
+(defconst my-screenshot-dir "~/Pictures/Screenshots")
+
+(defun jh/copy-screenshot-to-persist-fig-dir ()
+  "Copy latest screenshot in 'my-screenshot-dir' and rename in
+'my-persist-fig-dir'."
+  (interactive)
+  (let* ((screenshot-files (directory-files my-screenshot-dir t "[^.].*"))
+         (screenshot-file (car (last screenshot-files)))
+         (screenshot-file-format (file-name-extension screenshot-file))
+         (dest-file-base-name
+          (replace-regexp-in-string
+           "[ -]" "_"
+           (read-string "Name of screenshot file (exclude file-format): "))))
+
+    ;; Insure 'dest-file-name' excludes the file format
+    (if-let (dest-file-format (file-name-extension dest-file-base-name))
+        (user-error (format "Input included file-format=.%s" dest-file-format)))
+    (let* ((dest-file-name (format "%s.%s" dest-file-base-name screenshot-file-format))
+           (dest-file (expand-file-name dest-file-name my-persist-fig-dir)))
+      (rename-file screenshot-file dest-file)
+      (message (format "Created: %s" dest-file)))))
+
+(defun jh/insert-inline-image-with-caption ()
+  "Select image from 'my-persist-fig-dir' and insert an inline Org-mode
+ image + caption."
+  (interactive)
+  (let* ((image-dir my-persist-fig-dir)
+         (image-file
+          (read-file-name "Select image: " image-dir))
+         (figure-caption (read-string "Enter caption: "))
+         (relative-image-path
+          (file-relative-name
+           image-file (file-name-directory (buffer-file-name)))))
+    (insert (format "#+CAPTION: %s\n[[file:%s]]\n"
+                    figure-caption relative-image-path))))
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
