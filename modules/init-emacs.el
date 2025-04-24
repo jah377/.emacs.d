@@ -295,14 +295,20 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
  image + caption."
   (interactive)
   (let* ((image-dir my-persist-fig-dir)
+         ;; Full path of image
          (image-file
           (read-file-name "Select image: " image-dir))
-         (figure-caption (read-string "Enter caption: "))
+         ;; Path of image relative to current buffer
          (relative-image-path
           (file-relative-name
-           image-file (file-name-directory (buffer-file-name)))))
-    (insert (format "#+CAPTION: %s\n[[file:%s]]\n"
-                    figure-caption relative-image-path))))
+           image-file (file-name-directory (buffer-file-name))))
+         ;; Name of image for #+NAME:
+         (image-file-name (file-name-nondirectory image-file))
+         ;; Text for #+CAPTION:
+         (figure-caption (read-string "Enter caption: ")))
+
+    (insert (format "#+CAPTION: %s\n#+NAME: %s\n[[file:%s]]\n"
+                    figure-caption image-file-name relative-image-path))))
 
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
