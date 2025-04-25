@@ -56,7 +56,7 @@
                     :weight 'medium)
 
 ;; Modified from https://stackoverflow.com/a/50052751
-(defun font-size (fontsize)
+(defun fonts (fontsize)
   "Set the font-pt size."
   (interactive "nFont size: ")
   (let* ((font-height (* 10 fontsize)))
@@ -65,7 +65,7 @@
     (set-face-attribute 'variable-pitch nil :height font-height)))
 
 ;; Font size at startup
-(font-size 10)
+(fonts 16)
 
 (use-package nerd-icons
   :config
