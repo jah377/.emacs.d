@@ -79,8 +79,9 @@
 
 (my-leader-def
   "i"  '(:ignore t :which-key "images")
-  "ic" '(jh/copy-screenshot-to-persist-fig-dir :which-key "copy-screenshot")
-  "io" '(jh/insert-inline-image-with-caption   :which-key "insert-screenshot"))
+  "ic" '(jh/screenshot-copy-to-persist-fig-dir    :which-key "copy-screenshot")
+  "io" '(jh/screenshot-select-and-insert-org-link :which-key "insert-screenshot")
+  "ii" '(jh/screenshot-copy-and-insert-latest     :which-key "copy-insert-screenshot"))
 
 (my-leader-def
   :keymaps '(python-mode-map)

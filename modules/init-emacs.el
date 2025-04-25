@@ -263,52 +263,63 @@ Ex: (my/kill-buffers-by-mode 'help-mode 'helpful-mode)"
   (load-file user-init-file))
 
 (defconst my-persist-fig-dir (expand-file-name "figures/" my-persist-dir))
+(defconst my-screenshot-dir "~/Pictures/Screenshots")
 
 (unless (file-directory-p my-persist-fig-dir)
   (make-directory figures-dir t)
   (message "Created directory: %s" my-persist-fig-dir))
 
-(defconst my-screenshot-dir "~/Pictures/Screenshots")
+(defun jh--screenshot-latest-file ()
+  "Return the path of the latest screenshot in 'my-screenshot-dir'."
+  (car (last (directory-files my-screenshot-dir t "[^.].*"))))
 
-(defun jh/copy-screenshot-to-persist-fig-dir ()
-  "Copy latest screenshot in 'my-screenshot-dir' and rename in
+(defun jh--screenshot-dest-file-path (base-name extension)
+  "Generate full destination file path using BASE-NAME and EXTENSION in
+'my-persist-fig-dir'."
+  (let ((sanitized (replace-regexp-in-string "[ -]" "_" base-name)))
+    (expand-file-name (format "%s.%s" sanitized extension) my-persist-fig-dir)))
+
+(defun jh--screenshot-move-to-dest ()
+  "Move the latest screenshot to 'my-persist-fig-dir', prompting for a new
+base name.
+
+Returns the full path to the new file."
+  (let* ((src (jh--screenshot-latest-file))
+         (ext (file-name-extension src))
+         (base (read-string "Name of screenshot file (exclude file-format): "))
+         (dest (jh--screenshot-dest-file-path base ext)))
+    (rename-file src dest)
+    dest))
+
+(defun jh--screenshot-insert-org-link (filepath caption)
+  "Insert an Org-mode link for FILEPATH with CAPTION."
+  (let* ((relative
+          (file-relative-name filepath (file-name-directory (buffer-file-name))))
+         (name (file-name-base filepath)))
+    (insert (format "#+CAPTION: %s\n#+NAME: %s\n[[file:%s]]\n"
+                    caption name relative))))
+
+(defun jh/screenshot-copy-to-persist-fig-dir ()
+  "Copy the latest screenshot to 'my-persist-fig-dir' with a new name."
+  (interactive)
+  (let ((dest-file (jh--screenshot-move-to-dest)))
+    (message "Screenshot moved to: %s" dest-file)))
+
+(defun jh/screenshot-select-and-insert-org-link ()
+  "Insert an Org-mode inline image with caption from an image file in
 'my-persist-fig-dir'."
   (interactive)
-  (let* ((screenshot-files (directory-files my-screenshot-dir t "[^.].*"))
-         (screenshot-file (car (last screenshot-files)))
-         (screenshot-file-format (file-name-extension screenshot-file))
-         (dest-file-base-name
-          (replace-regexp-in-string
-           "[ -]" "_"
-           (read-string "Name of screenshot file (exclude file-format): "))))
+  (let* ((image-file (read-file-name "Select image: " my-persist-fig-dir))
+         (caption (read-string "Enter caption: ")))
+    (jh--screenshot-insert-org-link image-file caption)))
 
-    ;; Insure 'dest-file-name' excludes the file format
-    (if-let (dest-file-format (file-name-extension dest-file-base-name))
-        (user-error (format "Input included file-format=.%s" dest-file-format)))
-    (let* ((dest-file-name (format "%s.%s" dest-file-base-name screenshot-file-format))
-           (dest-file (expand-file-name dest-file-name my-persist-fig-dir)))
-      (rename-file screenshot-file dest-file)
-      (message (format "Created: %s" dest-file)))))
-
-(defun jh/insert-inline-image-with-caption ()
-  "Select image from 'my-persist-fig-dir' and insert an inline Org-mode
- image + caption."
+(defun jh/screenshot-copy-and-insert-latest ()
+  "Copy the latest screenshot and insert an Org-mode image link with caption."
   (interactive)
-  (let* ((image-dir my-persist-fig-dir)
-         ;; Full path of image
-         (image-file
-          (read-file-name "Select image: " image-dir))
-         ;; Path of image relative to current buffer
-         (relative-image-path
-          (file-relative-name
-           image-file (file-name-directory (buffer-file-name))))
-         ;; Name of image for #+NAME:
-         (image-file-name (file-name-nondirectory image-file))
-         ;; Text for #+CAPTION:
-         (figure-caption (read-string "Enter caption: ")))
-
-    (insert (format "#+CAPTION: %s\n#+NAME: %s\n[[file:%s]]\n"
-                    figure-caption image-file-name relative-image-path))))
+  (let* ((dest-file (jh--screenshot-move-to-dest))
+         (caption (read-string "Enter caption: ")))
+    (jh--screenshot-insert-org-link dest-file caption)
+    (message "Screenshot moved and link inserted: %s" dest-file)))
 
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
